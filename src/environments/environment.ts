@@ -1,3 +1,4 @@
 export const environment = {
-    baseUrl:'https://vpugcrolnalqsehhpein.supabase.co'
+  baseUrl: 'https://vpugcrolnalqsehhpein.supabase.co',
+  
 };

@@ -1,0 +1,114 @@
+<div class="sm:bg-background min-h-lvh flex flex-col items-center sm:pb-12">
+  <!-- logo -->
+  <nav class="top-0 w-full flex py-6.5 px-6 sm:px-10">
+    <span class="material-symbols-outlined logo-icon"> token </span>
+    <span class="logo-text"> Taskly </span>
+  </nav>
+
+  <!-- Register form container-->
+  <div class="bg-white mt-4 shadow-form-shadow px-6 py-[10.5px] sm:p-12 rounded-lg max-w-xl">
+    <!-- form header -->
+    <div class="sm:text-center mb-10">
+      <h2
+        class="sm:text-[1.75rem]/[2.5rem] text-[1.875rem]/[2.25rem] font-semibold text-slate-dark sm:tracking-[-0.75px] tracking-[-0.8px]"
+      >
+        Create your workspace
+      </h2>
+      <p class="body-md sm:text-sm/[20px]">Join the editorial approach to task management.</p>
+    </div>
+    <!-- form -->
+    <form class="flex-1 flex flex-col justify-center" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
+      <div class="form-control" formGroupName="data">
+        <label for="name" class="form-label" 
+               [class.!error-label]="(isSubmitted() || registerForm.get('data.name')?.touched) && formErrors()['data_name']">name</label>
+        <input type="text" 
+               name="name" 
+               id="name" 
+               class="input-text " 
+               placeholder="Enter your full name"  
+               formControlName="name"/>
+        @if((isSubmitted() || registerForm.get('data.name')?.touched) && formErrors()['data_name']){
+            <p class="error-msg mt-1.5">{{ formErrors()['data_name'] }}</p>
+        }@else{
+            <p class="text-[0.625rem]/[15px] text-slate-light tracking-normal mt-1.5 ms-1 font-normal">
+              3-50 characters, letters only.
+            </p>
+        }
+      </div>
+      <div class="form-control">
+        <label for="email" class="form-label" [class.!error-label]="(isSubmitted() || registerForm.get('email')?.touched) && formErrors()['email']">email</label>
+        <input type="text" name="email" id="email" class="input-text" placeholder="yourname@company.com" formControlName="email"/>
+            @if((isSubmitted() || registerForm.get('email')?.touched) && formErrors()['email']){
+                <p class="error-msg mt-1.5">{{ formErrors()['email'] }}</p>
+            }
+      </div>
+      <div class="form-control" formGroupName="data">
+        <label for="job-title" class="form-label">Job Title <span class="optional-text">(Optional)</span></label>
+        <input type="text" name="job-title" id="job-title" class="input-text" placeholder="e.g. Project Manager"  formControlName="department"/>
+      </div>
+      <div class="sm:flex sm:justify-between sm:gap-4">
+        <div class="form-control flex-1">
+          <label for="password" class="form-label" [class.!error-label]="(isSubmitted() || registerForm.get('password')?.touched) && formErrors()['password']">password</label>
+          <input type="password" name="password" id="password" class="input-text" placeholder="Password" formControlName="password"/>
+           @if((isSubmitted() || registerForm.get('password')?.touched) && formErrors()['password']){
+            <p class="error-msg mt-1.5">{{ formErrors()['password'] }}</p>
+        }
+        </div>
+        <div class="form-control flex-1">
+          <label for="confirm-password" class="form-label" [class.!error-label]="(isSubmitted() || registerForm.get('confirmPassword')?.touched) && formErrors()['confirmPassword']">confirm password</label>
+          <input
+            type="password"
+            name="confirm-password"
+            id="confirm-password"
+            class="input-text"
+            placeholder="Repeat your password"
+            formControlName="confirmPassword"
+            
+          />
+           @if((isSubmitted() || registerForm.get('confirmPassword')?.touched) && formErrors()['confirmPassword']){
+            <p class="error-msg mt-1.5">{{ formErrors()['confirmPassword'] }}</p>
+        }
+        </div>
+      </div>
+
+      <div class="requirements mb-6">
+        <div class="flex items-center">
+            @if(!passwordRequirements().hasMinLength){
+                <span class="material-symbols-outlined text-placeholder"> circle </span>
+            }@else {
+                <span class="material-symbols-outlined text-circle-checked"> check_circle </span>
+            }
+          <span class="ms-2">At least 8 characters</span>
+        </div>
+        <div class="flex items-center">
+            @if(!passwordRequirements().hasUpperLowerDigit){
+                <span class="material-symbols-outlined text-placeholder"> circle </span>
+            }@else {
+                <span class="material-symbols-outlined text-circle-checked"> check_circle </span>
+            }
+          <span class="ms-2">One uppercase, lowercase, and digit</span>
+        </div>
+        <div class="flex items-center">
+            @if(!passwordRequirements().hasSpecialChar){
+                <span class="material-symbols-outlined text-placeholder"> circle </span>
+            }@else {
+                <span class="material-symbols-outlined text-circle-checked"> check_circle </span>
+            }
+          <span class="ms-2">One special character</span>
+        </div>
+      </div>
+
+      @if(errMsg()){
+            <p class="error-msg m-1.5">{{ errMsg()}}</p>
+        }
+
+      <button type="submit" class="btn-primary w-full mb-4" >Create Account</button>
+
+      <div class="pt-[47.5px] pb-8 sm:pb-0 sm:pt-8 text-center">
+        <p class="text-sm/[20px] tracking-normal text-slate-medium font-normal">
+          Already have an account? <span class="text-primary font-semibold">Log in</span>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
