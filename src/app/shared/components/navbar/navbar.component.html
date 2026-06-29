@@ -1,25 +1,34 @@
-<nav class="w-full  py-3 px-6 flex justify-between items-center border-b border-border-secodary shadow-navbar-shadow shadow">
-    <div class="flex sm:hidden">
-      <span class="material-symbols-outlined logo-icon" (click)="clickMenue()">
-        menu
-      </span>
-      <span class="logo-text"> Taskly </span>
+<nav
+  class="w-full py-3 px-6 flex justify-between items-center border-b border-border-secodary shadow-navbar-shadow shadow"
+>
+  <div class="flex sm:hidden">
+    <span
+      class="material-symbols-outlined logo-icon"
+      (click)="clickMenue()"
+      (keydown.enter)="clickMenue()"
+      tabindex="0"
+    >
+      menu
+    </span>
+    <span class="logo-text"> Taskly </span>
+  </div>
+
+  <div class="flex ms-auto">
+    <div
+      class="sm:flex flex-col hidden me-3 border border-l-border-gray border-t-0 border-b-0 border-r-0 pl-4 pr-3 text-end"
+    >
+      @if (userprofile()) {
+        <p class="text-[14px]/[20px] tracking-normal font-semibold text-slate-dark">{{ userprofile()?.name }}</p>
+        <p class="text-[10px]/[20px] tracking-[1px] font-bold text-primary uppercase">
+          {{ userprofile()?.department }}
+        </p>
+      }
     </div>
 
-    <div class="flex ms-auto ">
-
-        <div class="sm:flex flex-col hidden me-3 border border-l-border-gray border-t-0 border-b-0 border-r-0 pl-4 pr-3 text-end">
-            @if(userprofile()){
-                <p class="text-[14px]/[20px] tracking-normal font-semibold text-slate-dark">{{userprofile()?.name}}</p>
-                <p class="text-[10px]/[20px] tracking-[1px] font-bold text-primary uppercase">{{userprofile()?.department}}</p>
-            }
-            
-        </div>
-
-        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm uppercase tracking-wider shadow-sm">
-          {{avatar}}
-        </div>
-
+    <div
+      class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm uppercase tracking-wider shadow-sm"
+    >
+      {{ avatar }}
     </div>
-    
+  </div>
 </nav>

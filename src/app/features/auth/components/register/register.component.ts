@@ -15,14 +15,14 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
-  private _router = inject (Router)
+  private _router = inject(Router);
 
   registerForm: FormGroup;
   isSubmitted = signal(false);
   formValue = signal({});
   registerPlayload!: UserRegisterPayload;
-  errMsg = signal('')
-  passwordValue =signal('')
+  errMsg = signal('');
+  passwordValue = signal('');
 
   formErrors = computed(() => {
     const current = this.formValue();
@@ -41,17 +41,18 @@ export class RegisterComponent {
     return errors;
   });
 
-  passwordRequirements = computed(()=>{
-    const hasMinLength = this.passwordValue().length >= 8
-    const hasUpperLowerDigit = /[A-Z]/.test(this.passwordValue()) && /[a-z]/.test(this.passwordValue()) && /\d/.test(this.passwordValue())
-    const hasSpecialChar =  /[!@#$%^&*]/.test(this.passwordValue())
+  passwordRequirements = computed(() => {
+    const hasMinLength = this.passwordValue().length >= 8;
+    const hasUpperLowerDigit =
+      /[A-Z]/.test(this.passwordValue()) && /[a-z]/.test(this.passwordValue()) && /\d/.test(this.passwordValue());
+    const hasSpecialChar = /[!@#$%^&*]/.test(this.passwordValue());
 
-    return {hasMinLength, hasUpperLowerDigit ,hasSpecialChar}
-  })
+    return { hasMinLength, hasUpperLowerDigit, hasSpecialChar };
+  });
 
-  isFormInvalid = computed(()=>{
-    return Object.keys(this.formErrors()).length > 0
-  })
+  isFormInvalid = computed(() => {
+    return Object.keys(this.formErrors()).length > 0;
+  });
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -68,54 +69,50 @@ export class RegisterComponent {
 
     this.registerForm.valueChanges.subscribe((v) => {
       this.formValue.set(v);
-      this.passwordValue.set(v.password)
+      this.passwordValue.set(v.password);
     });
   }
 
-  onSubmit(event:any) {
-    this.errMsg.set('')
+  onSubmit(event: Event) {
+    this.errMsg.set('');
     this.isSubmitted.set(true);
-    event.preventDefault()
+    event.preventDefault();
 
     const errors = this.formErrors();
-   
+
     if (Object.keys(errors).length === 0) {
-      
       const { email, password, data } = this.registerForm.value;
       this.registerPlayload = {
-            email: email,
-            password: password,
-              data: {
-                name: data.name,
-                department: data.department
-              } 
-          }
-
+        email: email,
+        password: password,
+        data: {
+          name: data.name,
+          department: data.department,
+        },
+      };
 
       this._authServie.Register(this.registerPlayload).subscribe({
-        next: (res) => {
+        next: () => {
           // console.log(res);
-          this._authServie.Login({email:email,password:password},false)
+          this._authServie.Login({ email: email, password: password }, false);
 
-          this._router.navigate(['/project'])
+          this._router.navigate(['/project']);
         },
         error: (err) => {
-          this.isSubmitted.set(false)
+          this.isSubmitted.set(false);
           // console.log(err);
-           const fallbackMsg = 'Registration failed. Please try again.'
-           this.errMsg.set(err?.error.msg || fallbackMsg)
-        }
-        
+          const fallbackMsg = 'Registration failed. Please try again.';
+          this.errMsg.set(err?.error.msg || fallbackMsg);
+        },
       });
-    }else{
-      this.isSubmitted.set(false)
+    } else {
+      this.isSubmitted.set(false);
       this.registerForm.markAllAsTouched();
       // console.log("errors", errors)
     }
   }
 
-
-  navigateToLogin(){
-    this._router.navigate(['/login'])
+  navigateToLogin() {
+    this._router.navigate(['/login']);
   }
 }

@@ -11,8 +11,13 @@ export interface UserLoginPayload {
   password: string;
 }
 
-export interface UserMetaData{
-  department: string,
-  email: string,
-  name: string
+export interface UserMetaData {
+  department: string;
+  email: string;
+  name: string;
+}
+
+export interface User {
+  id: string;
+  user_metadata: UserMetaData;
 }

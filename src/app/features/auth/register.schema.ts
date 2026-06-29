@@ -6,8 +6,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!
 
 export const RegisterSchema = z
   .object({
-    email: z.email({ message: 'Invalid email format' })
-            .min(1,'Email is required'),
+    email: z.email({ message: 'Invalid email format' }).min(1, 'Email is required'),
 
     password: z
       .string()
@@ -19,8 +18,7 @@ export const RegisterSchema = z
         'Password must contain at least one uppercase, one lowercase, one number, and one special character',
       ),
 
-    confirmPassword: z.string()
-                    .nonempty('Confirm password is required'),
+    confirmPassword: z.string().nonempty('Confirm password is required'),
 
     data: z.object({
       name: z
@@ -29,8 +27,6 @@ export const RegisterSchema = z
         .min(3, 'Name must be at least 3 characters')
         .max(50, 'Name cannot exceed 50 characters')
         .regex(nameRegex, 'Name can only contain letters and single spaces between names'),
-        
-
 
       department: z.string().optional(),
     }),

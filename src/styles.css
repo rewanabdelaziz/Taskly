@@ -14,7 +14,6 @@
   --color-slate-medium: #4f5f7b;
   --color-slate-light: #c3c6d6;
 
-
   /*Semantic */
   --color-success: #82f9be;
   --color-error: #ba1a1a;
@@ -29,14 +28,14 @@
   --color-active-task-label: #002113;
   --color-icon-card: #e8edff;
   --color-circle-checked: #004e32;
-  --color-border-gray:#C3C6D64D;
-  --color-border-secodary:#C3C6D633;
-  --color-sidebar-text:#041B3C99;
+  --color-border-gray: #c3c6d64d;
+  --color-border-secodary: #c3c6d633;
+  --color-sidebar-text: #041b3c99;
 
   /* shadows */
   --color-btn-shadow: #0000000d;
   --shadow-form-shadow: 0px 24px 48px 0px #041b3c0f;
-  --color-navbar-border:#0000001A;
+  --color-navbar-border: #0000001a;
 
   /* background */
   --background-image-gradient-primary: linear-gradient(
@@ -85,7 +84,7 @@
   @apply py-2.5 px-6 rounded-xs capitalize tracking-normal text-sm/[20px];
 }
 @utility btn-primary {
-  @apply btns-basic bg-gradient-primary text-white  shadow-xs font-semibold  shadow-btn-shadow ;
+  @apply btns-basic bg-gradient-primary text-white  shadow-xs font-semibold  shadow-btn-shadow;
 }
 @utility btn-secondary {
   @apply btns-basic  text-primary shadow-xs font-semibold;
