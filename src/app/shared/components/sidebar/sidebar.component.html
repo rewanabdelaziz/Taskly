@@ -1,0 +1,120 @@
+@if(isMobileOpen()){
+    <div class="fixed inset-0 z-10 sm:hidden bg-black/40" (click)="toggleMobileSidebar()"></div>
+}
+<aside 
+  [class.w-3xs]="!isCollapsed()" 
+  [class.w-20]="isCollapsed()" 
+  [class.!translate-x-0] = "isMobileOpen()"
+  class="fixed inset-0 sm:sticky translate-x-[-350%] sm:translate-x-0 z-20 h-screen bg-surface-low text-slate-dark flex flex-col justify-between p-4 transition-all duration-300">
+  
+  <div>
+    @if(!isCollapsed()){
+      <div class="sm:flex items-center py-2 ps-1 mb-8 hidden">
+        <span class="material-symbols-outlined logo-icon text-primary-container"> token </span>
+        <span class="logo-text"> Taskly </span>
+      </div>
+    }
+    
+
+    <ul>
+      <li class="hover:bg-white rounded-md py-2.5 px-3 transition-all duration-300">
+        <a routerLink="/project" routerLinkActive="!text-primary" class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+          <span class="material-symbols-outlined">folder_open</span>
+          @if (!isCollapsed()) { <span>Projects</span> }
+        </a>
+      </li>
+      
+      <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <a routerLink="/project" class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+          <span class="material-symbols-outlined">
+             account_tree
+          </span>
+          @if (!isCollapsed()) { <span>Project Epics</span> }
+        </a>
+      </li>
+
+      <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <a routerLink="/project" class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+            <span class="material-symbols-outlined">
+               checklist
+            </span>
+          @if (!isCollapsed()) { <span>Project Tasks</span> }
+        </a>
+      </li>
+
+      <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <a routerLink="/project" class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+           <span class="material-symbols-outlined">
+            group
+           </span>
+          @if (!isCollapsed()) { <span>Project Members</span> }
+        </a>
+      </li>
+
+      <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <a routerLink="/project" class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+          <span class="material-symbols-outlined">
+            info
+          </span>
+          @if (!isCollapsed()) { <span>Project Details</span> }
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="border-t border-border-secodary pt-6">
+    @if(!isMobileOpen()){
+        <button (click)="toggleSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-dark font-medium text-sm/[20px] tracking-normal hover:bg-white">
+      <span class="material-symbols-outlined transition-transform duration-300" [class.rotate-180]="isCollapsed()">
+        arrow_back_ios
+      </span>
+      @if (!isCollapsed()) { <span>Collapse</span> }
+    </button>
+    }
+    
+
+    <button class="w-full flex items-center gap-3 px-3 py-2.5 text-error font-medium text-sm/[20px] tracking-normal hover:bg-white">
+      <span class="material-symbols-outlined">logout</span>
+      @if (!isCollapsed()) { <span>Logout</span> }
+    </button>
+  </div>
+
+</aside>
+
+ 
+    <nav [class.!translate-y-0] = "!isMobileOpen()"
+          class="fixed bottom-0 sm:sticky sm:hidden translate-y-[350%] sm:translate-x-0 flex py-[14.5px] px-7 gap-10 justify-between w-full">
+        <a routerLink="/project" routerLinkActive="!text-primary" class="flex flex-col items-center  text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+          <span class="material-symbols-outlined">folder_open</span>
+           <span>Projects</span> 
+        </a>
+
+        <a routerLink="/project" class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+          <span class="material-symbols-outlined">
+             account_tree
+          </span>
+           <span>Epics</span> 
+        </a>
+
+        <a routerLink="/project" class="flex flex-col items-center   text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+            <span class="material-symbols-outlined">
+               checklist
+            </span>
+           <span>Tasks</span> 
+        </a>
+
+        <a routerLink="/project" class="flex flex-col items-center  text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+           <span class="material-symbols-outlined">
+            group
+           </span>
+           <span>Members</span> 
+        </a>
+
+        <a routerLink="/project" class="flex flex-col items-center  text-sidebar-text text-sm/[20px] hover:text-primary font-semibold">
+          <span class="material-symbols-outlined">
+            info
+          </span>
+          <span>Details</span> 
+        </a>
+    </nav>
+ 

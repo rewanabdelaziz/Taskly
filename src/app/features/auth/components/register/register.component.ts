@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RegisterSchema } from '../../register.schema';
 import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ import { AuthServiceService } from '../../services/auth-service.service';
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
+  private _router = inject (Router)
 
   registerForm: FormGroup;
   isSubmitted = signal(false);
@@ -93,7 +95,9 @@ export class RegisterComponent {
       this._authServie.Register(this.registerPlayload).subscribe({
         next: (res) => {
           // console.log(res);
-          // login and routing to home
+          this._authServie.Login({email:email,password:password},false)
+
+          this._router.navigate(['/project'])
         },
         error: (err) => {
           this.isSubmitted.set(false)
@@ -108,5 +112,10 @@ export class RegisterComponent {
       this.registerForm.markAllAsTouched();
       // console.log("errors", errors)
     }
+  }
+
+
+  navigateToLogin(){
+    this._router.navigate(['/login'])
   }
 }
