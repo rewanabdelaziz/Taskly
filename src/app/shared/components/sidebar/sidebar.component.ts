@@ -15,6 +15,7 @@ export class SidebarComponent {
 
   isCollapsed = signal(false);
   isMobileOpen = signal(false);
+  errMsg = signal('')
 
   toggleSidebar() {
     this.isCollapsed.update((state) => !state);
@@ -38,6 +39,10 @@ export class SidebarComponent {
 
         this._router.navigate(['login']);
       },
+      error: (err) =>{
+        this.isCollapsed.set(true);
+        this.errMsg.set('Logout failed, please try again.') 
+      }
     });
   }
 }
