@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
 import { throwError } from 'rxjs';
 
@@ -10,7 +10,8 @@ import { throwError } from 'rxjs';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit{
-  @Output() menuClick =new EventEmitter<void>()
+
+@Output() menuClick =new EventEmitter<void>()
   private _auth = inject(AuthServiceService)
 
   userprofile = this._auth.userProfile
@@ -36,5 +37,8 @@ export class NavbarComponent implements OnInit{
     this.menuClick.emit()
   }
 
-  
+
+
+
+
 }

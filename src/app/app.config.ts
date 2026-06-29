@@ -4,8 +4,9 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors, } from '@angular/common/http';
 import { supabaseInterceptor } from './core/interceptors/supabase.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes),provideHttpClient(withFetch(),withInterceptors([supabaseInterceptor]))],
+  providers: [provideRouter(routes),provideHttpClient(withFetch(),withInterceptors([authInterceptor,supabaseInterceptor]))],
 };
