@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://vpugcrolnalqsehhpein.supabase.co',
+  baseUrl: '',
+  supabase_api_key:''
 };
