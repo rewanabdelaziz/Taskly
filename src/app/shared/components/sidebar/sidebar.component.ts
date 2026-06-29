@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,6 +10,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
+  private _auth = inject(AuthServiceService);
+  private _router = inject(Router);
+
   isCollapsed = signal(false);
   isMobileOpen = signal(false);
 
@@ -18,5 +22,22 @@ export class SidebarComponent {
 
   toggleMobileSidebar() {
     this.isMobileOpen.update((state) => !state);
+  }
+
+  logout() {
+    this._auth.logOut().subscribe({
+      next: () => {
+        const storage = localStorage.getItem('access_token') ? localStorage : sessionStorage;
+        storage.removeItem('access_token');
+        storage.removeItem('refresh_token');
+        storage.removeItem('expires_at');
+        storage.removeItem('user_profile');
+
+        this._auth.isLoggedIn.set(false);
+        this._auth.userProfile.set(null);
+
+        this._router.navigate(['login']);
+      },
+    });
   }
 }

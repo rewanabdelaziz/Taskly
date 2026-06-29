@@ -94,8 +94,8 @@ export class RegisterComponent {
       this._authServie.Register(this.registerPlayload).subscribe({
         next: () => {
           // console.log(res);
-          this._authServie.Login({ email: email, password: password }, false);
 
+          this._authServie.isLoggedIn.set(true);
           this._router.navigate(['/project']);
         },
         error: (err) => {

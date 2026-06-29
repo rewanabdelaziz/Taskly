@@ -40,7 +40,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }),
 
       catchError((err) => {
-        storage.clear();
+        storage.removeItem('access_token');
+        storage.removeItem('refresh_token');
+        storage.removeItem('expires_at');
+        storage.removeItem('user_profile');
+        _auth.isLoggedIn.set(false);
+        _auth.userProfile.set(null);
         _router.navigate(['/login']);
         return throwError(() => err);
       }),
