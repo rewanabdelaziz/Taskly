@@ -39,7 +39,7 @@ export class SidebarComponent {
 
         this._router.navigate(['login']);
       },
-      error: (err) =>{
+      error: () =>{
         this.isCollapsed.set(true);
         this.errMsg.set('Logout failed, please try again.') 
       }
