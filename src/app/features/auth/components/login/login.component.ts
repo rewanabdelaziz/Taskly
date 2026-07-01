@@ -4,6 +4,8 @@ import { AuthServiceService } from '../../services/auth-service.service';
 import { UserLoginPayload } from '../../models/user';
 import { LoginSchema } from '../../login.schema';
 import { Router } from '@angular/router';
+import { GlobalErrorMessageService } from '../../../../shared/services/global-error-message.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -16,12 +18,12 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
+  _globalErrMsg = inject(GlobalErrorMessageService)
 
   loginForm: FormGroup;
   isSubmitted = signal(false);
   formValue = signal({});
   loginPlayload!: UserLoginPayload;
-  errMsg = signal('');
   rememberMe = signal(false);
 
   formErrors = computed(() => {
@@ -60,7 +62,6 @@ export class LoginComponent {
   }
 
   onSubmit(event: Event) {
-    this.errMsg.set('');
     this.isSubmitted.set(true);
     event.preventDefault();
 
@@ -79,11 +80,15 @@ export class LoginComponent {
           // console.log(res);
           this._router.navigate(['/project']);
         },
-        error: (err) => {
+        error: (err:HttpErrorResponse) => {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Login failed. Please try again.';
-          this.errMsg.set(err?.error.msg || fallbackMsg);
+          if(err?.error.msg == "Invalid login credentials"){
+            this._globalErrMsg.showErrorMsg("Invalid email or password! Please try again.")
+          }else{
+            this._globalErrMsg.showErrorMsg(fallbackMsg)
+          }
         },
       });
     } else {

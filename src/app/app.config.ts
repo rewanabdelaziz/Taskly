@@ -5,10 +5,11 @@ import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { supabaseInterceptor } from './core/interceptors/supabase.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { globalErrorsHandlerInterceptor } from './core/interceptors/global-errors-handler.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor, supabaseInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([supabaseInterceptor,authInterceptor,globalErrorsHandlerInterceptor ])),
   ],
 };

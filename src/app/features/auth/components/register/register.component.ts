@@ -4,6 +4,8 @@ import { RegisterSchema } from '../../register.schema';
 import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
+import { GlobalErrorMessageService } from '../../../../shared/services/global-error-message.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -16,12 +18,12 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
+  _globalErrMsg = inject(GlobalErrorMessageService)
 
   registerForm: FormGroup;
   isSubmitted = signal(false);
   formValue = signal({});
   registerPlayload!: UserRegisterPayload;
-  errMsg = signal('');
   passwordValue = signal('');
 
   formErrors = computed(() => {
@@ -74,7 +76,6 @@ export class RegisterComponent {
   }
 
   onSubmit(event: Event) {
-    this.errMsg.set('');
     this.isSubmitted.set(true);
     event.preventDefault();
 
@@ -98,11 +99,11 @@ export class RegisterComponent {
           this._authServie.isLoggedIn.set(true);
           this._router.navigate(['/project']);
         },
-        error: (err) => {
+        error: (err:HttpErrorResponse) => {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Registration failed. Please try again.';
-          this.errMsg.set(err?.error.msg || fallbackMsg);
+          this._globalErrMsg.showErrorMsg(err?.error.msg || fallbackMsg);
         },
       });
     } else {

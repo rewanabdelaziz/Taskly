@@ -141,8 +141,8 @@
         </div>
       </div>
 
-      @if (errMsg()) {
-        <p class="error-msg m-1.5">{{ errMsg() }}</p>
+      @if (_globalErrMsg.globalErrMsg() != null) {
+        <p class="error-msg m-1.5">{{ _globalErrMsg.globalErrMsg()}}</p>
       }
 
       <button type="submit" class="btn-primary w-full mb-4">Create Account</button>
