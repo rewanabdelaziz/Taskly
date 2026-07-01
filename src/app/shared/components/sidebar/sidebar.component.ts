@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
+import { GlobalErrorMessageService } from '../../services/global-error-message.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,10 +13,11 @@ import { AuthServiceService } from '../../../features/auth/services/auth-service
 export class SidebarComponent {
   private _auth = inject(AuthServiceService);
   private _router = inject(Router);
+  _globalErrService = inject(GlobalErrorMessageService)
 
   isCollapsed = signal(false);
   isMobileOpen = signal(false);
-  errMsg = signal('')
+
 
   toggleSidebar() {
     this.isCollapsed.update((state) => !state);
@@ -40,8 +42,7 @@ export class SidebarComponent {
         this._router.navigate(['login']);
       },
       error: () =>{
-        this.isCollapsed.set(true);
-        this.errMsg.set('Logout failed, please try again.') 
+        this.isCollapsed.set(true); 
       }
     });
   }

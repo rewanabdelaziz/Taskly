@@ -98,8 +98,8 @@
         }
       </button>
     }
-    @if(errMsg()){
-      <p class="error-msg mt-1.5">{{errMsg()}}</p>
+    @if(_globalErrService.globalErrMsg()){
+      <p class="error-msg mt-1.5">{{_globalErrService.globalErrMsg()}}</p>
     }
     <button
       (click)="logout()"
