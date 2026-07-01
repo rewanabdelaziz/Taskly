@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
 import { GlobalErrorMessageService } from '../../services/global-error-message.service';
+import { StorageKeys } from '../../../core/enums/storage-keys';
 
 @Component({
   selector: 'app-sidebar',
@@ -30,11 +31,11 @@ export class SidebarComponent {
   logout() {
     this._auth.logOut().subscribe({
       next: () => {
-        const storage = localStorage.getItem('access_token') ? localStorage : sessionStorage;
-        storage.removeItem('access_token');
-        storage.removeItem('refresh_token');
-        storage.removeItem('expires_at');
-        storage.removeItem('user_profile');
+        const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
+        storage.removeItem(StorageKeys.ACCESS_TOKEN);
+        storage.removeItem(StorageKeys.REFRESH_TOKEN);
+        storage.removeItem(StorageKeys.EXPIRES_AT);
+        storage.removeItem(StorageKeys.user_profile);
 
         this._auth.isLoggedIn.set(false);
         this._auth.userProfile.set(null);

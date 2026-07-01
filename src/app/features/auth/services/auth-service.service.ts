@@ -3,8 +3,9 @@ import { User, UserLoginPayload, UserMetaData, UserRegisterPayload } from '../mo
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap, tap } from 'rxjs';
-import { Router } from '@angular/router';
 import { LoginResponse } from '../models/supabaseModels';
+import { StorageKeys } from '../../../core/enums/storage-keys';
+import { ApiEndponts } from '../../../core/enums/api-endpoints';
 
 @Injectable({
   providedIn: 'root',
@@ -12,28 +13,26 @@ import { LoginResponse } from '../models/supabaseModels';
 export class AuthServiceService {
   baseUrl = environment.baseUrl;
   private _http = inject(HttpClient);
-  private _router = inject(Router);
   userProfile = signal<UserMetaData | null>(null);
   isLoggedIn = signal(false);
 
   constructor() {
-    const profile = localStorage.getItem('user_profile') || sessionStorage.getItem('user_profile');
+    const profile = localStorage.getItem(StorageKeys.user_profile) || sessionStorage.getItem(StorageKeys.user_profile);
     if (profile) {
       this.userProfile.set(JSON.parse(profile));
       this.isLoggedIn.set(true);
-      // console.log(this.isLoggedIn());
     }
   }
 
   // sign-up
   Register(UserRegisterPayload: UserRegisterPayload): Observable<User> {
-    return this._http.post<LoginResponse>(`${this.baseUrl}/auth/v1/signup`, UserRegisterPayload).pipe(
+    return this._http.post<LoginResponse>(`${this.baseUrl}${ApiEndponts.SIGNUP}`, UserRegisterPayload).pipe(
       tap((res: LoginResponse) => {
         this.isLoggedIn.set(true);
         const storage = sessionStorage;
-        storage.setItem('access_token', res.access_token);
-        storage.setItem('refresh_token', res.refresh_token);
-        storage.setItem('expires_at', res.expires_at.toString());
+        storage.setItem(StorageKeys.ACCESS_TOKEN, res.access_token);
+        storage.setItem(StorageKeys.REFRESH_TOKEN, res.refresh_token);
+        storage.setItem(StorageKeys.EXPIRES_AT, res.expires_at.toString());
       }),
       switchMap(() => this.getUser()),
     );
@@ -41,14 +40,14 @@ export class AuthServiceService {
 
   // login
   Login(UserLoginPayload: UserLoginPayload, rememberMe: boolean): Observable<User> {
-    return this._http.post<LoginResponse>(`${this.baseUrl}/auth/v1/token?grant_type=password`, UserLoginPayload).pipe(
+    return this._http.post<LoginResponse>(`${this.baseUrl}${ApiEndponts.LOGIN}`, UserLoginPayload).pipe(
       tap((res: LoginResponse) => {
         this.isLoggedIn.set(true);
         const storage = rememberMe ? localStorage : sessionStorage;
 
-        storage.setItem('access_token', res.access_token);
-        storage.setItem('refresh_token', res.refresh_token);
-        storage.setItem('expires_at', res.expires_at.toString());
+        storage.setItem(StorageKeys.ACCESS_TOKEN, res.access_token);
+        storage.setItem(StorageKeys.REFRESH_TOKEN, res.refresh_token);
+        storage.setItem(StorageKeys.EXPIRES_AT, res.expires_at.toString());
       }),
       switchMap(() => this.getUser()),
     );
@@ -56,24 +55,24 @@ export class AuthServiceService {
 
   // refresh_token
   refreshToken(token: string): Observable<LoginResponse> {
-    return this._http.post<LoginResponse>(`${this.baseUrl}/auth/v1/token?grant_type=refresh_token`, {
+    return this._http.post<LoginResponse>(`${this.baseUrl}${ApiEndponts.REFRESH_TOKEN}`, {
       refresh_token: token,
     });
   }
 
   // logout
   logOut() {
-    return this._http.post(`${this.baseUrl}/auth/v1/logout`, {});
+    return this._http.post(`${this.baseUrl}${ApiEndponts.LOGOUT}`, {});
   }
 
   // get user data
   getUser(): Observable<User> {
-    return this._http.get<User>(`${this.baseUrl}/auth/v1/user`).pipe(
+    return this._http.get<User>(`${this.baseUrl}${ApiEndponts.GET_USER}`).pipe(
       tap((res: User) => {
         const { name, email, department } = res.user_metadata;
-        const storage = localStorage.getItem('access_token') ? localStorage : sessionStorage;
+        const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
         this.userProfile.set({ name, email, department });
-        storage.setItem('user_profile', JSON.stringify({ name, email, department }));
+        storage.setItem(StorageKeys.user_profile, JSON.stringify({ name, email, department }));
       }),
     );
   }

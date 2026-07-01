@@ -4,16 +4,17 @@ import { AuthServiceService } from '../../features/auth/services/auth-service.se
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { LoginResponse } from '../../features/auth/models/supabaseModels';
+import { StorageKeys } from '../enums/storage-keys';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const _auth = inject(AuthServiceService);
   const _router = inject(Router);
 
-  const storage = localStorage.getItem('access_token') ? localStorage : sessionStorage;
+  const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
 
-  const accessToken = storage.getItem('access_token');
-  const refreshToken = storage.getItem('refresh_token');
-  const expireAt = storage.getItem('expires_at');
+  const accessToken = storage.getItem(StorageKeys.ACCESS_TOKEN);
+  const refreshToken = storage.getItem(StorageKeys.REFRESH_TOKEN);
+  const expireAt = storage.getItem(StorageKeys.EXPIRES_AT);
 
   const currentTime = Math.floor(Date.now() / 1000); //in seconds
 
@@ -24,13 +25,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   // if expire token
   if (expireAt && refreshToken && currentTime >= parseInt(expireAt)) {
-    console.log('inside refresh');
     return _auth.refreshToken(refreshToken).pipe(
       switchMap((res: LoginResponse) => {
         console.log(res);
-        storage.setItem('access_token', res.access_token);
-        storage.setItem('refresh_token', res.refresh_token);
-        storage.setItem('expires_at', res.expires_at.toString());
+        storage.setItem(StorageKeys.ACCESS_TOKEN, res.access_token);
+        storage.setItem(StorageKeys.REFRESH_TOKEN, res.refresh_token);
+        storage.setItem(StorageKeys.EXPIRES_AT, res.expires_at.toString());
 
         const cloneReq = req.clone({
           setHeaders: { Authorization: `Bearer ${res.access_token}` },
@@ -40,10 +40,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }),
 
       catchError((err) => {
-        storage.removeItem('access_token');
-        storage.removeItem('refresh_token');
-        storage.removeItem('expires_at');
-        storage.removeItem('user_profile');
+        storage.removeItem(StorageKeys.ACCESS_TOKEN);
+        storage.removeItem(StorageKeys.REFRESH_TOKEN);
+        storage.removeItem(StorageKeys.EXPIRES_AT);
+        storage.removeItem(StorageKeys.user_profile);
         _auth.isLoggedIn.set(false);
         _auth.userProfile.set(null);
         _router.navigate(['/login']);
