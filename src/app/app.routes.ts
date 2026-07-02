@@ -26,6 +26,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/projects/components/add-project/add-project.component').then((m) => m.AddProjectComponent),
       },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/projects/components/projects-list/projects-list.component').then((m) => m.ProjectsListComponent),
+      }
     ],
   },
   
