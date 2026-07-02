@@ -20,5 +20,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/projects/components/projects/projects.component').then((m) => m.ProjectsComponent),
     canActivate: [authGuard],
+    children: [
+      {
+        path: 'add',
+        loadComponent: () =>
+          import('./features/projects/components/add-project/add-project.component').then((m) => m.AddProjectComponent),
+      },
+    ],
   },
+  
 ];

@@ -3,5 +3,6 @@ export enum ApiEndponts{
     LOGIN = "/auth/v1/token?grant_type=password",
     REFRESH_TOKEN ="/auth/v1/token?grant_type=refresh_token",
     LOGOUT= "/auth/v1/logout",
-    GET_USER = "/auth/v1/user"
+    GET_USER = "/auth/v1/user",
+    ADD_PROJECT = "/rest/v1/projects",
 }

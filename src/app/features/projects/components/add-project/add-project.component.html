@@ -1,0 +1,125 @@
+<div class="flex flex-col items-center h-full">
+<!-- header -->
+ <div class="hidden sm:flex sm:flex-col pt-6 ps-8 w-full">
+    <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline">
+        <a class="text-ghost-link hover:text-primary" routerLink="/project">PROJECT</a>
+        <span class="material-symbols-outlined m-2 w-[3.7px] h-1.5 text-ghost-link text-[8px]!">
+           arrow_forward_ios
+        </span>
+        <a routerLink="/project/add" routerLinkActive="text-primary">ADD NEW PROJECT</a>
+    </nav>
+    <div class="mt-3 mb-10 flex justify-between">
+        <h2 class=" font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
+          Add New Project
+        </h2>
+
+        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
+            <span class="material-symbols-outlined">
+               person_add
+            </span>
+            Invite Member
+        </button>
+    </div>
+ </div>
+
+<!-- form container -->
+ <div class="bg-white shadow shadow-add-project-form-box-shadow  rounded-lg max-w-2xl ">
+    <!-- form header -->
+    <div class=" px-8 pt-8 flex gap-4 items-center border-b border-surface-low pb-10">
+        <div class="hidden sm:inline w-11.5 h-11 rounded-sm p-3 bg-add-task-icon-bg  text-primary-container">
+            <span class="material-symbols-outlined w-5.5! h-5!">
+                add_task
+            </span>
+        </div>
+        <div>
+            <h2
+              class="text-[24px]/[32px] font-semibold text-slate-dark sm:tracking-[-0.75px] tracking-normal"
+            >
+              Initialize New Project
+            </h2>
+            <p class="body-md sm:text-sm/[20px]">Define the scope and foundational details of your project.</p>
+        </div>
+    </div>
+    <!-- form -->
+    <form class="flex-1 flex flex-col justify-center p-8 sm:px-6" [formGroup]="addProjectForm" (ngSubmit)="onSubmit($event)">
+      <div class="mb-8">
+        <label
+          for="name"
+          class="form-label"
+          [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['email']"
+          >Project TITLE <span [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['email']" class="text-[11px]/[100%] tracking-normal text-error">*</span></label
+        >
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="input-text py-3"
+          placeholder="project title"
+          formControlName="name"
+          
+        />
+        @if ((isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']) {
+          <p class="text-error mt-2 gap-1.5">
+            <span class="material-symbols-outlined">
+            error
+            </span>
+            {{ formErrors()['name'] }}</p>
+        }
+      </div>
+      <div class="mb-8">
+          <div class="flex justify-between">
+            <label
+            for="description"
+            class="form-label"
+            [class.!error-label]="(isSubmitted() || addProjectForm.get('password')?.touched) && formErrors()['password']"
+            >description</label>
+            <span class="optional-text text-second-optional-label">Optional</span>
+          </div>
+          
+        
+
+        <textarea
+          type="description"
+          name="description"
+          id="description"
+          class="resize-none input-text pt-3 h-37 text-[16px]/[24px] "
+          placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
+          formControlName="description"
+          maxlength="500"></textarea>
+
+          <span class="text-slate-medium text-[11px]/[16.5px] font-medium  tracking-normal block text-end w-full mt-2">0 / 500 characters</span>
+        @if ((isSubmitted() || addProjectForm.get('description')?.touched) && formErrors()['description']) {
+          <p class="error-msg mt-1.5">{{ formErrors()['description'] }}</p>
+        }
+      </div>
+      
+
+      @if (_globalErrMsg.globalErrMsg()) {
+        <p class="error-msg m-1.5">{{ _globalErrMsg.globalErrMsg() }}</p>
+      }
+      @if(successMsg()) {
+        <p class="bg-success m-1.5 p-1">{{ successMsg() }}</p>
+
+      }
+
+      <div class="flex sm:flex-row justify-between items-center mb-12 flex-col">
+        <button class="btn-ghost sm:text-slate-medium  text-primary w-full sm:w-auto shadow-none"
+                (click)="navigateToProjectList()">
+            Back
+        </button>
+        <button type="submit" class="btn-primary w-full sm:w-auto">create project</button>
+      </div>
+
+      <div class="bg-surface-low text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5">
+        <span class="material-symbols-outlined hidden sm:inline">
+          lightbulb
+        </span>
+        
+        <p> <span class="font-bold">Pro Tip:</span> You can invite project members and assign epics immediately after the initial creation process.</p>
+      </div>
+
+     
+    </form>
+  </div>
+</div>
+

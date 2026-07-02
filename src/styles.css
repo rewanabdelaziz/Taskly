@@ -31,11 +31,16 @@
   --color-border-gray: #c3c6d64d;
   --color-border-secodary: #c3c6d633;
   --color-sidebar-text: #041b3c99;
-
+  --color-ghost-link:#43465499;
+  --color-ghost-icon:#43465466;
+  --color-add-task-icon-bg:#0052CC1A;
+  --color-second-optional-label:#4F5F7B99;
   /* shadows */
   --color-btn-shadow: #0000000d;
   --shadow-form-shadow: 0px 24px 48px 0px #041b3c0f;
+  --btn-shadow: 0px 4px 6px -4px #003D9B33;
   --color-navbar-border: #0000001a;
+  --add-project-form-box-shadow: 0px 1px 2px 0px #0000000D;
 
   /* background */
   --background-image-gradient-primary: linear-gradient(
