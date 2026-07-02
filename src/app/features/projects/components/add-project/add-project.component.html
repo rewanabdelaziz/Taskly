@@ -59,7 +59,7 @@
           
         />
         @if ((isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']) {
-          <p class="text-error mt-2 gap-1.5">
+          <p class="text-error mt-2 gap-1.5 flex items-center">
             <span class="material-symbols-outlined">
             error
             </span>
@@ -94,14 +94,6 @@
       </div>
       
 
-      @if (_globalErrMsg.globalErrMsg()) {
-        <p class="error-msg m-1.5">{{ _globalErrMsg.globalErrMsg() }}</p>
-      }
-      @if(successMsg()) {
-        <p class="bg-success m-1.5 p-1">{{ successMsg() }}</p>
-
-      }
-
       <div class="flex sm:flex-row justify-between items-center mb-12 flex-col">
         <button class="btn-ghost sm:text-slate-medium  text-primary w-full sm:w-auto shadow-none"
                 (click)="navigateToProjectList()">
@@ -111,7 +103,7 @@
       </div>
 
       <div class="bg-surface-low text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5">
-        <span class="material-symbols-outlined hidden sm:inline">
+        <span class="material-symbols-outlined hidden! sm:inline">
           lightbulb
         </span>
         

@@ -98,9 +98,7 @@
         }
       </button>
     }
-    @if(_globalErrService.globalErrMsg()){
-      <p class="error-msg mt-1.5">{{_globalErrService.globalErrMsg()}}</p>
-    }
+
     <button
       (click)="logout()"
       class="w-full flex items-center gap-3 px-3 py-2.5 text-error font-medium text-sm/[20px] tracking-normal hover:bg-white"

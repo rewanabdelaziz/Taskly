@@ -4,7 +4,7 @@ import { AuthServiceService } from '../../services/auth-service.service';
 import { UserLoginPayload } from '../../models/user';
 import { LoginSchema } from '../../login.schema';
 import { Router } from '@angular/router';
-import { GlobalErrorMessageService } from '../../../../shared/services/global-error-message.service';
+import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -18,7 +18,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
-  _globalErrMsg = inject(GlobalErrorMessageService)
+  _globalMsg = inject(ToastNotificationService)
 
   loginForm: FormGroup;
   isSubmitted = signal(false);
@@ -78,6 +78,8 @@ export class LoginComponent {
       this._authServie.Login(this.loginPlayload, this.rememberMe()).subscribe({
         next: () => {
           // console.log(res);
+          this.isSubmitted.set(false);
+          this._globalMsg.showMsg('Logged in successfully!', 'success');
           this._router.navigate(['/project']);
         },
         error: (err:HttpErrorResponse) => {
@@ -85,16 +87,16 @@ export class LoginComponent {
           // console.log(err);
           const fallbackMsg = 'Login failed. Please try again.';
           if(err?.error.msg == "Invalid login credentials"){
-            this._globalErrMsg.showErrorMsg("Invalid email or password! Please try again.")
+            this._globalMsg.showMsg("Invalid email or password! Please try again.")
           }else{
-            this._globalErrMsg.showErrorMsg(fallbackMsg)
+            this._globalMsg.showMsg(fallbackMsg)
           }
         },
       });
     } else {
       this.isSubmitted.set(false);
       this.loginForm.markAllAsTouched();
-      console.log('errors', errors);
+      // console.log('errors', errors);
     }
   }
 

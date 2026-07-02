@@ -4,7 +4,7 @@ import { RegisterSchema } from '../../register.schema';
 import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
-import { GlobalErrorMessageService } from '../../../../shared/services/global-error-message.service';
+import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -18,7 +18,7 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
-  _globalErrMsg = inject(GlobalErrorMessageService)
+  _globalMsg = inject(ToastNotificationService)
 
   registerForm: FormGroup;
   isSubmitted = signal(false);
@@ -97,13 +97,15 @@ export class RegisterComponent {
           // console.log(res);
 
           this._authServie.isLoggedIn.set(true);
+          this.isSubmitted.set(false);
+          this._globalMsg.showMsg('Account created successfully!', 'success');
           this._router.navigate(['/project']);
         },
-        error: (err:HttpErrorResponse) => {
+        error: () => {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Registration failed. Please try again.';
-          this._globalErrMsg.showErrorMsg(err?.error.msg || fallbackMsg);
+          this._globalMsg.showMsg( fallbackMsg);
         },
       });
     } else {

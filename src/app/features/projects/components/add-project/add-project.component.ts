@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { GlobalErrorMessageService } from '../../../../shared/services/global-error-message.service';
+import {ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddProjectPayload } from '../../models/projects';
 import { AddProjectSchema } from '../../add-project.schema';
@@ -18,7 +18,7 @@ export class AddProjectComponent implements OnDestroy{
   private fb = inject(FormBuilder);
   private _router = inject(Router);
   private _pojectService = inject(ProjectsManagementsService);
-  _globalErrMsg = inject(GlobalErrorMessageService)
+  _globalToastMsg = inject(ToastNotificationService)
   successMsg = signal<string | null>(null);
   timeOutId : null | number = null;
 
@@ -78,17 +78,21 @@ export class AddProjectComponent implements OnDestroy{
       this.addProjectPlayload = {name, description};
       this._pojectService.addNewProject(this.addProjectPlayload).subscribe({
         next: () => {
+          this.isSubmitted.set(false);
+          this._globalToastMsg.showMsg(null);
+          this.addProjectForm.reset();
           this.successMsg.set("Project created successfully. You can now invite members and assign epics.");
-          this.timeOutId = window.setTimeout(()=>{
-            this.successMsg.set(null)
-            this.timeOutId= null
-          },3000)
+          this._globalToastMsg.showMsg(this.successMsg(), 'success');
           // this._router.navigate(['/project']);
         },
-        error: (err: HttpErrorResponse) => {
-          this._globalErrMsg.showErrorMsg(err.error.message);
+        error: () => {
+          this.isSubmitted.set(false);
+          this._globalToastMsg.showMsg(`Failed to create project`);
         }
       });
+    }else {
+      this.isSubmitted.set(false);
+      this.addProjectForm.markAllAsTouched();
     }
   }
 

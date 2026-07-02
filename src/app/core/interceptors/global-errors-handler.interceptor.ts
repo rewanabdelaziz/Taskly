@@ -1,23 +1,21 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { GlobalErrorMessageService } from '../../shared/services/global-error-message.service';
+import { ToastNotificationService } from '../../shared/services/toast-notification.service';
 
 export const globalErrorsHandlerInterceptor: HttpInterceptorFn = (req, next) => {
-  const _errService = inject(GlobalErrorMessageService)
+  const _errService = inject(ToastNotificationService)
   return next(req).pipe(
     catchError((err : HttpErrorResponse)=>{
-     
-
         switch(err.status){
           case 404:
-            _errService.showErrorMsg("not found")
+            _errService.showMsg("not found")
             break;
           case 500: 
-            _errService.showErrorMsg("internal server error. please try again.")
+            _errService.showMsg("internal server error. please try again.")
             break;
           case 0:
-             _errService.showErrorMsg("No internet connection")
+             _errService.showMsg("No internet connection")
              break;
 
         }

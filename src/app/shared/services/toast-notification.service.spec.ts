@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GlobalErrorMessageService } from './global-error-message.service';
+import { GlobalErrorMessageService } from './toast-notification.service';
 
 describe('GlobalErrorMessageService', () => {
   let service: GlobalErrorMessageService;
