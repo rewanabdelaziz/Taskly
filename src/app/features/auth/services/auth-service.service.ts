@@ -76,4 +76,9 @@ export class AuthServiceService {
       }),
     );
   }
+
+  // reset password
+  recoverPassword(payload:{email:string}){
+    return this._http.post(`${this.baseUrl}${ApiEndponts.RECOVER_PASSWORD}`,payload)
+  }
 }

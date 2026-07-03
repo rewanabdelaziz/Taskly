@@ -25,18 +25,20 @@
   --color-placeholder: #737685;
   --color-error-msg-bg: #ffdad6;
   --color-error-msg-text: #93000a;
-  --color-success-msg-bg: #d1f7e4;
-  --color-success-msg-text: #004e32;
+  --color-success-msg-bg: #82F9BE33;
+  --color-success-msg-text: #005235;
   --color-active-task-label: #002113;
   --color-icon-card: #e8edff;
   --color-circle-checked: #004e32;
   --color-border-gray: #c3c6d64d;
   --color-border-secodary: #c3c6d633;
+  --color-message-border:#0052351A;
   --color-sidebar-text: #041b3c99;
   --color-ghost-link:#43465499;
   --color-ghost-icon:#43465466;
   --color-add-task-icon-bg:#0052CC1A;
   --color-second-optional-label:#4F5F7B99;
+  --color-secondary-green:#00523599;
   /* shadows */
   --color-btn-shadow: #0000000d;
   --shadow-form-shadow: 0px 24px 48px 0px #041b3c0f;
