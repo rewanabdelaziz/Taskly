@@ -42,17 +42,13 @@ export class ForgetPasswordComponent implements OnDestroy{
   onSubmit(event: Event) {
    this.isSubmitted.set(true);
    event.preventDefault();
-    console.log("inside submit")
     if (this.forgetPasswordFrom.valid) {
-      console.log("before req ")
       const {email} = this.forgetPasswordFrom.value;
       this.forgetPasswordPlayload = { email: email};
 
       this._authServie.recoverPassword(this.forgetPasswordPlayload).subscribe({
         next: () =>{
-          console.log("res ")
           this.isSuccess.set(true)
-          
           this.startCounter();
         },
         error: () =>{
