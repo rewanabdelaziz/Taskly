@@ -78,7 +78,14 @@ export class AuthServiceService {
   }
 
   // reset password
-  recoverPassword(payload:{email:string}){
+  recoverPassword(email:string){
+    const payload= { email : email,
+      redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password",
+    //   options: {
+    //   redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password"
+    // }  
+  }
+
     return this._http.post(`${this.baseUrl}${ApiEndponts.RECOVER_PASSWORD}`,payload)
   }
 }

@@ -23,7 +23,7 @@ export class ForgetPasswordComponent implements OnDestroy{
   private timeIntervalId : null | number = null
   
   
-  forgetPasswordPlayload!: {email: string};
+  forgetPasswordPlayload! :string;
 
   constructor() {
     this.timerMin = signal(4)
@@ -44,15 +44,17 @@ export class ForgetPasswordComponent implements OnDestroy{
    event.preventDefault();
     if (this.forgetPasswordFrom.valid) {
       const {email} = this.forgetPasswordFrom.value;
-      this.forgetPasswordPlayload = { email: email};
+      this.forgetPasswordPlayload = email;
 
-      this._authServie.recoverPassword(this.forgetPasswordPlayload).subscribe({
+      this._authServie.recoverPassword(email).subscribe({
         next: () =>{
           this.isSuccess.set(true)
           this.startCounter();
+          this._globalMsg.showMsg("link sent successfully. check your email","success")
         },
         error: () =>{
           this.isSubmitted.set(false)
+          this._globalMsg.showMsg("Something wrong try again")
         }
       })
     }
