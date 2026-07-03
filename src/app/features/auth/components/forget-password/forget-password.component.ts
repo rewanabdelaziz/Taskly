@@ -2,11 +2,12 @@ import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-forget-password',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css'
 })

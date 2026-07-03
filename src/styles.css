@@ -90,7 +90,7 @@
 }
 /* buttons */
 @utility btns-basic {
-  @apply py-2.5 px-6 rounded-xs capitalize tracking-normal text-sm/[20px];
+  @apply py-2.5 px-6 rounded-xs capitalize tracking-normal text-sm/[20px] cursor-pointer;
 }
 @utility btn-primary {
   @apply btns-basic bg-gradient-primary text-white  shadow-xs font-semibold  shadow-btn-shadow;
