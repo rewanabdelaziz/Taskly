@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
 import { DatePipe } from '@angular/common';
 import { Project } from '../../models/projects';
-import { boolean } from 'zod';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-projects-list',
@@ -19,22 +19,38 @@ export class ProjectsListComponent implements OnInit{
   isloading = signal<boolean>(false)
   isEmpty = signal<boolean>(false)
   isError = signal<boolean>(false)
+  currentPage = signal(1)
+  limit = signal(9)
+  offset = computed(()=> (this.currentPage() - 1) * this.limit())
+  total = signal(0)
+  EndPageNum = computed(()=> Math.ceil(this.total() / this.limit()) || 1)
 
 
   ngOnInit(): void {
-    this.getAllProjects()
+    this.getProjects()
   }
 
-  getAllProjects(){
+  getProjects(){
     this.isloading.set(true)
-    this.project_managements.getAllProjects().subscribe({
-      next: (res:Project[]) =>{
-        console.log(res)
+    this.isEmpty.set(false)
+    this.isError.set(false)
+    this.project_managements.getAllProjects(this.offset(),this.limit()).subscribe({
+      next: (res:HttpResponse<Project[]>) =>{
+        console.log(res.body)
+
         this.isloading.set(false)
-        if(res.length == 0){
+        this.projects.set(res.body || [])
+
+        if(this.projects().length == 0){
           this.isEmpty.set(true)
         }
-        this.projects.set(res)
+        // content tange from header ex: 0-4/5 [(start index - end index) / total num]
+        const contentRange = res.headers.get('content-range');
+        if (contentRange) {
+          const parts = contentRange.split('/');
+          const total = parseInt(parts[1])
+          this.total.set(total)
+        }
         
       },
       error: (err)=>{
@@ -45,9 +61,23 @@ export class ProjectsListComponent implements OnInit{
     })
   }
 
+  next(){
+    if(this.currentPage()< this.EndPageNum()){
+      this.currentPage.update((prev)=> prev+1)
+      this.getProjects()
+    }
+  }
+  
+  prev(){
+    if(this.currentPage()> 1){
+      this.currentPage.update((prev)=> prev-1)
+      this.getProjects()
+    }
+  }
+
 
   retry(){
     this.isError.set(false)
-    this.getAllProjects()
+    this.getProjects()
   }
 }

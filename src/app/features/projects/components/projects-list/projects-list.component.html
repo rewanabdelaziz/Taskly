@@ -136,13 +136,15 @@
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 w-full mt-10 pt-6 border-t border-slate-100">
           
           <div class="text-sm text-text-body font-medium">
-            Showing <span class="text-slate-dark font-semibold">{{ projects().length }}</span> of <span class="text-slate-dark font-semibold">24</span> active projects
+            Showing <span class="text-slate-dark font-semibold">{{ projects().length }}</span> of <span class="text-slate-dark font-semibold">{{total()}}</span> active projects
           </div>
         
           <div class="flex items-center gap-2">
             
             <button 
               type="button" 
+              (click)="prev()"
+              [disabled]="currentPage() === 1 || isloading()"
               class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
               <span class="material-symbols-outlined text-[18px]">chevron_left</span>
             </button>
@@ -150,18 +152,24 @@
             <button 
               type="button" 
               class="flex items-center justify-center w-9 h-9 bg-primary text-white font-bold rounded shadow-sm cursor-pointer">
-              1
+              {{ currentPage() }}
             </button>
+        
+            @if (EndPageNum() > 1 && currentPage() !== EndPageNum()) {
+              <div class="text-slate-400 text-sm px-1">...</div>
+              <button 
+                type="button" 
+                (click)="currentPage.set(EndPageNum()); getProjects()"
+                class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-700 font-semibold rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                {{ EndPageNum() }}
+              </button>
+            }
         
             <button 
               type="button" 
-              class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-700 font-semibold rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-              2
-            </button>
-        
-            <button 
-              type="button" 
-              class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+              (click)="next()"
+              [disabled]="currentPage() === EndPageNum() || isloading()"
+              class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
               <span class="material-symbols-outlined text-[18px]">chevron_right</span>
             </button>
         
