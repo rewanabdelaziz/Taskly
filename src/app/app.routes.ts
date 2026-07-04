@@ -46,11 +46,13 @@ export const routes: Routes = [
         loadComponent: () => import('./features/auth/components/forget-password/forget-password.component').then((m) => m.ForgetPasswordComponent), 
         canActivate: [reverseAuthGuard],
       },
-      {
-        path:'reset-password',
-        loadComponent: () => import('./features/auth/components/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent), 
-      }
+      
     ],
   },
+
+  {
+    path:'reset-password',
+    loadComponent: () => import('./features/auth/components/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent), 
+  }
   
 ];
