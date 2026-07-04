@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { User, UserLoginPayload, UserMetaData, UserRegisterPayload } from '../models/user';
 import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, switchMap, tap } from 'rxjs';
 import { LoginResponse } from '../models/supabaseModels';
 import { StorageKeys } from '../../../core/enums/storage-keys';
@@ -15,6 +15,7 @@ export class AuthServiceService {
   private _http = inject(HttpClient);
   userProfile = signal<UserMetaData | null>(null);
   isLoggedIn = signal(false);
+  resetToken = signal<string | null>(null)
 
   constructor() {
     const profile = localStorage.getItem(StorageKeys.user_profile) || sessionStorage.getItem(StorageKeys.user_profile);
@@ -81,11 +82,22 @@ export class AuthServiceService {
   recoverPassword(email:string){
     const payload= { email : email,
       redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password",
+      // redirect_to: "http://localhost:4200/reset-password",
     //   options: {
     //   redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password"
     // }  
-  }
+    }
 
     return this._http.post(`${this.baseUrl}${ApiEndponts.RECOVER_PASSWORD}`,payload)
   }
+
+  // setPassword
+  resetPassword(payload:{password:string},token:string){
+    const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+    });
+    return this._http.put(`${this.baseUrl}${ApiEndponts.RESET_PASSWORD}`,payload, {headers})
+  }
+
+
 }

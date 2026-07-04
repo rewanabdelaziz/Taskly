@@ -28,20 +28,23 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./features/auth/components/auth-layout/auth-layout.component').then((m) => m.AuthLayoutComponent),
-    canActivate: [reverseAuthGuard],
+    
     children: [
       {
         path: 'sign-up',
         loadComponent: () =>
           import('./features/auth/components/register/register.component').then((m) => m.RegisterComponent),
+        canActivate: [reverseAuthGuard],
       },
       {
         path: 'login',
         loadComponent: () => import('./features/auth/components/login/login.component').then((m) => m.LoginComponent),
+        canActivate: [reverseAuthGuard],
       },
       {
         path:'forgot-password',
         loadComponent: () => import('./features/auth/components/forget-password/forget-password.component').then((m) => m.ForgetPasswordComponent), 
+        canActivate: [reverseAuthGuard],
       },
       {
         path:'reset-password',

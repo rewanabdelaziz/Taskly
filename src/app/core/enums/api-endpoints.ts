@@ -6,4 +6,5 @@ export enum ApiEndponts{
     GET_USER = "/auth/v1/user",
     RECOVER_PASSWORD = "/auth/v1/recover",
     ADD_PROJECT = "/rest/v1/projects",
+    RESET_PASSWORD = "/auth/v1/user"
 }
