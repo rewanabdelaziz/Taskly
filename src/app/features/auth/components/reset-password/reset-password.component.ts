@@ -107,7 +107,13 @@ private fb = inject(FormBuilder);
           this.isSubmitted.set(false);
           console.log(err);
           const fallbackMsg = 'Reset password failed. Please try again.';
-          this._globalMsg.showMsg( fallbackMsg);
+          if(err.error.error_code === "same_password" || err.error.code === 422){
+            this._globalMsg.showMsg( "New password should be different from the old password.");
+          }else{
+            this._globalMsg.showMsg( fallbackMsg);
+            
+          }
+          
         },
       });
     } else {
