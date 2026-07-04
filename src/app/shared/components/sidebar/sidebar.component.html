@@ -10,7 +10,7 @@
   [class.w-3xs]="!isCollapsed()"
   [class.w-20]="isCollapsed()"
   [class.!translate-x-0]="isMobileOpen()"
-  class="fixed inset-0 sm:sticky translate-x-[-350%] sm:translate-x-0 z-20 h-screen bg-surface-low text-slate-dark flex flex-col justify-between p-4 transition-all duration-300"
+  class="fixed inset-0 sm:sticky translate-x-[-350%] sm:translate-x-0 z-30 h-screen bg-surface-low text-slate-dark flex flex-col justify-between p-4 transition-all duration-300"
 >
   <div>
     @if (!isCollapsed()) {
@@ -113,7 +113,7 @@
 
 <nav
   [class.!translate-y-0]="!isMobileOpen()"
-  class="fixed bottom-0 sm:sticky sm:hidden translate-y-[350%] sm:translate-x-0 flex py-[14.5px] px-7 gap-2 sm:gap-10 justify-between w-full"
+  class="fixed bottom-0 z-30 bg-white sm:hidden translate-y-[350%] sm:translate-x-0 flex py-[14.5px] px-7 gap-2 sm:gap-10 justify-between w-full"
 >
   <a
     routerLink="/project"
