@@ -15,7 +15,7 @@ export class AuthServiceService {
   private _http = inject(HttpClient);
   userProfile = signal<UserMetaData | null>(null);
   isLoggedIn = signal(false);
-  resetToken = signal<string | null>(null)
+
 
   constructor() {
     const profile = localStorage.getItem(StorageKeys.user_profile) || sessionStorage.getItem(StorageKeys.user_profile);

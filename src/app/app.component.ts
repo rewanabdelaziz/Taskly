@@ -32,11 +32,10 @@ export class AppComponent implements OnInit{
 
         if(type === 'recovery' ){
           if(accessToken){
-            console.log('Recovery token detected dynamically! Redirecting to reset-password...')
+            // console.log('Recovery token detected dynamically! Redirecting to reset-password...')
             this._router.navigate(['/reset-password'],{
               state: {accessToken : accessToken}
             })
-            this._auth.resetToken.set(accessToken)
           }else{
             this._toast.showMsg('Invalid or expired reset link.')
           }
