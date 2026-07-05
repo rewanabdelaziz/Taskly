@@ -78,7 +78,6 @@ export class AddProjectComponent implements OnDestroy{
     this.addProjectForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      rememberMe: [false],
     });
 
     this.formValue.set(this.addProjectForm.value);

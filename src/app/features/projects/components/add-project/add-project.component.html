@@ -95,7 +95,7 @@
           formControlName="description"
           maxlength="500"></textarea>
 
-          <span class="text-slate-medium text-[11px]/[16.5px] font-medium  tracking-normal block text-end w-full mt-2">{{addProjectForm.get('description')?.value.length || 0}}/ 500 characters</span>
+          <span class="text-slate-medium text-[11px]/[16.5px] font-medium  tracking-normal block text-end w-full mt-2">{{ (addProjectForm.get('description')?.value?.length || 0)}}/ 500 characters</span>
         @if ((isSubmitted() || addProjectForm.get('description')?.touched) && formErrors()['description']) {
           <p class="error-msg mt-1.5">{{ formErrors()['description'] }}</p>
         }
