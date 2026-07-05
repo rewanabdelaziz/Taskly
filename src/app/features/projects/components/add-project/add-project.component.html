@@ -6,19 +6,27 @@
         <span class="material-symbols-outlined m-2 w-[3.7px] h-1.5 text-ghost-link text-[8px]!">
            arrow_forward_ios
         </span>
-        <a routerLink="/project/add" routerLinkActive="text-primary">ADD NEW PROJECT</a>
+        @if(isEditMode()){
+          <a [routerLink]="['/project',projectId,'/edit']" routerLinkActive="text-primary">Edit PROJECT</a>
+        }@else {
+          <a routerLink="/project/add" routerLinkActive="text-primary">ADD NEW PROJECT</a>
+        }
+        
     </nav>
     <div class="mt-3 mb-10 flex justify-between">
         <h2 class=" font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
-          Add New Project
+          {{isEditMode()? 'Edit Project':'Add New Project'}}
         </h2>
-
-        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
+        
+        @if(!isEditMode()){
+                  <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
             <span class="material-symbols-outlined">
                person_add
             </span>
             Invite Member
         </button>
+        }
+
     </div>
  </div>
 
@@ -35,7 +43,7 @@
             <h2
               class="text-[24px]/[32px] font-semibold text-slate-dark sm:tracking-[-0.75px] tracking-normal"
             >
-              Initialize New Project
+              {{isEditMode()? 'Edit Project':'Initialize New Project'}}
             </h2>
             <p class="body-md sm:text-sm/[20px]">Define the scope and foundational details of your project.</p>
         </div>
@@ -99,7 +107,7 @@
                 (click)="navigateToProjectList()">
             Back
         </button>
-        <button type="submit" class="btn-primary w-full sm:w-auto">create project</button>
+        <button type="submit" class="btn-primary w-full sm:w-auto">{{isEditMode()? 'edit project': 'create project'}}</button>
       </div>
 
       <div class="bg-surface-low text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5">

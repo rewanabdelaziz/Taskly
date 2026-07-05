@@ -44,6 +44,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         storage.removeItem(StorageKeys.REFRESH_TOKEN);
         storage.removeItem(StorageKeys.EXPIRES_AT);
         storage.removeItem(StorageKeys.user_profile);
+        localStorage.removeItem(StorageKeys.SELECTED_PROJECT)
         _auth.isLoggedIn.set(false);
         _auth.userProfile.set(null);
         _router.navigate(['/login']);

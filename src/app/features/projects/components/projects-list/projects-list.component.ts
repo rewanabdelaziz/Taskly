@@ -58,7 +58,7 @@ export class ProjectsListComponent implements OnInit{
     this.isError.set(false)
     this.project_managements.getAllProjects(this.offset(),this.limit()).subscribe({
       next: (res:HttpResponse<Project[]>) =>{
-        console.log(res.body)
+        // console.log(res.body)
 
         this.isloading.set(false)
         if (isAppend) {
@@ -82,7 +82,7 @@ export class ProjectsListComponent implements OnInit{
         
       },
       error: (err)=>{
-        console.log(err)
+        // console.log(err)
         this.isloading.set(false)
         this.isError.set(true)
       }
@@ -108,7 +108,8 @@ export class ProjectsListComponent implements OnInit{
     this.getProjects(this.isMobile() && this.currentPage() > 1)
   }
 
-  goToEpics(id:string){
+  goToEpics(id:string,project:Project){
+    this.project_managements.setSelectedProject(project)
     this._router.navigate([`/project/${id}/epics`])
   }
 }

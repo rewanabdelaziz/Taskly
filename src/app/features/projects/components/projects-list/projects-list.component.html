@@ -108,7 +108,7 @@
        <!-- cards container -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             @for(project of projects(); track project.id){
-                <div class="bg-white flex flex-col justify-between p-6 min-h-56 max-w-80 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer" (click)="goToEpics(project.id)">
+                <div class="bg-white flex flex-col justify-between p-6 min-h-56 max-w-80 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer" (click)="goToEpics(project.id,project)">
                     <h3 class="text-third-heading text-[1.125rem]/[1.75rem] mb-3.5">{{project.name}}</h3>
                     <p class="text-text-body text-sm/[1.4375rem] mb-10.5">{{project.description}}</p>
                     <div class="flex justify-between items-center gap-16">

@@ -57,6 +57,7 @@ export class SidebarComponent {
         storage.removeItem(StorageKeys.REFRESH_TOKEN);
         storage.removeItem(StorageKeys.EXPIRES_AT);
         storage.removeItem(StorageKeys.user_profile);
+        localStorage.removeItem(StorageKeys.SELECTED_PROJECT)
 
         this._auth.isLoggedIn.set(false);
         this._auth.userProfile.set(null);

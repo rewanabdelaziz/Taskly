@@ -1,12 +1,12 @@
-import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { Component, computed, effect, inject, OnDestroy, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import {ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddProjectPayload } from '../../models/projects';
 import { AddProjectSchema } from '../../add-project.schema';
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
-import { HttpErrorResponse } from '@angular/common/http';
-
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 @Component({
   selector: 'app-add-project',
   standalone: true,
@@ -26,6 +26,31 @@ export class AddProjectComponent implements OnDestroy{
   isSubmitted = signal(false);
   formValue = signal({});
   addProjectPlayload!: AddProjectPayload;
+
+
+  private currentUrl = toSignal(
+    this._router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => event.urlAfterRedirects)
+    ),
+    { initialValue: this._router.url }
+  );
+
+  projectId = computed(() => {
+    const url = this.currentUrl();
+    const segments = url.split('/');
+    
+    const idSegment = segments[2]; 
+    if (idSegment && idSegment !== 'add') {
+      return idSegment;
+    }
+    return null; 
+  });
+
+   isEditMode = computed(()=>{
+    return this.projectId !==null
+   })
+
   
 
   formErrors = computed(() => {
@@ -61,7 +86,19 @@ export class AddProjectComponent implements OnDestroy{
     this.addProjectForm.valueChanges.subscribe((v) => {
       this.formValue.set(v);
     });
+
+    effect(()=>{
+      const id = this.projectId()
+      const project = this._pojectService.selectedProject()
+      if(id && project && project.id === id){
+        this.addProjectForm.patchValue({
+          name: project.name,
+          description: project.description
+        })
+      }
+    })
   }
+
   ngOnDestroy(): void {
     if(this.timeOutId){
       clearTimeout(this.timeOutId)
@@ -71,8 +108,18 @@ export class AddProjectComponent implements OnDestroy{
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
     event.preventDefault();
-    const errors = this.formErrors();
+    
+    if(this.isEditMode() && (this.projectId()!== null )){
+      const id = this.projectId() || ''
+      this.editProject(id)
+    }else{
+      this.addProject()
+    }
 
+  }
+
+  addProject(){
+    const errors = this.formErrors();
     if (Object.keys(errors).length === 0) {
       const {name , description} = this.addProjectForm.value;
       this.addProjectPlayload = {name, description};
@@ -95,6 +142,33 @@ export class AddProjectComponent implements OnDestroy{
       this.addProjectForm.markAllAsTouched();
     }
   }
+
+  editProject(id:string){
+    const errors = this.formErrors();
+
+    if (Object.keys(errors).length === 0) {
+
+      const {name , description} = this.addProjectForm.value;
+      this.addProjectPlayload = {name, description};
+      this._pojectService.editProject(this.addProjectPlayload,id).subscribe({
+        next: () => {
+          this.isSubmitted.set(false);
+          this._globalToastMsg.showMsg(null);
+          this.addProjectForm.reset();
+          this.successMsg.set("Project edited successfully. You can now invite members and assign epics.");
+          this._globalToastMsg.showMsg(this.successMsg(), 'success');
+          this._router.navigate(['/project']);
+        },
+        error: () => {
+          this.isSubmitted.set(false);
+          this._globalToastMsg.showMsg(`Failed to edit project.please try again.`);
+        }
+      });
+    }else {
+      this.isSubmitted.set(false);
+    }
+  }
+
 
   navigateToProjectList(){
     this._router.navigate(['/project']);
