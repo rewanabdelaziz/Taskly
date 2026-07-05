@@ -48,7 +48,7 @@ export class AddProjectComponent implements OnDestroy{
   });
 
    isEditMode = computed(()=>{
-    return this.projectId !==null
+    return this.projectId() !==null
    })
 
   
