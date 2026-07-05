@@ -1,5 +1,5 @@
 import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
 import { DatePipe } from '@angular/common';
 import { Project } from '../../models/projects';
@@ -8,13 +8,14 @@ import { HttpResponse } from '@angular/common/http';
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [RouterLink,DatePipe],
+  imports: [RouterLink,DatePipe,RouterLink],
   templateUrl: './projects-list.component.html',
   styleUrl: './projects-list.component.css'
 })
 export class ProjectsListComponent implements OnInit{
 
   private project_managements = inject(ProjectsManagementsService)
+  private _router = inject(Router)
   projects  = signal <Project[]>([])
   isloading = signal<boolean>(false)
   isEmpty = signal<boolean>(false)
@@ -24,6 +25,7 @@ export class ProjectsListComponent implements OnInit{
   offset = computed(()=> (this.currentPage() - 1) * this.limit())
   total = signal(0)
   EndPageNum = computed(()=> Math.ceil(this.total() / this.limit()) || 1)
+  
 
   isMobile = signal<boolean>(false);
 
@@ -104,5 +106,9 @@ export class ProjectsListComponent implements OnInit{
 
   retry(){
     this.getProjects(this.isMobile() && this.currentPage() > 1)
+  }
+
+  goToEpics(id:string){
+    this._router.navigate([`/project/${id}/epics`])
   }
 }

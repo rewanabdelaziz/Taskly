@@ -25,6 +25,7 @@
         <a
           routerLink="/project"
           routerLinkActive="!text-primary"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
         >
           <span class="material-symbols-outlined">folder_open</span>
@@ -34,9 +35,11 @@
         </a>
       </li>
 
-      <li class="hover:bg-white rounded-md py-2.5 px-3">
+     @if(projectId()){
+       <li class="hover:bg-white rounded-md py-2.5 px-3">
         <a
-          routerLink="/project"
+           [routerLink]="['/project',projectId(),'epics']"
+           routerLinkActive="!text-primary"
           class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
         >
           <span class="material-symbols-outlined"> account_tree </span>
@@ -48,7 +51,8 @@
 
       <li class="hover:bg-white rounded-md py-2.5 px-3">
         <a
-          routerLink="/project"
+         [routerLink]="['/project',projectId(),'tasks']"
+         routerLinkActive="!text-primary"
           class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
         >
           <span class="material-symbols-outlined"> checklist </span>
@@ -60,7 +64,8 @@
 
       <li class="hover:bg-white rounded-md py-2.5 px-3">
         <a
-          routerLink="/project"
+          [routerLink]="['/project',projectId(),'members']"
+           routerLinkActive="!text-primary"
           class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
         >
           <span class="material-symbols-outlined"> group </span>
@@ -72,7 +77,8 @@
 
       <li class="hover:bg-white rounded-md py-2.5 px-3">
         <a
-          routerLink="/project"
+          [routerLink]="['/project',projectId(),'edit']"
+          routerLinkActive="!text-primary"
           class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
         >
           <span class="material-symbols-outlined"> info </span>
@@ -81,6 +87,7 @@
           }
         </a>
       </li>
+     }
     </ul>
   </div>
 
@@ -118,14 +125,17 @@
   <a
     routerLink="/project"
     routerLinkActive="!text-primary"
+    [routerLinkActiveOptions]="{ exact: true }"
     class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
   >
     <span class="material-symbols-outlined">folder_open</span>
     <span>Projects</span>
   </a>
 
-  <a
-    routerLink="/project"
+  @if(projectId()){
+    <a
+    [routerLink]="['/project',projectId(),'epics']"
+    routerLinkActive="!text-primary"
     class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
   >
     <span class="material-symbols-outlined"> account_tree </span>
@@ -133,7 +143,8 @@
   </a>
 
   <a
-    routerLink="/project"
+    [routerLink]="['/project',projectId(),'tasks']"
+    routerLinkActive="!text-primary"
     class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
   >
     <span class="material-symbols-outlined"> checklist </span>
@@ -141,7 +152,8 @@
   </a>
 
   <a
-    routerLink="/project"
+    [routerLink]="['/project',projectId(),'members']"
+    routerLinkActive="!text-primary"
     class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
   >
     <span class="material-symbols-outlined"> group </span>
@@ -149,10 +161,12 @@
   </a>
 
   <a
-    routerLink="/project"
+    [routerLink]="['/project',projectId(),'edit']"
+    routerLinkActive="!text-primary"
     class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
   >
     <span class="material-symbols-outlined"> info </span>
     <span>Details</span>
   </a>
+  }
 </nav>

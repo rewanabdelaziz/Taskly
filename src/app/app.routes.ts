@@ -17,6 +17,26 @@ export const routes: Routes = [
           import('./features/projects/components/add-project/add-project.component').then((m) => m.AddProjectComponent),
       },
       {
+        path: ':id/edit',
+        loadComponent: () =>
+          import('./features/projects/components/add-project/add-project.component').then((m) => m.AddProjectComponent),
+      },
+      {
+        path: ':id/epics',
+        loadComponent: () =>
+          import('./features/projects/components/epics/epics.component').then((m) => m.EpicsComponent),
+      },
+      {
+        path: ':id/members',
+        loadComponent: () =>
+          import('./features/projects/components/members/members.component').then((m) => m.MembersComponent),
+      },
+      {
+        path: ':id/tasks',
+        loadComponent: () =>
+          import('./features/projects/components/tasks/tasks.component').then((m) => m.TasksComponent),
+      },
+      {
         path: '',
         loadComponent: () =>
           import('./features/projects/components/projects-list/projects-list.component').then((m) => m.ProjectsListComponent),

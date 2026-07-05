@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
 import { ToastNotificationService } from '../../services/toast-notification.service';
 import { StorageKeys } from '../../../core/enums/storage-keys';
-
+import { filter, map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -18,6 +19,26 @@ export class SidebarComponent {
 
   isCollapsed = signal(false);
   isMobileOpen = signal(false);
+
+  private currentUrl = toSignal(
+    this._router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => event.urlAfterRedirects)
+    ),
+    { initialValue: this._router.url }
+  );
+
+
+  projectId = computed(() => {
+    const url = this.currentUrl();
+    const segments = url.split('/');
+    
+    const idSegment = segments[2]; 
+    if (idSegment && idSegment !== 'add') {
+      return idSegment;
+    }
+    return null; 
+  });
 
 
   toggleSidebar() {
