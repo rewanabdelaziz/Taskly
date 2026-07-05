@@ -11,4 +11,5 @@ export enum ApiEndponts{
     // projects 
     GET_PROJECTS ="/rest/v1/rpc/get_projects",
     ADD_PROJECT = "/rest/v1/projects",
+    MEMBERS = "/rest/v1/get_project_members"
 }
