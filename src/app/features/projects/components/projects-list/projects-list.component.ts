@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
 import { DatePipe } from '@angular/common';
@@ -25,21 +25,47 @@ export class ProjectsListComponent implements OnInit{
   total = signal(0)
   EndPageNum = computed(()=> Math.ceil(this.total() / this.limit()) || 1)
 
+  isMobile = signal<boolean>(false);
 
   ngOnInit(): void {
     this.getProjects()
+    this.checkScreenSize()
   }
 
-  getProjects(){
+  @HostListener('window:scroll',[])
+  onWindowScroll(){
+    if (!this.isMobile() || this.isloading() || this.currentPage() >= this.EndPageNum()) return;
+
+    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
+    const max = document.documentElement.scrollHeight;
+
+    if (pos >= max - 50) {
+      this.currentPage.update(prev => prev + 1);
+      this.getProjects(true); 
+    }
+  }
+
+  @HostListener('window:resize', [])
+  checkScreenSize() {
+    this.isMobile.set(window.innerWidth < 640); // sm:640px
+  }
+
+  getProjects(isAppend:boolean = false){
     this.isloading.set(true)
-    this.isEmpty.set(false)
+    if (!isAppend) this.isEmpty.set(false)
     this.isError.set(false)
     this.project_managements.getAllProjects(this.offset(),this.limit()).subscribe({
       next: (res:HttpResponse<Project[]>) =>{
         console.log(res.body)
 
         this.isloading.set(false)
-        this.projects.set(res.body || [])
+        if (isAppend) {
+          const newProj = res.body || []
+          this.projects.update(prev => [...prev, ...newProj]);
+        } else {
+          this.projects.set(res.body || [])
+        }
+        
 
         if(this.projects().length == 0){
           this.isEmpty.set(true)
@@ -67,7 +93,7 @@ export class ProjectsListComponent implements OnInit{
       this.getProjects()
     }
   }
-  
+
   prev(){
     if(this.currentPage()> 1){
       this.currentPage.update((prev)=> prev-1)
@@ -77,7 +103,6 @@ export class ProjectsListComponent implements OnInit{
 
 
   retry(){
-    this.isError.set(false)
-    this.getProjects()
+    this.getProjects(this.isMobile() && this.currentPage() > 1)
   }
 }
