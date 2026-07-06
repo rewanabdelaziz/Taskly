@@ -35,59 +35,59 @@
         </a>
       </li>
 
-     @if(projectId()){
-       <li class="hover:bg-white rounded-md py-2.5 px-3">
-        <a
-           [routerLink]="['/project',projectId(),'epics']"
-           routerLinkActive="!text-primary"
-          class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-        >
-          <span class="material-symbols-outlined"> account_tree </span>
-          @if (!isCollapsed()) {
-            <span>Project Epics</span>
-          }
-        </a>
-      </li>
+      @if (projectId()) {
+        <li class="hover:bg-white rounded-md py-2.5 px-3">
+          <a
+            [routerLink]="['/project', projectId(), 'epics']"
+            routerLinkActive="!text-primary"
+            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+          >
+            <span class="material-symbols-outlined"> account_tree </span>
+            @if (!isCollapsed()) {
+              <span>Project Epics</span>
+            }
+          </a>
+        </li>
 
-      <li class="hover:bg-white rounded-md py-2.5 px-3">
-        <a
-         [routerLink]="['/project',projectId(),'tasks']"
-         routerLinkActive="!text-primary"
-          class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-        >
-          <span class="material-symbols-outlined"> checklist </span>
-          @if (!isCollapsed()) {
-            <span>Project Tasks</span>
-          }
-        </a>
-      </li>
+        <li class="hover:bg-white rounded-md py-2.5 px-3">
+          <a
+            [routerLink]="['/project', projectId(), 'tasks']"
+            routerLinkActive="!text-primary"
+            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+          >
+            <span class="material-symbols-outlined"> checklist </span>
+            @if (!isCollapsed()) {
+              <span>Project Tasks</span>
+            }
+          </a>
+        </li>
 
-      <li class="hover:bg-white rounded-md py-2.5 px-3">
-        <a
-          [routerLink]="['/project',projectId(),'members']"
-           routerLinkActive="!text-primary"
-          class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-        >
-          <span class="material-symbols-outlined"> group </span>
-          @if (!isCollapsed()) {
-            <span>Project Members</span>
-          }
-        </a>
-      </li>
+        <li class="hover:bg-white rounded-md py-2.5 px-3">
+          <a
+            [routerLink]="['/project', projectId(), 'members']"
+            routerLinkActive="!text-primary"
+            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+          >
+            <span class="material-symbols-outlined"> group </span>
+            @if (!isCollapsed()) {
+              <span>Project Members</span>
+            }
+          </a>
+        </li>
 
-      <li class="hover:bg-white rounded-md py-2.5 px-3">
-        <a
-          [routerLink]="['/project',projectId(),'edit']"
-          routerLinkActive="!text-primary"
-          class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-        >
-          <span class="material-symbols-outlined"> info </span>
-          @if (!isCollapsed()) {
-            <span>Project Details</span>
-          }
-        </a>
-      </li>
-     }
+        <li class="hover:bg-white rounded-md py-2.5 px-3">
+          <a
+            [routerLink]="['/project', projectId(), 'edit']"
+            routerLinkActive="!text-primary"
+            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+          >
+            <span class="material-symbols-outlined"> info </span>
+            @if (!isCollapsed()) {
+              <span>Project Details</span>
+            }
+          </a>
+        </li>
+      }
     </ul>
   </div>
 
@@ -132,41 +132,41 @@
     <span>Projects</span>
   </a>
 
-  @if(projectId()){
+  @if (projectId()) {
     <a
-    [routerLink]="['/project',projectId(),'epics']"
-    routerLinkActive="!text-primary"
-    class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-  >
-    <span class="material-symbols-outlined"> account_tree </span>
-    <span>Epics</span>
-  </a>
+      [routerLink]="['/project', projectId(), 'epics']"
+      routerLinkActive="!text-primary"
+      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+    >
+      <span class="material-symbols-outlined"> account_tree </span>
+      <span>Epics</span>
+    </a>
 
-  <a
-    [routerLink]="['/project',projectId(),'tasks']"
-    routerLinkActive="!text-primary"
-    class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-  >
-    <span class="material-symbols-outlined"> checklist </span>
-    <span>Tasks</span>
-  </a>
+    <a
+      [routerLink]="['/project', projectId(), 'tasks']"
+      routerLinkActive="!text-primary"
+      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+    >
+      <span class="material-symbols-outlined"> checklist </span>
+      <span>Tasks</span>
+    </a>
 
-  <a
-    [routerLink]="['/project',projectId(),'members']"
-    routerLinkActive="!text-primary"
-    class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-  >
-    <span class="material-symbols-outlined"> group </span>
-    <span>Members</span>
-  </a>
+    <a
+      [routerLink]="['/project', projectId(), 'members']"
+      routerLinkActive="!text-primary"
+      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+    >
+      <span class="material-symbols-outlined"> group </span>
+      <span>Members</span>
+    </a>
 
-  <a
-    [routerLink]="['/project',projectId(),'edit']"
-    routerLinkActive="!text-primary"
-    class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
-  >
-    <span class="material-symbols-outlined"> info </span>
-    <span>Details</span>
-  </a>
+    <a
+      [routerLink]="['/project', projectId(), 'edit']"
+      routerLinkActive="!text-primary"
+      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+    >
+      <span class="material-symbols-outlined"> info </span>
+      <span>Details</span>
+    </a>
   }
 </nav>

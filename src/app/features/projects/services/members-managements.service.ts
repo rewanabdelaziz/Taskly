@@ -6,16 +6,14 @@ import { Observable } from 'rxjs';
 import { Member } from '../models/members';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MembersManagementsService {
-  private _http = inject(HttpClient)
-   baseUrl = environment.baseUrl
+  private _http = inject(HttpClient);
+  baseUrl = environment.baseUrl;
 
-  constructor() { }
-
-  getProjectMembers(projectId:string):Observable<Member[]>{
+  getProjectMembers(projectId: string): Observable<Member[]> {
     const params = new HttpParams().set('project_id', `eq.${projectId}`);
-    return this._http.get<Member[]>(`${this.baseUrl}${ApiEndponts.MEMBERS}`,{params: params})
+    return this._http.get<Member[]>(`${this.baseUrl}${ApiEndponts.MEMBERS}`, { params: params });
   }
 }

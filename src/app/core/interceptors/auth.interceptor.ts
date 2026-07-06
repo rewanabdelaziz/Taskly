@@ -27,7 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (expireAt && refreshToken && currentTime >= parseInt(expireAt)) {
     return _auth.refreshToken(refreshToken).pipe(
       switchMap((res: LoginResponse) => {
-        console.log(res);
+        // console.log(res);
         storage.setItem(StorageKeys.ACCESS_TOKEN, res.access_token);
         storage.setItem(StorageKeys.REFRESH_TOKEN, res.refresh_token);
         storage.setItem(StorageKeys.EXPIRES_AT, res.expires_at.toString());
@@ -44,7 +44,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         storage.removeItem(StorageKeys.REFRESH_TOKEN);
         storage.removeItem(StorageKeys.EXPIRES_AT);
         storage.removeItem(StorageKeys.user_profile);
-        localStorage.removeItem(StorageKeys.SELECTED_PROJECT)
+        localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
         _auth.isLoggedIn.set(false);
         _auth.userProfile.set(null);
         _router.navigate(['/login']);

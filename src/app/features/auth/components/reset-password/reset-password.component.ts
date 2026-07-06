@@ -8,24 +8,23 @@ import { ResetPasswordSchema } from '../../reset-password.schema';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule,RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.css'
+  styleUrl: './reset-password.component.css',
 })
-export class ResetPasswordComponent implements OnDestroy{
+export class ResetPasswordComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
-  _globalMsg = inject(ToastNotificationService)
+  _globalMsg = inject(ToastNotificationService);
 
   resetPasswordForm: FormGroup;
   isSubmitted = signal(false);
   formValue = signal({});
-  resetPasswordPlayload!: {password: string};
+  resetPasswordPlayload!: { password: string };
   passwordValue = signal('');
-  private timeOutId : null | number = null
+  private timeOutId: null | number = null;
   private state;
-
 
   formErrors = computed(() => {
     const current = this.formValue();
@@ -51,7 +50,7 @@ export class ResetPasswordComponent implements OnDestroy{
     const hasDigit = /\d/.test(this.passwordValue());
     const hasSpecialChar = /[!@#$%^&*]/.test(this.passwordValue());
 
-    return { hasMinLength, hasUpper,hasLower,hasDigit, hasSpecialChar };
+    return { hasMinLength, hasUpper, hasLower, hasDigit, hasSpecialChar };
   });
 
   isFormInvalid = computed(() => {
@@ -63,7 +62,6 @@ export class ResetPasswordComponent implements OnDestroy{
     this.resetPasswordForm = this.fb.group({
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-      
     });
 
     this.formValue.set(this.resetPasswordForm.value);
@@ -72,22 +70,21 @@ export class ResetPasswordComponent implements OnDestroy{
       this.formValue.set(v);
       this.passwordValue.set(v.password);
     });
-    
+
     // store access token from state
     const currentNavigation = this._router.getCurrentNavigation();
     this.state = currentNavigation?.extras.state as { accessToken: string };
 
     if (!this.state || !this.state.accessToken) {
-      this._globalMsg.showMsg("Invalid or expired reset link.")
+      this._globalMsg.showMsg('Invalid or expired reset link.');
       this._router.navigate(['/login']);
-      return
+      return;
     }
   }
 
-
   ngOnDestroy(): void {
-    if(this.timeOutId){
-      clearTimeout(this.timeOutId)
+    if (this.timeOutId) {
+      clearTimeout(this.timeOutId);
     }
   }
 
@@ -98,36 +95,33 @@ export class ResetPasswordComponent implements OnDestroy{
     const errors = this.formErrors();
 
     if (Object.keys(errors).length === 0) {
-      const {password} = this.resetPasswordForm.value;
+      const { password } = this.resetPasswordForm.value;
       this.resetPasswordPlayload = {
         password: password,
       };
 
-      this._authServie.resetPassword(this.resetPasswordPlayload,this.state.accessToken).subscribe({
+      this._authServie.resetPassword(this.resetPasswordPlayload, this.state.accessToken).subscribe({
         next: () => {
           // console.log(res);
 
           this._authServie.isLoggedIn.set(true);
           this.isSubmitted.set(false);
           this._globalMsg.showMsg('Your password has been updated successfully. You can now log in', 'success');
-          
-          this.timeOutId = window.setTimeout(()=>{
+
+          this.timeOutId = window.setTimeout(() => {
             this._router.navigate(['/login']);
-            this.timeOutId = null
-          },3000)
-          
+            this.timeOutId = null;
+          }, 3000);
         },
         error: (err) => {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Reset password failed. Please try again.';
-          if(err.error.error_code === "same_password" || err.error.code === 422){
-            this._globalMsg.showMsg( "New password should be different from the old password.");
-          }else{
-            this._globalMsg.showMsg( fallbackMsg);
-            
+          if (err.error.error_code === 'same_password' || err.error.code === 422) {
+            this._globalMsg.showMsg('New password should be different from the old password.');
+          } else {
+            this._globalMsg.showMsg(fallbackMsg);
           }
-          
         },
       });
     } else {
@@ -136,7 +130,4 @@ export class ResetPasswordComponent implements OnDestroy{
       // console.log("errors", errors)
     }
   }
-
-  
-
 }

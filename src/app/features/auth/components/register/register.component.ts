@@ -5,7 +5,6 @@ import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +17,7 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
-  _globalMsg = inject(ToastNotificationService)
+  _globalMsg = inject(ToastNotificationService);
 
   registerForm: FormGroup;
   isSubmitted = signal(false);
@@ -105,7 +104,7 @@ export class RegisterComponent {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Registration failed. Please try again.';
-          this._globalMsg.showMsg( fallbackMsg);
+          this._globalMsg.showMsg(fallbackMsg);
         },
       });
     } else {

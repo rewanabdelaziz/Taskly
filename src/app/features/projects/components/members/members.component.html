@@ -1,218 +1,209 @@
 <div class="flex flex-col items-center h-full ps-3 sm:ps-6">
-
-<!-- container -->
- <div class=" w-full h-full">
-    @if(isloading()){
-   <!-- skeleton loader -->
-    <div class="hidden sm:flex sm:flex-col pt-6 w-full">
-        <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row ">
-            <div class="mb-4 lg:mb-0">
-                <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
-                    Project Members
-                </h2>
-            </div>
-            <div class="h-12 w-44 bg-slate-200 rounded-lg animate-pulse"></div>
+  <!-- container -->
+  <div class="w-full h-full">
+    @if (isloading()) {
+      <!-- skeleton loader -->
+      <div class="hidden sm:flex sm:flex-col pt-6 w-full">
+        <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row">
+          <div class="mb-4 lg:mb-0">
+            <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Project Members</h2>
+          </div>
+          <div class="h-12 w-44 bg-slate-200 rounded-lg animate-pulse"></div>
         </div>
-        
-       
+
         <div class="hidden lg:block w-full overflow-x-auto pb-4 custom-scrollbar">
-            <div class="flex justify-center items-center w-full min-w-max p-1">
-                
-                <table class="w-full min-w-187.5 max-w-5xl border-separate border-spacing-y-3 px-4 animate-pulse">
-                    <thead class="bg-background label-sm text-text-body tracking-[0.06875px]">
-                        <tr>
-                            <th colspan="2" class="px-8 py-5 text-left font-semibold text-slate-300">Member</th>
-                            <th class="text-center px-8 py-5 font-semibold text-slate-300">Role</th>
-                            <th class="text-center px-8 py-5 font-semibold text-slate-300">Action</th>
-                        </tr>
-                    </thead>
-                        
-                    <tbody>
-                        @for(i of [1,2,3,4,5]; track i) {
-                            <tr class="rounded-lg bg-white shadow-sm">
-                                
-                               
-                                <td class="px-8 py-5 w-20">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-200"></div>
-                                </td>
-    
-                               
-                                <td class="px-8 py-5">
-                                    <div class="flex flex-col gap-2">
-                                        <div class="h-4 w-32 bg-slate-200 rounded"></div>
-                                        <div class="h-3 w-48 bg-slate-200 rounded"></div>
-                                    </div>
-                                </td>
-    
-                              
-                                <td class="px-8 py-5 text-center">
-                                    <div class="h-6 w-16 bg-slate-200 rounded-xl inline-block"></div>
-                                </td>
-    
-                               
-                                <td class="px-8 py-5 text-center w-20">
-                                    <div class="h-5 w-2 bg-slate-200 rounded-full inline-block"></div>
-                                </td>
-    
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-    
-            </div>
-        </div>
-    </div>
-    }@else if(isError()){
-        <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
-           <a class="bg-error-msg-bg flex items-center justify-center text-slate-dark rounded-xl w-16 h-16" routerLink="/project/add">
-                    <span class="material-symbols-outlined text-error">
-                    cloud_off
-                    </span>
-            </a>
-            <div class="m-6 w-full text-center">
-                <h2 class=" font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
-                    Something went wrong
-            </h2>
-           <p class="text-text-body text-lg/tight">We're having trouble retrieving your projects right now. Please try again in a moment.</p>
-            </div>
+          <div class="flex justify-center items-center w-full min-w-max p-1">
+            <table class="w-full min-w-187.5 max-w-5xl border-separate border-spacing-y-3 px-4 animate-pulse">
+              <thead class="bg-background label-sm text-text-body tracking-[0.06875px]">
+                <tr>
+                  <th colspan="2" class="px-8 py-5 text-left font-semibold text-slate-300">Member</th>
+                  <th class="text-center px-8 py-5 font-semibold text-slate-300">Role</th>
+                  <th class="text-center px-8 py-5 font-semibold text-slate-300">Action</th>
+                </tr>
+              </thead>
 
-            <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" (click)="retry()">
-                  Retry Connection
-            </button>
+              <tbody>
+                @for (i of [1, 2, 3, 4, 5]; track i) {
+                  <tr class="rounded-lg bg-white shadow-sm">
+                    <td class="px-8 py-5 w-20">
+                      <div class="w-10 h-10 rounded-xl bg-slate-200"></div>
+                    </td>
+
+                    <td class="px-8 py-5">
+                      <div class="flex flex-col gap-2">
+                        <div class="h-4 w-32 bg-slate-200 rounded"></div>
+                        <div class="h-3 w-48 bg-slate-200 rounded"></div>
+                      </div>
+                    </td>
+
+                    <td class="px-8 py-5 text-center">
+                      <div class="h-6 w-16 bg-slate-200 rounded-xl inline-block"></div>
+                    </td>
+
+                    <td class="px-8 py-5 text-center w-20">
+                      <div class="h-5 w-2 bg-slate-200 rounded-full inline-block"></div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
-    }@else if(isEmpty()){
-        <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
-           <img class="w-full" src="assets/new_project.webp">
-            <div class="m-12 w-full text-center">
-                <h2 class=" font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
-                    No Members
-            </h2>
-           <p class="text-text-body text-lg/tight">You don’t have any projects yet. Start by defining your first architectural workspace to begin tracking tasks and epics.</p>
-            </div>
+      </div>
+    } @else if (isError()) {
+      <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
+        <a
+          class="bg-error-msg-bg flex items-center justify-center text-slate-dark rounded-xl w-16 h-16"
+          routerLink="/project/add"
+        >
+          <span class="material-symbols-outlined text-error"> cloud_off </span>
+        </a>
+        <div class="m-6 w-full text-center">
+          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Something went wrong</h2>
+          <p class="text-text-body text-lg/tight">
+            We're having trouble retrieving your projects right now. Please try again in a moment.
+          </p>
+        </div>
+
+        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" (click)="retry()">
+          Retry Connection
+        </button>
+      </div>
+    } @else if (isEmpty()) {
+      <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
+        <img class="w-full" src="assets/new_project.webp" alt="empty icon" />
+        <div class="m-12 w-full text-center">
+          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">No Members</h2>
+          <p class="text-text-body text-lg/tight">
+            You don’t have any projects yet. Start by defining your first architectural workspace to begin tracking
+            tasks and epics.
+          </p>
+        </div>
 
         <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
-            <span class="material-symbols-outlined">
-               person_add
-            </span>
-            Invite Member
+          <span class="material-symbols-outlined"> person_add </span>
+          Invite Member
         </button>
-        </div>
-        
-    }@else {
-    
-        <!-- header -->
-         <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline">
+      </div>
+    } @else {
+      <!-- header -->
+      <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline">
         <a class="text-ghost-link hover:text-primary" routerLink="/project">PROJECT</a>
         <span class="material-symbols-outlined m-2 w-[3.7px] h-1.5 text-ghost-link text-[8px]!">
-           arrow_forward_ios
+          arrow_forward_ios
         </span>
 
-          <a [routerLink]="['/project',projectId(),'/members']" routerLinkActive="text-primary">PROJECT DETAILS</a>
-        
-        </nav>
-        <div class="hidden sm:flex sm:flex-col pt-6 w-full">
-    
-           <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row">
-               <div class="mb-4 lg:mb-0">
-                   <h2 class=" font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
-                     Project Members
-                   </h2>
-                  
-               </div>
-    
-    
-               <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
-                    <span class="material-symbols-outlined">
-                       person_add
-                    </span>
-                    Invite Member
-                </button>
-           </div>
-    
-           
-        </div>
+        <a [routerLink]="['/project', projectId(), '/members']" routerLinkActive="text-primary">PROJECT DETAILS</a>
+      </nav>
+      <div class="hidden sm:flex sm:flex-col pt-6 w-full">
+        <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row">
+          <div class="mb-4 lg:mb-0">
+            <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Project Members</h2>
+          </div>
 
-        
-        
-       <!-- tabel container -->
-        <div class="hidden lg:flex justify-center items-center w-full">
+          <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
+            <span class="material-symbols-outlined"> person_add </span>
+            Invite Member
+          </button>
+        </div>
+      </div>
+
+      <!-- tabel container -->
+      <div class="hidden lg:flex justify-center items-center w-full">
         <table class="max-w-189.5 shadow-form-shadow border-separate border-spacing-y-3 px-4">
-            <thead class="bg-background label-sm text-text-body tracking-[0.06875px] ">
-                <tr>
-                    <th colspan="2" class="px-8 py-5 ms-5 text-left">Member</th>
-                    <th class="text-center px-8 py-5">role</th>
-                    <th class="text-center px-8 py-5">Action</th>
-                </tr>
-            </thead>
-                
-            <tbody>
-                @for(member of members(); track member.member_id){
-                    <tr class="rounded-lg tracking-normal font-medium  bg-white " >
-                        <td class="px-8 py-5"><div class="w-10 h-10 rounded-xl bg-surface-highest text-primary flex items-center justify-center font-bold">
-                           {{ member.metadata.name.split(" ")[0].substring(0, 1).toUpperCase() }} 
-                           {{member.metadata.name.split(" ")[1].substring(0, 1).toUpperCase()}}
-                           </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="flex flex-col">
-                                <span class="text-sm/[1.25rem] text-slate-dark tracking-normal font-semibold">{{member.metadata.name}}</span>
-                                <span class="text-[0.75rem]/[1rem] text-text-body tracking-normal font-normal">{{member.metadata.email}}</span>
-                            </div>
-                            </td>
-                        <td class="px-8 py-5"><span class="px-3 py-1 rounded-xl" [ngClass]="member.role == 'owner'? 'bg-gradient-primary text-white':'bg-badge-member-bg text-badge-member'">{{member.role}}</span></td>
-                        <td class="text-text-body font-medium px-8 py-5 text-end"> 
-                            @if(member.role !== 'owner'){
-                                <span class="material-symbols-outlined">
-                                more_vert
-                                </span>
-                            }
-                        </td>
-                    
-                    </tr>
-    
-                }
-            </tbody>
+          <thead class="bg-background label-sm text-text-body tracking-[0.06875px]">
+            <tr>
+              <th colspan="2" class="px-8 py-5 ms-5 text-left">Member</th>
+              <th class="text-center px-8 py-5">role</th>
+              <th class="text-center px-8 py-5">Action</th>
+            </tr>
+          </thead>
 
-            
-        </table>
-        </div>
-        
-
-        <!-- cards container in medium & small screen -->
-         <div class="lg:hidden flex flex-col justify-center items-center">
-             @for(member of members(); track member.member_id){
-                  <div class="w-full sm:max-w-3xs flex justify-between items-center rounded-lg p-4 gap-1 md:gap-10  bg-white">
-                    <div class="flex gap-2">
-                        <div class="w-10 h-10 rounded-xl bg-surface-highest text-primary flex items-center justify-center font-bold">
-                           {{ member.metadata.name.split(" ")[0].substring(0, 1).toUpperCase() }} 
-                           {{member.metadata.name.split(" ")[1].substring(0, 1).toUpperCase()}}
-                        </div>
-                        <div class="flex flex-col">
-                                <span class="text-sm/[1.25rem] text-slate-dark tracking-normal font-semibold">{{member.metadata.name}}</span>
-                                <span class="sm:text-[0.6875rem]/[1rem] text-text-body tracking-normal font-normal text-[0.5rem]">{{member.metadata.email}}</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="px-3 py-1 rounded-xl" [ngClass]="member.role == 'owner'? 'bg-gradient-primary text-white':'bg-badge-member-bg text-badge-member'">{{member.role}}</span>
-                        @if(member.role !== 'owner'){
-                            <span class="material-symbols-outlined">
-                            more_vert
-                            </span>
-                        }
-                    </div>
+          <tbody>
+            @for (member of members(); track member.member_id) {
+              <tr class="rounded-lg tracking-normal font-medium bg-white">
+                <td class="px-8 py-5">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-surface-highest text-primary flex items-center justify-center font-bold"
+                  >
+                    {{ member.metadata.name.split(' ')[0].substring(0, 1).toUpperCase() }}
+                    {{ member.metadata.name.split(' ')[1].substring(0, 1).toUpperCase() }}
                   </div>
-    
-                }
+                </td>
+                <td class="px-8 py-5">
+                  <div class="flex flex-col">
+                    <span class="text-sm/[1.25rem] text-slate-dark tracking-normal font-semibold">{{
+                      member.metadata.name
+                    }}</span>
+                    <span class="text-[0.75rem]/[1rem] text-text-body tracking-normal font-normal">{{
+                      member.metadata.email
+                    }}</span>
+                  </div>
+                </td>
+                <td class="px-8 py-5">
+                  <span
+                    class="px-3 py-1 rounded-xl"
+                    [ngClass]="
+                      member.role === 'owner'
+                        ? 'bg-gradient-primary text-white'
+                        : 'bg-badge-member-bg text-badge-member'
+                    "
+                    >{{ member.role }}</span
+                  >
+                </td>
+                <td class="text-text-body font-medium px-8 py-5 text-end">
+                  @if (member.role !== 'owner') {
+                    <span class="material-symbols-outlined"> more_vert </span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
-            <button class="inline fixed bottom-2 right-2 btn-primary btn-shadow text-center  px-4 py-3 font-bold mb-20" routerLink="/project/add">
-                <span class="material-symbols-outlined">
-                  person_add
-                </span>
-            </button>
-         </div>
-         
+      <!-- cards container in medium & small screen -->
+      <div class="lg:hidden flex flex-col justify-center items-center">
+        @for (member of members(); track member.member_id) {
+          <div class="w-full sm:max-w-3xs flex justify-between items-center rounded-lg p-4 gap-1 md:gap-10 bg-white">
+            <div class="flex gap-2">
+              <div
+                class="w-10 h-10 rounded-xl bg-surface-highest text-primary flex items-center justify-center font-bold"
+              >
+                {{ member.metadata.name.split(' ')[0].substring(0, 1).toUpperCase() }}
+                {{ member.metadata.name.split(' ')[1].substring(0, 1).toUpperCase() }}
+              </div>
+              <div class="flex flex-col">
+                <span class="text-sm/[1.25rem] text-slate-dark tracking-normal font-semibold">{{
+                  member.metadata.name
+                }}</span>
+                <span class="sm:text-[0.6875rem]/[1rem] text-text-body tracking-normal font-normal text-[0.5rem]">{{
+                  member.metadata.email
+                }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <span
+                class="px-3 py-1 rounded-xl"
+                [ngClass]="
+                  member.role === 'owner' ? 'bg-gradient-primary text-white' : 'bg-badge-member-bg text-badge-member'
+                "
+                >{{ member.role }}</span
+              >
+              @if (member.role !== 'owner') {
+                <span class="material-symbols-outlined"> more_vert </span>
+              }
+            </div>
+          </div>
+        }
+
+        <button
+          class="inline fixed bottom-2 right-2 btn-primary btn-shadow text-center px-4 py-3 font-bold mb-20"
+          routerLink="/project/add"
+        >
+          <span class="material-symbols-outlined"> person_add </span>
+        </button>
+      </div>
     }
-
- </div>
+  </div>
 </div>
-

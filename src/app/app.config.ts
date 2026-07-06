@@ -10,6 +10,9 @@ import { globalErrorsHandlerInterceptor } from './core/interceptors/global-error
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([supabaseInterceptor,authInterceptor,globalErrorsHandlerInterceptor ])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([supabaseInterceptor, authInterceptor, globalErrorsHandlerInterceptor]),
+    ),
   ],
 };

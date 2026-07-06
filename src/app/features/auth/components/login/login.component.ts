@@ -18,7 +18,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
-  _globalMsg = inject(ToastNotificationService)
+  _globalMsg = inject(ToastNotificationService);
 
   loginForm: FormGroup;
   isSubmitted = signal(false);
@@ -82,14 +82,14 @@ export class LoginComponent {
           this._globalMsg.showMsg('Logged in successfully!', 'success');
           this._router.navigate(['/project']);
         },
-        error: (err:HttpErrorResponse) => {
+        error: (err: HttpErrorResponse) => {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Login failed. Please try again.';
-          if(err?.error.msg == "Invalid login credentials"){
-            this._globalMsg.showMsg("Invalid email or password! Please try again.")
-          }else{
-            this._globalMsg.showMsg(fallbackMsg)
+          if (err?.error.msg == 'Invalid login credentials') {
+            this._globalMsg.showMsg('Invalid email or password! Please try again.');
+          } else {
+            this._globalMsg.showMsg(fallbackMsg);
           }
         },
       });

@@ -16,7 +16,6 @@ export class AuthServiceService {
   userProfile = signal<UserMetaData | null>(null);
   isLoggedIn = signal(false);
 
-
   constructor() {
     const profile = localStorage.getItem(StorageKeys.user_profile) || sessionStorage.getItem(StorageKeys.user_profile);
     if (profile) {
@@ -68,7 +67,7 @@ export class AuthServiceService {
 
   // get user data
   getUser(): Observable<User> {
-    return this._http.get<User>(`${this.baseUrl}${ApiEndponts.GET_USER}`).pipe(
+    return this._http.get<User>(`${this.baseUrl}${ApiEndponts.USER}`).pipe(
       tap((res: User) => {
         const { name, email, department } = res.user_metadata;
         const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
@@ -79,25 +78,24 @@ export class AuthServiceService {
   }
 
   // reset password
-  recoverPassword(email:string){
-    const payload= { email : email,
-      redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password",
+  recoverPassword(email: string) {
+    const payload = {
+      email: email,
+      redirect_to: 'https://taskly-omega-lyart.vercel.app/reset-password',
       // redirect_to: "http://localhost:4200/reset-password",
-    //   options: {
-    //   redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password"
-    // }  
-    }
+      //   options: {
+      //   redirect_to: "https://taskly-omega-lyart.vercel.app/reset-password"
+      // }
+    };
 
-    return this._http.post(`${this.baseUrl}${ApiEndponts.RECOVER_PASSWORD}`,payload)
+    return this._http.post(`${this.baseUrl}${ApiEndponts.RECOVER_PASSWORD}`, payload);
   }
 
   // setPassword
-  resetPassword(payload:{password:string},token:string){
+  resetPassword(payload: { password: string }, token: string) {
     const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
-    return this._http.put(`${this.baseUrl}${ApiEndponts.RESET_PASSWORD}`,payload, {headers})
+    return this._http.put(`${this.baseUrl}${ApiEndponts.USER}`, payload, { headers });
   }
-
-
 }

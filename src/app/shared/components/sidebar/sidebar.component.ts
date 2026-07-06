@@ -15,7 +15,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class SidebarComponent {
   private _auth = inject(AuthServiceService);
   private _router = inject(Router);
-  _globalToastService = inject(ToastNotificationService)
+  _globalToastService = inject(ToastNotificationService);
 
   isCollapsed = signal(false);
   isMobileOpen = signal(false);
@@ -23,23 +23,21 @@ export class SidebarComponent {
   private currentUrl = toSignal(
     this._router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      map((event) => event.urlAfterRedirects)
+      map((event) => event.urlAfterRedirects),
     ),
-    { initialValue: this._router.url }
+    { initialValue: this._router.url },
   );
-
 
   projectId = computed(() => {
     const url = this.currentUrl();
     const segments = url.split('/');
-    
-    const idSegment = segments[2]; 
+
+    const idSegment = segments[2];
     if (idSegment && idSegment !== 'add') {
       return idSegment;
     }
-    return null; 
+    return null;
   });
-
 
   toggleSidebar() {
     this.isCollapsed.update((state) => !state);
@@ -57,17 +55,17 @@ export class SidebarComponent {
         storage.removeItem(StorageKeys.REFRESH_TOKEN);
         storage.removeItem(StorageKeys.EXPIRES_AT);
         storage.removeItem(StorageKeys.user_profile);
-        localStorage.removeItem(StorageKeys.SELECTED_PROJECT)
+        localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
 
         this._auth.isLoggedIn.set(false);
         this._auth.userProfile.set(null);
         this._globalToastService.showMsg('Logged out successfully.', 'success');
         this._router.navigate(['login']);
       },
-      error: () =>{
+      error: () => {
         this._globalToastService.showMsg('Error logging out. Please try again.');
-        this.isCollapsed.set(true); 
-      }
+        this.isCollapsed.set(true);
+      },
     });
   }
 }

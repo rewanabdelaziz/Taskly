@@ -7,9 +7,8 @@ import { ToastNotificationService } from '../../services/toast-notification.serv
   standalone: true,
   imports: [NgClass],
   templateUrl: './toast.component.html',
-  styleUrl: './toast.component.css'
+  styleUrl: './toast.component.css',
 })
 export class ToastComponent {
-  _toastService = inject(ToastNotificationService)
-
+  _toastService = inject(ToastNotificationService);
 }

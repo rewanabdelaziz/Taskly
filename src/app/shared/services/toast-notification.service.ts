@@ -1,32 +1,32 @@
 import { Injectable, signal } from '@angular/core';
 
-export interface ToastData{
+export interface ToastData {
   message: string | null;
   status: 'error' | 'success';
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastNotificationService {
-  globalToastMsg = signal<ToastData | null>(null)
-  private timeOutId : null | number = null
-  
-  showMsg(message: string | null, status: 'error' | 'success' = 'error') {
-    if(!message) return
+  globalToastMsg = signal<ToastData | null>(null);
+  private timeOutId: null | number = null;
 
-    this.globalToastMsg.set({message,status})
-    
-    if(this.timeOutId){
-      clearTimeout(this.timeOutId)
+  showMsg(message: string | null, status: 'error' | 'success' = 'error') {
+    if (!message) return;
+
+    this.globalToastMsg.set({ message, status });
+
+    if (this.timeOutId) {
+      clearTimeout(this.timeOutId);
     }
 
-    this.timeOutId = window.setTimeout(()=>{
+    this.timeOutId = window.setTimeout(() => {
       // to confirm that there is no other message came
-      if(this.globalToastMsg()?.message === message){
-        this.globalToastMsg.set(null)
+      if (this.globalToastMsg()?.message === message) {
+        this.globalToastMsg.set(null);
       }
 
-      this.timeOutId= null
-    },3000)
+      this.timeOutId = null;
+    }, 3000);
   }
 }

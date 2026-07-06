@@ -3,7 +3,7 @@ export interface AddProjectPayload {
   description: string;
 }
 
-export interface Project{
+export interface Project {
   id: string;
   name: string;
   description: string;
