@@ -4,7 +4,7 @@ import { AuthServiceService } from '../../features/auth/services/auth-service.se
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { LoginResponse } from '../../features/auth/models/supabaseModels';
-import { StorageKeys } from '../enums/storage-keys';
+import { StorageKeys } from '../constants/storage-keys';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const _auth = inject(AuthServiceService);
@@ -43,7 +43,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         storage.removeItem(StorageKeys.ACCESS_TOKEN);
         storage.removeItem(StorageKeys.REFRESH_TOKEN);
         storage.removeItem(StorageKeys.EXPIRES_AT);
-        storage.removeItem(StorageKeys.user_profile);
+        storage.removeItem(StorageKeys.USER_PROFILE);
         localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
         _auth.isLoggedIn.set(false);
         _auth.userProfile.set(null);

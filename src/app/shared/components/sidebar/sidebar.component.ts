@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
 import { ToastNotificationService } from '../../services/toast-notification.service';
-import { StorageKeys } from '../../../core/enums/storage-keys';
+import { StorageKeys } from '../../../core/constants/storage-keys';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { IconComponent } from '../icon/icon.component';
@@ -55,7 +55,7 @@ export class SidebarComponent {
         storage.removeItem(StorageKeys.ACCESS_TOKEN);
         storage.removeItem(StorageKeys.REFRESH_TOKEN);
         storage.removeItem(StorageKeys.EXPIRES_AT);
-        storage.removeItem(StorageKeys.user_profile);
+        storage.removeItem(StorageKeys.USER_PROFILE);
         localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
 
         this._auth.isLoggedIn.set(false);

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ToastComponent } from './shared/components/toast/toast.component';
-import { StorageKeys } from './core/enums/storage-keys';
+import { StorageKeys } from './core/constants/storage-keys';
 import { ToastNotificationService } from './shared/services/toast-notification.service';
 import { AuthServiceService } from './features/auth/services/auth-service.service';
 

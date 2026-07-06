@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ApiEndponts } from '../../../core/enums/api-endpoints';
+import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Member } from '../models/members';
@@ -14,6 +14,6 @@ export class MembersManagementsService {
 
   getProjectMembers(projectId: string): Observable<Member[]> {
     const params = new HttpParams().set('project_id', `eq.${projectId}`);
-    return this._http.get<Member[]>(`${this.baseUrl}${ApiEndponts.MEMBERS}`, { params: params });
+    return this._http.get<Member[]>(`${this.baseUrl}${ApiEndpoints.MEMBERS}`, { params: params });
   }
 }

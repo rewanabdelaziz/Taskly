@@ -2,9 +2,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { AddProjectPayload, Project } from '../models/projects';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { ApiEndponts } from '../../../core/enums/api-endpoints';
+import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 import { Observable } from 'rxjs';
-import { StorageKeys } from '../../../core/enums/storage-keys';
+import { StorageKeys } from '../../../core/constants/storage-keys';
 @Injectable({
   providedIn: 'root',
 })
@@ -26,7 +26,7 @@ export class ProjectsManagementsService {
   }
 
   addNewProject(projectPayload: AddProjectPayload) {
-    return this._http.post(`${this.baseUrl}${ApiEndponts.ADD_PROJECT}`, projectPayload);
+    return this._http.post(`${this.baseUrl}${ApiEndpoints.ADD_PROJECT}`, projectPayload);
   }
 
   getAllProjects(offset: number, limit: number): Observable<HttpResponse<Project[]>> {
@@ -34,7 +34,7 @@ export class ProjectsManagementsService {
 
     const headers = new HttpHeaders().set('Prefer', 'count=exact');
 
-    return this._http.get<Project[]>(`${this.baseUrl}${ApiEndponts.GET_PROJECTS}`, {
+    return this._http.get<Project[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECTS}`, {
       headers,
       params,
       observe: 'response', //to return all response (header + body)
@@ -43,6 +43,6 @@ export class ProjectsManagementsService {
 
   editProject(projectPayload: AddProjectPayload, projectId: string) {
     const params = new HttpParams().set('id', `eq.${projectId}`);
-    return this._http.patch(`${this.baseUrl}${ApiEndponts.ADD_PROJECT}`, projectPayload, { params: params });
+    return this._http.patch(`${this.baseUrl}${ApiEndpoints.ADD_PROJECT}`, projectPayload, { params: params });
   }
 }
