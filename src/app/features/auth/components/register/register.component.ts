@@ -5,11 +5,12 @@ import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,IconComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })

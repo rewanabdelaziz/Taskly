@@ -6,11 +6,12 @@ import { MembersManagementsService } from '../../services/members-managements.se
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [NgClass, RouterLink],
+  imports: [NgClass, RouterLink,IconComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
 })

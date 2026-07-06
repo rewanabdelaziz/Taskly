@@ -7,10 +7,11 @@ import { AddProjectSchema } from '../../add-project.schema';
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule],
+  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule,IconComponent],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.css',
 })

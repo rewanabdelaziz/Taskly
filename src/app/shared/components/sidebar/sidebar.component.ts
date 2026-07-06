@@ -5,10 +5,11 @@ import { ToastNotificationService } from '../../services/toast-notification.serv
 import { StorageKeys } from '../../../core/enums/storage-keys';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { IconComponent } from '../icon/icon.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive,IconComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })

@@ -15,7 +15,7 @@
   <div>
     @if (!isCollapsed()) {
       <div class="sm:flex items-center py-2 ps-1 mb-8 hidden">
-        <span class="material-symbols-outlined logo-icon text-primary-container"> token </span>
+        <app-icon name="logo" class="logo-icon text-primary-container"></app-icon>
         <span class="logo-text"> Taskly </span>
       </div>
     }
@@ -28,7 +28,7 @@
           [routerLinkActiveOptions]="{ exact: true }"
           class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
         >
-          <span class="material-symbols-outlined">folder_open</span>
+          <app-icon name="folder" ></app-icon>
           @if (!isCollapsed()) {
             <span>Projects</span>
           }
@@ -42,7 +42,7 @@
             routerLinkActive="!text-primary"
             class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
           >
-            <span class="material-symbols-outlined"> account_tree </span>
+            <app-icon name="tasks" ></app-icon>
             @if (!isCollapsed()) {
               <span>Project Epics</span>
             }
@@ -55,7 +55,7 @@
             routerLinkActive="!text-primary"
             class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
           >
-            <span class="material-symbols-outlined"> checklist </span>
+            <app-icon name="tasks-checked" ></app-icon>
             @if (!isCollapsed()) {
               <span>Project Tasks</span>
             }
@@ -68,7 +68,7 @@
             routerLinkActive="!text-primary"
             class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
           >
-            <span class="material-symbols-outlined"> group </span>
+            <app-icon name="members" ></app-icon>
             @if (!isCollapsed()) {
               <span>Project Members</span>
             }
@@ -81,7 +81,7 @@
             routerLinkActive="!text-primary"
             class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
           >
-            <span class="material-symbols-outlined"> info </span>
+            <app-icon name="warning" ></app-icon>
             @if (!isCollapsed()) {
               <span>Project Details</span>
             }
@@ -97,9 +97,7 @@
         (click)="toggleSidebar()"
         class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-dark font-medium text-sm/[20px] tracking-normal hover:bg-white"
       >
-        <span class="material-symbols-outlined transition-transform duration-300" [class.rotate-180]="isCollapsed()">
-          arrow_back_ios
-        </span>
+        <app-icon name="arrow-back" class="transition-transform duration-300" [class.rotate-180]="isCollapsed()"></app-icon>
         @if (!isCollapsed()) {
           <span>Collapse</span>
         }
@@ -110,7 +108,7 @@
       (click)="logout()"
       class="w-full flex items-center gap-3 px-3 py-2.5 text-error font-medium text-sm/[20px] tracking-normal hover:bg-white"
     >
-      <span class="material-symbols-outlined">logout</span>
+      <app-icon name="logout" ></app-icon>
       @if (!isCollapsed()) {
         <span>Logout</span>
       }
@@ -128,7 +126,7 @@
     [routerLinkActiveOptions]="{ exact: true }"
     class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
   >
-    <span class="material-symbols-outlined">folder_open</span>
+    <app-icon name="folder" ></app-icon>
     <span>Projects</span>
   </a>
 
@@ -138,7 +136,7 @@
       routerLinkActive="!text-primary"
       class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
     >
-      <span class="material-symbols-outlined"> account_tree </span>
+      <app-icon name="tasks" ></app-icon>
       <span>Epics</span>
     </a>
 
@@ -147,7 +145,7 @@
       routerLinkActive="!text-primary"
       class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
     >
-      <span class="material-symbols-outlined"> checklist </span>
+      <app-icon name="tasks-checked" ></app-icon>
       <span>Tasks</span>
     </a>
 
@@ -156,7 +154,7 @@
       routerLinkActive="!text-primary"
       class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
     >
-      <span class="material-symbols-outlined"> group </span>
+      <app-icon name="members" ></app-icon>
       <span>Members</span>
     </a>
 
@@ -165,7 +163,7 @@
       routerLinkActive="!text-primary"
       class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
     >
-      <span class="material-symbols-outlined"> info </span>
+      <app-icon name="warning" ></app-icon>
       <span>Details</span>
     </a>
   }

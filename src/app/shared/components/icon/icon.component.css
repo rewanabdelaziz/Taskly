@@ -1,0 +1,11 @@
+.shared-inline-icon {
+   
+
+    width: 100%;
+    height: 100%;
+}
+::ng-deep .shared-inline-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

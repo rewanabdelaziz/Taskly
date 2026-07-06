@@ -56,7 +56,7 @@
           class="bg-error-msg-bg flex items-center justify-center text-slate-dark rounded-xl w-16 h-16"
           routerLink="/project/add"
         >
-          <span class="material-symbols-outlined text-error"> cloud_off </span>
+          <app-icon name="cloud-off" class="text-error"></app-icon>
         </a>
         <div class="m-6 w-full text-center">
           <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Something went wrong</h2>
@@ -81,17 +81,15 @@
         </div>
 
         <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
-          <span class="material-symbols-outlined"> person_add </span>
+          <app-icon name="person-add" ></app-icon>
           Invite Member
         </button>
       </div>
     } @else {
       <!-- header -->
-      <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline">
+      <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline flex items-center">
         <a class="text-ghost-link hover:text-primary" routerLink="/project">PROJECT</a>
-        <span class="material-symbols-outlined m-2 w-[3.7px] h-1.5 text-ghost-link text-[8px]!">
-          arrow_forward_ios
-        </span>
+        <app-icon name="next-arrow" [size]="8" class="m-2  text-ghost-link text-[8px]!"></app-icon>
 
         <a [routerLink]="['/project', projectId(), '/members']" routerLinkActive="text-primary">PROJECT DETAILS</a>
       </nav>
@@ -102,7 +100,7 @@
           </div>
 
           <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
-            <span class="material-symbols-outlined"> person_add </span>
+            <app-icon name="person-add" class="me-1"></app-icon>
             Invite Member
           </button>
         </div>
@@ -153,7 +151,7 @@
                 </td>
                 <td class="text-text-body font-medium px-8 py-5 text-end">
                   @if (member.role !== 'owner') {
-                    <span class="material-symbols-outlined"> more_vert </span>
+                    <app-icon name="more-vertical" ></app-icon>
                   }
                 </td>
               </tr>
@@ -191,7 +189,7 @@
                 >{{ member.role }}</span
               >
               @if (member.role !== 'owner') {
-                <span class="material-symbols-outlined"> more_vert </span>
+                <app-icon name="more-vertical" ></app-icon>
               }
             </div>
           </div>
@@ -201,7 +199,7 @@
           class="inline fixed bottom-2 right-2 btn-primary btn-shadow text-center px-4 py-3 font-bold mb-20"
           routerLink="/project/add"
         >
-          <span class="material-symbols-outlined"> person_add </span>
+          <app-icon name="person-add" ></app-icon>
         </button>
       </div>
     }

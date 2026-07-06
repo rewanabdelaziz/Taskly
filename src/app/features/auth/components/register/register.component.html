@@ -110,25 +110,25 @@
     <div class="requirements mb-6">
       <div class="flex items-center">
         @if (!passwordRequirements().hasMinLength) {
-          <span class="material-symbols-outlined text-placeholder"> circle </span>
+          <app-icon name="circle" class="text-placeholder"></app-icon>
         } @else {
-          <span class="material-symbols-outlined text-circle-checked"> check_circle </span>
+          <app-icon name="circle-checked" class="text-circle-checked"></app-icon>
         }
         <span class="ms-2">At least 8 characters</span>
       </div>
       <div class="flex items-center">
         @if (!passwordRequirements().hasUpperLowerDigit) {
-          <span class="material-symbols-outlined text-placeholder"> circle </span>
+          <app-icon name="circle" class="text-placeholder"></app-icon>
         } @else {
-          <span class="material-symbols-outlined text-circle-checked"> check_circle </span>
+          <app-icon name="circle-checked" class="text-circle-checked"></app-icon>
         }
         <span class="ms-2">One uppercase, lowercase, and digit</span>
       </div>
       <div class="flex items-center">
         @if (!passwordRequirements().hasSpecialChar) {
-          <span class="material-symbols-outlined text-placeholder"> circle </span>
+          <app-icon name="circle" class="text-placeholder"></app-icon>
         } @else {
-          <span class="material-symbols-outlined text-circle-checked"> check_circle </span>
+          <app-icon name="circle-checked" class="text-circle-checked"></app-icon>
         }
         <span class="ms-2">One special character</span>
       </div>

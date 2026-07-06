@@ -2,13 +2,10 @@
   <div
     class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg border border-current border-opacity-10"
     [ngClass]="
-      toastData.status === 'error' ? 'bg-error-msg-bg text-error-msg-text' : 'bg-success-msg-bg text-success-msg-text'
+      toastData.status === 'error' ? 'bg-error-msg-bg text-error-msg-text' : 'bg-success-toast-bg text-success-msg-text'
     "
   >
-    <span class="material-symbols-outlined text-[20px]">
-      {{ toastData.status === 'success' ? 'check_circle' : 'error' }}
-    </span>
-
+    <app-icon [name]="toastData.status === 'success' ? 'circle-checked' : 'warning'" class="text-[20px]"></app-icon>
     <p class="text-sm font-medium flex-1">{{ toastData.message }}</p>
   </div>
 }

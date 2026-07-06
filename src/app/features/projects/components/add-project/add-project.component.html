@@ -1,9 +1,9 @@
 <div class="flex flex-col items-center h-full">
   <!-- header -->
   <div class="hidden sm:flex sm:flex-col pt-6 ps-8 w-full">
-    <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline">
+    <nav class="uppercase font-bold text-[12px]/[16px] tracking-[1.2px] no-underline flex items-center">
       <a class="text-ghost-link hover:text-primary" routerLink="/project">PROJECT</a>
-      <span class="material-symbols-outlined m-2 w-[3.7px] h-1.5 text-ghost-link text-[8px]!"> arrow_forward_ios </span>
+      <app-icon name="next-arrow" [size]="8" class="m-2 text-ghost-link text-[8px]!"></app-icon>
       @if (isEditMode()) {
         <a [routerLink]="['/project', projectId(), '/edit']" routerLinkActive="text-primary">Edit PROJECT</a>
       } @else {
@@ -15,12 +15,6 @@
         {{ isEditMode() ? 'Edit Project' : 'Add New Project' }}
       </h2>
 
-      @if (!isEditMode()) {
-        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
-          <span class="material-symbols-outlined"> person_add </span>
-          Invite Member
-        </button>
-      }
     </div>
   </div>
 
@@ -29,7 +23,7 @@
     <!-- form header -->
     <div class="px-8 pt-8 flex gap-4 items-center border-b border-surface-low pb-10">
       <div class="hidden sm:inline w-11.5 h-11 rounded-sm p-3 bg-add-task-icon-bg text-primary-container">
-        <span class="material-symbols-outlined w-5.5! h-5!"> add_task </span>
+        <app-icon name="checked-with-plus" [size]="20"></app-icon>
       </div>
       <div>
         <h2 class="text-[24px]/[32px] font-semibold text-slate-dark sm:tracking-[-0.75px] tracking-normal">
@@ -51,7 +45,6 @@
           [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']"
           >Project TITLE
           <span
-            [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']"
             class="text-[11px]/[100%] tracking-normal text-error"
             >*</span
           ></label
@@ -66,7 +59,7 @@
         />
         @if ((isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']) {
           <p class="text-error mt-2 gap-1.5 flex items-center">
-            <span class="material-symbols-outlined"> error </span>
+            <app-icon name="warning"></app-icon>
             {{ formErrors()['name'] }}
           </p>
         }
@@ -117,7 +110,7 @@
       <div
         class="bg-surface-low text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5"
       >
-        <span class="material-symbols-outlined hidden! sm:inline"> lightbulb </span>
+        <app-icon name="light" class="hidden! sm:inline-flex!"></app-icon>
 
         <p>
           <span class="font-bold">Pro Tip:</span> You can invite project members and assign epics immediately after the

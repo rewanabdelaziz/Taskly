@@ -1,10 +1,11 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [],
+  imports: [IconComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })

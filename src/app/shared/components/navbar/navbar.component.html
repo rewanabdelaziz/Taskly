@@ -2,14 +2,11 @@
   class="w-full bg-white py-3 px-6 flex justify-between items-center border-b border-border-secodary shadow-navbar-shadow shadow"
 >
   <div class="flex sm:hidden">
-    <span
-      class="material-symbols-outlined logo-icon"
+    <app-icon name="menu" class="logo-icon"
       (click)="clickMenue()"
       (keydown.enter)="clickMenue()"
-      tabindex="0"
-    >
-      menu
-    </span>
+      tabindex="0">
+    </app-icon>
     <span class="logo-text"> Taskly </span>
   </div>
 

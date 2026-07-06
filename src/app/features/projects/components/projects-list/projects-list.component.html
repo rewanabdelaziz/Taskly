@@ -35,7 +35,7 @@
           class="bg-error-msg-bg flex items-center justify-center text-slate-dark rounded-xl w-16 h-16"
           routerLink="/project/add"
         >
-          <span class="material-symbols-outlined text-error"> cloud_off </span>
+          <app-icon name="cloud-off" class="text-error"></app-icon>
         </a>
         <div class="m-6 w-full text-center">
           <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Something went wrong</h2>
@@ -60,8 +60,7 @@
         </div>
 
         <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" routerLink="/project/add">
-          <span class="material-symbols-outlined"> add </span>
-          Create New Project
+          <app-icon name="plus" [size]="15" class="me-1"></app-icon> Create New Project
         </button>
       </div>
     } @else {
@@ -74,7 +73,7 @@
           </div>
 
           <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" routerLink="/project/add">
-            <span class="material-symbols-outlined"> add </span>
+            <app-icon name="plus" [size]="15" class="me-1"></app-icon>
             Create New Project
           </button>
         </div>
@@ -83,7 +82,7 @@
         class="inline sm:hidden fixed bottom-2 right-2 btn-primary btn-shadow text-center px-4 py-3 font-bold mb-20"
         routerLink="/project/add"
       >
-        <span class="material-symbols-outlined"> add </span>
+        <app-icon name="plus" ></app-icon>
       </button>
 
       <!-- cards container -->
@@ -113,7 +112,7 @@
             class="bg-surface-low flex items-center justify-center text-slate-dark rounded-xl w-12 h-12"
             routerLink="/project/add"
           >
-            <span class="material-symbols-outlined"> add_circle </span>
+            <app-icon name="plus-with-circle" ></app-icon>
           </a>
 
           <p class="text-text-body uppercase tracking-[0.0875rem]">add project</p>
@@ -137,7 +136,7 @@
             [disabled]="currentPage() === 1 || isloading()"
             class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            <app-icon name="arrow-back" ></app-icon>
           </button>
 
           <button
@@ -164,7 +163,7 @@
             [disabled]="currentPage() === EndPageNum() || isloading()"
             class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            <app-icon name="next-arrow" class="text-[18px]" ></app-icon>
           </button>
         </div>
       </div>

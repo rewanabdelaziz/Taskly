@@ -4,11 +4,12 @@ import { ProjectsManagementsService } from '../../services/projects-managements.
 import { DatePipe } from '@angular/common';
 import { Project } from '../../models/projects';
 import { HttpResponse } from '@angular/common/http';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [RouterLink, DatePipe, RouterLink],
+  imports: [RouterLink, DatePipe, RouterLink,IconComponent],
   templateUrl: './projects-list.component.html',
   styleUrl: './projects-list.component.css',
 })

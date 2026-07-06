@@ -4,11 +4,12 @@ import { AuthServiceService } from '../../services/auth-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { ResetPasswordSchema } from '../../reset-password.schema';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
 })
