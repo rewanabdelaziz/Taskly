@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnDestroy, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,10 +8,12 @@ import { ProjectsManagementsService } from '../../services/projects-managements.
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { Breadcrumbs } from '../../../../shared/models/breadcrumbs';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule,IconComponent],
+  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule,IconComponent,BreadcrumbComponent],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.css',
 })
@@ -27,6 +29,7 @@ export class AddProjectComponent implements OnDestroy {
   isSubmitted = signal(false);
   formValue = signal({});
   addProjectPlayload!: AddProjectPayload;
+  breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
 
   private currentUrl = toSignal(
     this._router.events.pipe(
@@ -92,6 +95,14 @@ export class AddProjectComponent implements OnDestroy {
           name: project.name,
           description: project.description,
         });
+        untracked(()=>{
+            this.breadcrumbs.update((prev)=> [...prev,{label:'edit project',url:`/project/${this.projectId()}/edit`}])
+        })
+        
+      }else{
+        untracked(()=>{
+            this.breadcrumbs.update((prev)=> [...prev,{label:'add new project',url:"/project/add"}] )
+        })
       }
     });
   }
