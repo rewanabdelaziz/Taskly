@@ -7,11 +7,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
+import { Breadcrumbs } from '../../../../shared/models/breadcrumbs';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [NgClass, RouterLink,IconComponent],
+  imports: [NgClass, RouterLink,IconComponent,BreadcrumbComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
 })
@@ -23,6 +25,7 @@ export class MembersComponent {
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
+breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
 
   private currentUrl = toSignal(
     this._router.events.pipe(
@@ -50,6 +53,9 @@ export class MembersComponent {
       if (id && project && project.id === id) {
         untracked(() => {
           this.getMembers(id);
+          this.breadcrumbs.update((prev)=> [...prev,
+            {label:`${this.project_managements.selectedProject()?.name}`,url:`/project/${this.projectId()}/epics`},
+            {label:'project details',url:`/project/${this.projectId()}/members`}])
         });
       }
     });
