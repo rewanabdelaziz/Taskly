@@ -34,7 +34,7 @@
         <label
           for="name"
           class="form-label"
-          [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']"
+          [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && addProjectForm.get('name')?.errors"
           >Project TITLE
           <span
             class="text-[11px]/[100%] tracking-normal text-error"
@@ -49,11 +49,18 @@
           placeholder="project title"
           formControlName="name"
         />
-        @if ((isSubmitted() || addProjectForm.get('name')?.touched) && formErrors()['name']) {
-          <p class="text-error mt-2 gap-1.5 flex items-center">
-            <app-icon name="warning"></app-icon>
-            {{ formErrors()['name'] }}
-          </p>
+        @if ((isSubmitted() || addProjectForm.get('name')?.touched) && addProjectForm.get('name')?.errors) {
+          @if(addProjectForm.get('name')?.errors?.['required']){
+            <p class="text-error mt-2 gap-1.5 flex items-center">
+              <app-icon name="warning"></app-icon>
+              project title is required
+            </p>
+          }@else if(addProjectForm.get('name')?.errors?.['minlength'] || addProjectForm.get('name')?.errors?.['maxlength']){
+            <p class="text-error mt-2 gap-1.5 flex items-center">
+              <app-icon name="warning"></app-icon>
+              project title must be at [3 - 100] charachter
+            </p>
+          }
         }
       </div>
       <div class="mb-8">
@@ -62,7 +69,7 @@
             for="description"
             class="form-label"
             [class.!error-label]="
-              (isSubmitted() || addProjectForm.get('password')?.touched) && formErrors()['password']
+              (isSubmitted() || addProjectForm.get('password')?.touched) && addProjectForm.get('password')?.errors
             "
             >description</label
           >
@@ -82,8 +89,13 @@
         <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
           >{{ addProjectForm.get('description')?.value?.length || 0 }}/ 500 characters</span
         >
-        @if ((isSubmitted() || addProjectForm.get('description')?.touched) && formErrors()['description']) {
-          <p class="error-msg mt-1.5">{{ formErrors()['description'] }}</p>
+        @if ((isSubmitted() || addProjectForm.get('description')?.touched)  && addProjectForm.get('description')?.errors) {
+          @if(addProjectForm.get('description')?.errors?.['maxlength']){
+            <p class="text-error mt-2 gap-1.5 flex items-center">
+              <app-icon name="warning"></app-icon>
+              project title must be at most 500 charachter
+            </p>
+          }
         }
       </div>
 

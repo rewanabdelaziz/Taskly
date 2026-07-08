@@ -15,7 +15,7 @@
       <label
         for="name"
         class="form-label"
-        [class.!error-label]="(isSubmitted() || registerForm.get('data.name')?.touched) && formErrors()['data_name']"
+        [class.!error-label]="(isSubmitted() || registerForm.get('data.name')?.touched) && registerForm.get('data.name')?.errors"
         >name</label
       >
       <input
@@ -26,19 +26,26 @@
         placeholder="Enter your full name"
         formControlName="name"
       />
-      @if ((isSubmitted() || registerForm.get('data.name')?.touched) && formErrors()['data_name']) {
-        <p class="error-msg mt-1.5">{{ formErrors()['data_name'] }}</p>
+      @if((isSubmitted() || registerForm.get('data.name')?.touched) && registerForm.get('data.name')?.errors){
+        @if (registerForm.get('data.name')?.errors?.['required']) {
+        <p class="error-msg mt-1.5">Name is required</p>
+      }@else if(registerForm.get('data.name')?.errors?.['minlength'] || registerForm.get('data.name')?.errors?.['maxlength']){
+         <p class="error-msg mt-1.5">Name must be [3-50] characters</p>
+      }@else if (registerForm.get('data.name')?.errors?.['pattern']) {
+         <p class="error-msg mt-1.5">Name can only contain letters and single spaces between names</p>
       } @else {
         <p class="text-[0.625rem]/[15px] text-slate-light tracking-normal mt-1.5 ms-1 font-normal">
           3-50 characters, letters only.
         </p>
       }
+      }
+      
     </div>
     <div class="form-control">
       <label
         for="email"
         class="form-label"
-        [class.!error-label]="(isSubmitted() || registerForm.get('email')?.touched) && formErrors()['email']"
+        [class.!error-label]="(isSubmitted() || registerForm.get('email')?.touched) && registerForm.get('email')?.errors"
         >email</label
       >
       <input
@@ -49,9 +56,14 @@
         placeholder="yourname@company.com"
         formControlName="email"
       />
-      @if ((isSubmitted() || registerForm.get('email')?.touched) && formErrors()['email']) {
-        <p class="error-msg mt-1.5">{{ formErrors()['email'] }}</p>
+      @if((isSubmitted() || registerForm.get('email')?.touched) && registerForm.get('email')?.errors){
+        @if (registerForm.get('email')?.errors?.['email']) {
+        <p class="error-msg mt-1.5">Invalid email format</p>
+        }@else if(registerForm.get('email')?.errors?.['required']){
+          <p class="error-msg mt-1.5">Email is required</p>
+        }
       }
+      
     </div>
     <div class="form-control" formGroupName="data">
       <label for="job-title" class="form-label">Job Title <span class="optional-text">(Optional)</span></label>
@@ -69,7 +81,7 @@
         <label
           for="password"
           class="form-label"
-          [class.!error-label]="(isSubmitted() || registerForm.get('password')?.touched) && formErrors()['password']"
+          [class.!error-label]="(isSubmitted() || registerForm.get('password')?.touched) && registerForm.get('password')?.errors"
           >password</label
         >
         <input
@@ -79,18 +91,26 @@
           class="input-text"
           placeholder="Password"
           formControlName="password"
+          #password
+          (input)="this.passwordValue.set(password.value)"
         />
-        @if ((isSubmitted() || registerForm.get('password')?.touched) && formErrors()['password']) {
-          <p class="error-msg mt-1.5">{{ formErrors()['password'] }}</p>
+        @if( (isSubmitted() || registerForm.get('password')?.touched) && registerForm.get('password')?.errors){
+          @if (registerForm.get('password')?.errors?.['required'] ) {
+            <p class="error-msg mt-1.5">Password is required.</p>
+          }@else if(registerForm.get('password')?.errors?.['minlength'] || registerForm.get('password')?.errors?.['maxlength']){
+            <p class="error-msg mt-1.5">Name must be [8-64] characters</p>
+          }@else if(registerForm.get('password')?.errors?.['pattern']){
+            <p class="error-msg mt-1.5">Password must contain at least one uppercase, one lowercase, one number, and one special character.</p>
+          }
         }
+        
       </div>
       <div class="form-control flex-1">
         <label
           for="confirm-password"
           class="form-label"
           [class.!error-label]="
-            (isSubmitted() || registerForm.get('confirmPassword')?.touched) && formErrors()['confirmPassword']
-          "
+            (isSubmitted() || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors "
           >confirm password</label
         >
         <input
@@ -101,8 +121,12 @@
           placeholder="Repeat your password"
           formControlName="confirmPassword"
         />
-        @if ((isSubmitted() || registerForm.get('confirmPassword')?.touched) && formErrors()['confirmPassword']) {
-          <p class="error-msg mt-1.5">{{ formErrors()['confirmPassword'] }}</p>
+        @if( (isSubmitted() || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors){
+          @if (registerForm.get('confirmPassword')?.errors?.['required'] ) {
+            <p class="error-msg mt-1.5">confirm Password is required.</p>
+          }@else if(registerForm.get('confirmPassword')?.errors?.['passwordMismatch']){
+            <p class="error-msg mt-1.5">Passwords do not match.</p>
+          }
         }
       </div>
     </div>
