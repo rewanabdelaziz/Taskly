@@ -3,7 +3,6 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddProjectPayload } from '../../models/projects';
-import { AddProjectSchema } from '../../add-project.schema';
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
@@ -13,7 +12,7 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule,IconComponent,BreadcrumbComponent],
+  imports: [ReactiveFormsModule,IconComponent,BreadcrumbComponent],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.css',
 })
@@ -26,9 +25,8 @@ export class AddProjectComponent implements OnDestroy {
   timeOutId: null | number = null;
 
   addProjectForm: FormGroup;
-  isSubmitted = signal(false);
-  formValue = signal({});
   addProjectPlayload!: AddProjectPayload;
+  isSubmitted = signal(false);
   breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
 
   private currentUrl = toSignal(
@@ -54,38 +52,14 @@ export class AddProjectComponent implements OnDestroy {
     return this.projectId() !== null;
   });
 
-  formErrors = computed(() => {
-    const current = this.formValue();
-    const res = AddProjectSchema.safeParse(current);
-    let errors: Record<string, string> = {};
 
-    if (res.success) {
-      errors = {};
-    } else {
-      res.error.issues.forEach((issue) => {
-        const path = issue.path.join('_');
-        errors[path] = issue.message;
-      });
-    }
-
-    return errors;
-  });
-
-  isFormInvalid = computed(() => {
-    return Object.keys(this.formErrors()).length > 0;
-  });
 
   constructor() {
     this.addProjectForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      name: ['', [Validators.required,Validators.minLength(3),Validators.maxLength(100)]],
+      description: ['', [Validators.minLength(0),Validators.maxLength(500)]],
     });
 
-    this.formValue.set(this.addProjectForm.value);
-
-    this.addProjectForm.valueChanges.subscribe((v) => {
-      this.formValue.set(v);
-    });
 
     effect(() => {
       const id = this.projectId();
@@ -126,8 +100,7 @@ export class AddProjectComponent implements OnDestroy {
   }
 
   addProject() {
-    const errors = this.formErrors();
-    if (Object.keys(errors).length === 0) {
+    if (this.addProjectForm.valid) {
       const { name, description } = this.addProjectForm.value;
       this.addProjectPlayload = { name, description };
       this._pojectService.addNewProject(this.addProjectPlayload).subscribe({
@@ -151,9 +124,9 @@ export class AddProjectComponent implements OnDestroy {
   }
 
   editProject(id: string) {
-    const errors = this.formErrors();
 
-    if (Object.keys(errors).length === 0) {
+
+    if (this.addProjectForm.valid) {
       const { name, description } = this.addProjectForm.value;
       this.addProjectPlayload = { name, description };
       this._pojectService.editProject(this.addProjectPlayload, id).subscribe({
