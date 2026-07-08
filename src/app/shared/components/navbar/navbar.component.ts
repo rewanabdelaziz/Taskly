@@ -1,35 +1,20 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { AuthServiceService } from '../../../features/auth/services/auth-service.service';
 import { IconComponent } from '../icon/icon.component';
+import { NameAvatarIconComponent } from '../name-avatar-icon/name-avatar-icon.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent,NameAvatarIconComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent  {
   @Output() menuClick = new EventEmitter<void>();
   private _auth = inject(AuthServiceService);
 
   userprofile = this._auth.userProfile;
-  avatar = '';
-  ngOnInit(): void {
-    this.initAvatar();
-  }
-
-  initAvatar() {
-    if (this.userprofile()?.name) {
-      const nameParts = this.userprofile()?.name.trim().split(/\s+/);
-
-      if (nameParts && nameParts.length >= 2) {
-        this.avatar = (nameParts[0][0] + nameParts[1][0]).toUpperCase();
-      } else if (nameParts?.length == 1) {
-        this.avatar = nameParts[0].substring(0, 2).toUpperCase();
-      }
-    }
-  }
 
   clickMenue() {
     this.menuClick.emit();
