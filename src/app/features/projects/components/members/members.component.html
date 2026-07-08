@@ -116,12 +116,7 @@
             @for (member of members(); track member.member_id) {
               <tr class="rounded-lg tracking-normal font-medium bg-white">
                 <td class="px-8 py-5">
-                  <div
-                    class="w-10 h-10 rounded-xl bg-surface-highest text-primary flex items-center justify-center font-bold"
-                  >
-                    {{ member.metadata.name.split(' ')[0].substring(0, 1).toUpperCase() }}
-                    {{ member.metadata.name.split(' ')[1].substring(0, 1).toUpperCase() }}
-                  </div>
+                  <app-name-avatar-icon [userName]="member.metadata.name" [size]="48"></app-name-avatar-icon>
                 </td>
                 <td class="px-8 py-5">
                   <div class="flex flex-col">

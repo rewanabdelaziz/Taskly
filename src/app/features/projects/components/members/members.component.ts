@@ -9,11 +9,12 @@ import { NgClass } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { Breadcrumbs } from '../../../../shared/models/breadcrumbs';
+import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [NgClass, RouterLink,IconComponent,BreadcrumbComponent],
+  imports: [NgClass, RouterLink,IconComponent,BreadcrumbComponent,NameAvatarIconComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
 })
