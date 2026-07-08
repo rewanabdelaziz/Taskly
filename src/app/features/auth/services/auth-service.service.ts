@@ -6,6 +6,7 @@ import { Observable, switchMap, tap } from 'rxjs';
 import { LoginResponse } from '../models/supabaseModels';
 import { StorageKeys } from '../../../core/constants/storage-keys';
 import { ApiEndpoints } from '../../../core/constants/api-endpoints';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 export class AuthServiceService {
   baseUrl = environment.baseUrl;
   private _http = inject(HttpClient);
+  private _router = inject(Router)
   userProfile = signal<UserMetaData | null>(null);
   isLoggedIn = signal(false);
 
@@ -97,5 +99,17 @@ export class AuthServiceService {
       Authorization: `Bearer ${token}`,
     });
     return this._http.put(`${this.baseUrl}${ApiEndpoints.USER}`, payload, { headers });
+  }
+
+  // clear storage
+  clearStorage(){
+    const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
+    storage.removeItem(StorageKeys.ACCESS_TOKEN);
+    storage.removeItem(StorageKeys.REFRESH_TOKEN);
+    storage.removeItem(StorageKeys.USER_PROFILE);
+    localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
+    this.isLoggedIn.set(false);
+    this.userProfile.set(null);
+    this._router.navigate(['/login']);
   }
 }
