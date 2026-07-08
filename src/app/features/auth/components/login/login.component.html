@@ -15,7 +15,7 @@
       <label
         for="email"
         class="form-label"
-        [class.!error-label]="(isSubmitted() || loginForm.get('email')?.touched) && formErrors()['email']"
+        [class.!error-label]="(isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors"
         >email</label
       >
       <input
@@ -26,8 +26,11 @@
         placeholder="yourname@company.com"
         formControlName="email"
       />
-      @if ((isSubmitted() || loginForm.get('email')?.touched) && formErrors()['email']) {
-        <p class="error-msg mt-1.5">{{ formErrors()['email'] }}</p>
+      @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['required']) {
+        <p class="error-msg mt-1.5">Email is required</p>
+      }
+      @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['email']) {
+        <p class="error-msg mt-1.5">Invalid email format</p>
       }
     </div>
     <div class="form-control">
@@ -35,7 +38,7 @@
         <label
           for="password"
           class="form-label"
-          [class.!error-label]="(isSubmitted() || loginForm.get('password')?.touched) && formErrors()['password']"
+          [class.!error-label]="(isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors"
           >password</label
         >
         <a
@@ -53,8 +56,8 @@
         placeholder="Password"
         formControlName="password"
       />
-      @if ((isSubmitted() || loginForm.get('password')?.touched) && formErrors()['password']) {
-        <p class="error-msg mt-1.5">{{ formErrors()['password'] }}</p>
+      @if ((isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors?.['required']) {
+        <p class="error-msg mt-1.5">Password is required</p>
       }
     </div>
     <div class="sm:flex sm:justify-between mb-6">

@@ -1,11 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RegisterSchema } from '../../register.schema';
 import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
+
 
 @Component({
   selector: 'app-register',
@@ -21,27 +22,9 @@ export class RegisterComponent {
   _globalMsg = inject(ToastNotificationService);
 
   registerForm: FormGroup;
-  isSubmitted = signal(false);
-  formValue = signal({});
   registerPlayload!: UserRegisterPayload;
+  isSubmitted = signal(false);
   passwordValue = signal('');
-
-  formErrors = computed(() => {
-    const current = this.formValue();
-    const res = RegisterSchema.safeParse(current);
-    let errors: Record<string, string> = {};
-
-    if (res.success) {
-      errors = {};
-    } else {
-      res.error.issues.forEach((issue) => {
-        const path = issue.path.join('_');
-        errors[path] = issue.message;
-      });
-    }
-
-    return errors;
-  });
 
   passwordRequirements = computed(() => {
     const hasMinLength = this.passwordValue().length >= 8;
@@ -52,36 +35,26 @@ export class RegisterComponent {
     return { hasMinLength, hasUpperLowerDigit, hasSpecialChar };
   });
 
-  isFormInvalid = computed(() => {
-    return Object.keys(this.formErrors()).length > 0;
-  });
+  
 
   constructor() {
     this.registerForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
+      email: ['', [Validators.required,Validators.email]],
+      password: ['', [Validators.required,Validators.pattern(FormValidators.passwordRegex),Validators.minLength(8),Validators.maxLength(64)]],
       confirmPassword: ['', Validators.required],
       data: this.fb.group({
-        name: ['', Validators.required],
+        name: ['', [Validators.required,Validators.pattern(FormValidators.nameRegex),Validators.minLength(3),Validators.maxLength(50)]],
         department: [''],
       }),
-    });
+    },{ validators: passwordMatchValidator });
 
-    this.formValue.set(this.registerForm.value);
 
-    this.registerForm.valueChanges.subscribe((v) => {
-      this.formValue.set(v);
-      this.passwordValue.set(v.password);
-    });
   }
-
+  
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
     event.preventDefault();
-
-    const errors = this.formErrors();
-
-    if (Object.keys(errors).length === 0) {
+    if (this.registerForm.valid) {
       const { email, password, data } = this.registerForm.value;
       this.registerPlayload = {
         email: email,
@@ -101,11 +74,15 @@ export class RegisterComponent {
           this._globalMsg.showMsg('Account created successfully!', 'success');
           this._router.navigate(['/project']);
         },
-        error: () => {
+        error: (err) => {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Registration failed. Please try again.';
-          this._globalMsg.showMsg(fallbackMsg);
+          if(err.error.msg === "User already registered"){
+            this._globalMsg.showMsg("User already registered")
+          }else{
+            this._globalMsg.showMsg(fallbackMsg);
+          }
         },
       });
     } else {
@@ -118,4 +95,5 @@ export class RegisterComponent {
   navigateToLogin() {
     this._router.navigate(['/login']);
   }
+
 }

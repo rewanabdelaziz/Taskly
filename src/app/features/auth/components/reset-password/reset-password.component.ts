@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
-import { ResetPasswordSchema } from '../../reset-password.schema';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-reset-password',
@@ -20,29 +20,11 @@ export class ResetPasswordComponent implements OnDestroy {
   _globalMsg = inject(ToastNotificationService);
 
   resetPasswordForm: FormGroup;
-  isSubmitted = signal(false);
-  formValue = signal({});
   resetPasswordPlayload!: { password: string };
+  isSubmitted = signal(false);
   passwordValue = signal('');
   private timeOutId: null | number = null;
   private state;
-
-  formErrors = computed(() => {
-    const current = this.formValue();
-    const res = ResetPasswordSchema.safeParse(current);
-    let errors: Record<string, string> = {};
-
-    if (res.success) {
-      errors = {};
-    } else {
-      res.error.issues.forEach((issue) => {
-        const path = issue.path.join('_');
-        errors[path] = issue.message;
-      });
-    }
-
-    return errors;
-  });
 
   passwordRequirements = computed(() => {
     const hasMinLength = this.passwordValue().length >= 8 && this.passwordValue().length <= 64;
@@ -54,23 +36,14 @@ export class ResetPasswordComponent implements OnDestroy {
     return { hasMinLength, hasUpper, hasLower, hasDigit, hasSpecialChar };
   });
 
-  isFormInvalid = computed(() => {
-    return Object.keys(this.formErrors()).length > 0;
-  });
 
   constructor() {
     // init form
     this.resetPasswordForm = this.fb.group({
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-    });
+     password: ['', [Validators.required,Validators.pattern(FormValidators.passwordRegex),Validators.minLength(8),Validators.maxLength(64)]],
+     confirmPassword: ['', Validators.required],
+    },{ validators: passwordMatchValidator });
 
-    this.formValue.set(this.resetPasswordForm.value);
-
-    this.resetPasswordForm.valueChanges.subscribe((v) => {
-      this.formValue.set(v);
-      this.passwordValue.set(v.password);
-    });
 
     // store access token from state
     const currentNavigation = this._router.getCurrentNavigation();
@@ -93,9 +66,9 @@ export class ResetPasswordComponent implements OnDestroy {
     this.isSubmitted.set(true);
     event.preventDefault();
 
-    const errors = this.formErrors();
 
-    if (Object.keys(errors).length === 0) {
+
+    if (this.resetPasswordForm.valid) {
       const { password } = this.resetPasswordForm.value;
       this.resetPasswordPlayload = {
         password: password,

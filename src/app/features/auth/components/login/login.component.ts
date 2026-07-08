@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { UserLoginPayload } from '../../models/user';
-import { LoginSchema } from '../../login.schema';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -22,52 +21,24 @@ export class LoginComponent {
 
   loginForm: FormGroup;
   isSubmitted = signal(false);
-  formValue = signal({});
   loginPlayload!: UserLoginPayload;
   rememberMe = signal(false);
 
-  formErrors = computed(() => {
-    const current = this.formValue();
-    const res = LoginSchema.safeParse(current);
-    let errors: Record<string, string> = {};
-
-    if (res.success) {
-      errors = {};
-    } else {
-      res.error.issues.forEach((issue) => {
-        const path = issue.path.join('_');
-        errors[path] = issue.message;
-      });
-    }
-
-    return errors;
-  });
-
-  isFormInvalid = computed(() => {
-    return Object.keys(this.formErrors()).length > 0;
-  });
 
   constructor() {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      email: ['',[Validators.required,Validators.email]],
       password: ['', Validators.required],
       rememberMe: [false],
     });
 
-    this.formValue.set(this.loginForm.value);
-
-    this.loginForm.valueChanges.subscribe((v) => {
-      this.formValue.set(v);
-    });
   }
 
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
     event.preventDefault();
 
-    const errors = this.formErrors();
-
-    if (Object.keys(errors).length === 0) {
+    if (this.loginForm.valid) {
       const { email, password, rememberMe } = this.loginForm.value;
       this.loginPlayload = {
         email: email,
