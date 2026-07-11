@@ -8,7 +8,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 @Component({
   selector: 'app-forget-password',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink,IconComponent],
+  imports: [ReactiveFormsModule, RouterLink,IconComponent,IconComponent],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })

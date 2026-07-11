@@ -1,10 +1,10 @@
 <div class="sm:bg-background min-h-lvh flex flex-col sm:pb-12 items-stretch">
-  <!-- logo -->
-  <nav class="sticky top-0 z-40 w-full flex py-6.5 px-6 sm:px-10 bg-background">
-    <app-icon name="logo" class="logo-icon"></app-icon>
-    <span class="logo-text"> Taskly </span>
-  </nav>
+  <!-- nav bar -->
+  <app-auth-nav-bar></app-auth-nav-bar>
 
   <!--form container-->
-  <router-outlet></router-outlet>
+  <div class="flex flex-col items-stretch sm:items-center sm:justify-center flex-1 px-5">
+     <router-outlet></router-outlet>
+  </div>
+ 
 </div>

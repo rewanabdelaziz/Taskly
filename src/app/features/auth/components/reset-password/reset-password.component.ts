@@ -5,13 +5,15 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
+import { AuthNavBarComponent } from '../auth-nav-bar/auth-nav-bar.component';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, IconComponent],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent, AuthNavBarComponent],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
+  host: { class: 'flex flex-col flex-1 h-full' }
 })
 export class ResetPasswordComponent implements OnDestroy {
   private fb = inject(FormBuilder);
