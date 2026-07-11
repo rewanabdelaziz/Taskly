@@ -21,12 +21,20 @@ export class ProjectsListComponent implements OnInit {
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
   currentPage = signal(1);
-  limit = signal(9);
+  limit = signal(5);
   offset = computed(() => (this.currentPage() - 1) * this.limit());
   total = signal(0);
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
 
-  isMobile = signal<boolean>(false);
+
+  isMobileNow = signal<boolean>(false);
+
+  currentLength = computed(()=>{
+    if(this.currentPage()===1){
+      return this.projects().length
+    }
+    return (this.limit() * (this.currentPage() -1) ) + this.projects().length
+  })
 
   ngOnInit(): void {
     this.getProjects();
@@ -35,12 +43,12 @@ export class ProjectsListComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    if (!this.isMobile() || this.isloading() || this.currentPage() >= this.EndPageNum()) return;
+    if (!this.isMobileNow() || this.isloading() || this.currentPage() >= this.EndPageNum()) return;
 
     const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
     const max = document.documentElement.scrollHeight;
 
-    if (pos >= max - 50) {
+    if (pos >= max - 150) {
       this.currentPage.update((prev) => prev + 1);
       this.getProjects(true);
     }
@@ -48,12 +56,20 @@ export class ProjectsListComponent implements OnInit {
 
   @HostListener('window:resize', [])
   checkScreenSize() {
-    this.isMobile.set(window.innerWidth < 640); // sm:640px
+    const wasMobile = this.isMobileNow()
+    this.isMobileNow.set(window.innerWidth < 640); // sm:640px
+
+    if(wasMobile && !this.isMobileNow()){
+      this.currentPage.set(1)
+      this.getProjects(false)
+    }
   }
 
   getProjects(isAppend = false) {
-    this.isloading.set(true);
-    if (!isAppend) this.isEmpty.set(false);
+    if (!isAppend) {
+      this.isEmpty.set(false);
+      this.isloading.set(true);
+    }
     this.isError.set(false);
     this.project_managements.getAllProjects(this.offset(), this.limit()).subscribe({
       next: (res: HttpResponse<Project[]>) => {
@@ -101,7 +117,7 @@ export class ProjectsListComponent implements OnInit {
   }
 
   retry() {
-    this.getProjects(this.isMobile() && this.currentPage() > 1);
+    this.getProjects(this.isMobileNow() && this.currentPage() > 1);
   }
 
   goToEpics(id: string, project: Project) {

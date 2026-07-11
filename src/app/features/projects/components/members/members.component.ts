@@ -26,7 +26,7 @@ export class MembersComponent {
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
-breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
+  breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
 
   private currentUrl = toSignal(
     this._router.events.pipe(
@@ -39,7 +39,7 @@ breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
   projectId = computed(() => {
     const url = this.currentUrl();
     const segments = url.split('/');
-
+    
     const idSegment = segments[2];
     if (idSegment && idSegment !== 'add') {
       return idSegment;
