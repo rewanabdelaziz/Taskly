@@ -61,8 +61,13 @@
   /*Typography */
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'Liberation Mono';
-}
 
+  /* custom breakpoints */
+  --breakpoint-xs: 20rem
+}
+body{
+  font-family: var(--font-sans)
+}
 /* ============== UTILITIES ================== */
 
 /* logo */
@@ -70,7 +75,7 @@
   @apply text-xl/[1.75rem] tracking-[-0.5px] text-slate-dark font-bold uppercase;
 }
 @utility logo-icon {
-  @apply me-2 text-primary;
+  @apply me-2 text-primary-container;
 }
 /* fonts */
 @utility display-lg {
@@ -82,11 +87,17 @@
 }
 
 @utility title-md {
-  @apply text-[1.125rem]/[1.6875rem] text-slate-dark capitalize tracking-normal font-medium;
+  @apply text-[clamp(1.5rem,1.2rem+1.25vw,1.875rem)]/[clamp(2rem,1.75rem+1vw,2.25rem)] text-slate-dark capitalize tracking-[-0.8px] font-semibold;
+}
+@utility title-sm {
+  @apply text-[clamp(1.75rem,1.2rem+1.25vw,1.875rem)]/[clamp(2rem,1.75rem+1vw,2.25rem)] text-slate-dark capitalize tracking-[-0.8px] font-semibold;
+}
+@utility body-md {
+  @apply text-[1rem]/[1.5rem]  text-text-body normal-case  tracking-normal font-normal;
 }
 
-@utility body-md {
-  @apply text-sm/[22.75px]  text-text-body normal-case  tracking-normal font-normal;
+@utility body-sm {
+  @apply text-sm/[1.25rem]  text-text-body normal-case  tracking-normal font-normal;
 }
 
 @utility label-sm {
@@ -94,7 +105,7 @@
 }
 /* buttons */
 @utility btns-basic {
-  @apply py-2.5 px-6 rounded-xs capitalize tracking-normal text-sm/[20px] cursor-pointer;
+  @apply py-3 px-6 sm:py-4 rounded-xs capitalize tracking-normal text-sm/[20px] cursor-pointer;
 }
 @utility btn-primary {
   @apply btns-basic bg-gradient-primary text-white  shadow-xs font-semibold  shadow-btn-shadow;
@@ -116,7 +127,7 @@
   @apply form-label-basic text-error;
 }
 @utility input-text {
-  @apply block bg-surface-highest px-4 pt-3.5 pb-3.75 text-placeholder w-full font-normal tracking-normal text-[16px]/[100%] sm:rounded-sm rounded-lg  focus:outline-primary;
+  @apply block bg-surface-highest px-4.5 py-4 sm:px-4 sm:pt-3.5 pb-3.75 text-placeholder w-full font-normal tracking-normal text-[16px]/[100%] sm:rounded-sm rounded-lg  focus:outline-primary;
 }
 @utility error-msg {
   @apply bg-error-msg-bg text-error-msg-text px-4 py-3;

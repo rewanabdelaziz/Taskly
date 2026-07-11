@@ -1,82 +1,84 @@
 <!--form container-->
-<div class="bg-white mt-4 shadow-form-shadow px-6 py-[10.5px] sm:p-12 rounded-lg max-w-120 mx-auto">
-  <!-- form header -->
-  <div class="sm:text-center mb-10">
-    <h2
-      class="sm:text-[1.75rem]/[2.5rem] text-[1.875rem]/[2.25rem] font-semibold text-slate-dark sm:tracking-[-0.75px] tracking-[-0.8px]"
-    >
-      Welcome Back
-    </h2>
-    <p class="body-md sm:text-sm/[20px]">Please enter your details to access your workspace</p>
-  </div>
-  <!-- form -->
-  <form class="flex-1 flex flex-col justify-center" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
-    <div class="form-control">
-      <label
-        for="email"
-        class="form-label"
-        [class.!error-label]="(isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors"
-        >email</label
-      >
-      <input
-        type="text"
-        name="email"
-        id="email"
-        class="input-text"
-        placeholder="yourname@company.com"
-        formControlName="email"
-      />
-      @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['required']) {
-        <p class="error-msg mt-1.5">Email is required</p>
-      }
-      @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['email']) {
-        <p class="error-msg mt-1.5">Invalid email format</p>
-      }
+<div class="bg-background sm:bg-white shadow-form-shadow px-6 pt-25 sm:p-12 rounded-lg md:w-120 flex-1 sm:flex-initial sm:min-h-auto flex flex-col justify-between">
+  <div class="flex-1">
+      <!-- form header -->
+    <div class="text-center mb-10">
+      <h2 class="title-md"> Welcome Back </h2>
+      <p class="body-sm">Please enter your details to access your workspace</p>
     </div>
-    <div class="form-control">
-      <div class="flex justify-between">
+    <!-- form -->
+    <form class="flex-1 flex flex-col justify-center" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+      <div class="form-control">
         <label
-          for="password"
+          for="email"
           class="form-label"
-          [class.!error-label]="(isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors"
-          >password</label
+          [class.!error-label]="(isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors"
+          >email</label
         >
+        <input
+          type="text"
+          name="email"
+          id="email"
+          class="input-text"
+          placeholder="yourname@company.com"
+          formControlName="email"
+        />
+        @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['required']) {
+          <p class="error-msg mt-1.5">Email is required</p>
+        }
+        @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['email']) {
+          <p class="error-msg mt-1.5">Invalid email format</p>
+        }
+      </div>
+      <div class="form-control">
+        <div class="flex justify-between">
+          <label
+            for="password"
+            class="form-label"
+            [class.!error-label]="(isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors"
+            >password</label
+          >
+          <a
+            class="text-[0.6875rem]/[1rem] tracking-normal no-underline font-bold text-primary sm:hidden block cursor-pointer"
+            routerLink="/forgot-password"
+            >Forgot?</a
+          >
+        </div>
+  
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="input-text"
+          placeholder="Password"
+          formControlName="password"
+        />
+        @if ((isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors?.['required']) {
+          <p class="error-msg mt-1.5">Password is required</p>
+        }
+      </div>
+      <div class="sm:flex sm:justify-between mb-6">
+        <div class="form-check flex items-center">
+          <input class="form-check-input" type="checkbox" value="remember" id="remember" formControlName="rememberMe" />
+          <label class="body-sm  font-medium  ms-2" for="remember">Remember Me</label>
+        </div>
+  
         <a
-          class="text-sm/[20px] tracking-normal no-underline font-medium text-primary sm:hidden block cursor-pointer"
+          class="text-sm/[1.25rem] tracking-normal no-underline font-medium text-primary hidden sm:block"
           routerLink="/forgot-password"
           >Forgot Password?</a
         >
       </div>
-
-      <input
-        type="password"
-        name="password"
-        id="password"
-        class="input-text"
-        placeholder="Password"
-        formControlName="password"
-      />
-      @if ((isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors?.['required']) {
-        <p class="error-msg mt-1.5">Password is required</p>
-      }
-    </div>
-    <div class="sm:flex sm:justify-between mb-6">
-      <div class="form-check flex items-center">
-        <input class="form-check-input" type="checkbox" value="remember" id="remember" formControlName="rememberMe" />
-        <label class="text-sm/[20px] tracking-normal font-medium text-text-body ms-2" for="remember">Remember Me</label>
-      </div>
-
-      <a
-        class="text-sm/[20px] tracking-normal no-underline font-medium text-primary hidden sm:block"
-        routerLink="/forgot-password"
-        >Forgot Password?</a
-      >
-    </div>
-
-    <button type="submit" class="btn-primary w-full mb-4">Log In</button>
-
-    <div class="pt-[47.5px] pb-8 sm:pb-0 sm:pt-8 text-center">
-      <p class="text-sm/[20px] tracking-normal text-slate-medium font-normal">
+  
+      <button type="submit" class="btn-primary w-full mb-4 md:py-4 hidden sm:inline">Log In</button>
+      <button type="submit" class="btn-primary w-full mb-4 md:py-4 rounded-lg sm:hidden flex items-center justify-center">Sign in
+        <app-icon name="next-arrow" [size]="10" class="ms-1.5"></app-icon>
+      </button>
+      
+    </form>
+  </div>
+  <div class="pt-12 pb-8 sm:pb-0 sm:pt-8 text-center">
+      <p class="body-sm text-slate-medium">
         Don't have an account?
         <span
           class="text-primary font-semibold cursor-pointer"
@@ -87,5 +89,4 @@
         >
       </p>
     </div>
-  </form>
 </div>
