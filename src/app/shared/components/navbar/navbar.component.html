@@ -1,8 +1,9 @@
 <nav
-  class="w-full bg-background py-3 px-6 flex justify-between items-center border-b border-border-secodary shadow-navbar-shadow shadow"
+  class="w-full bg-background py-4 sm:py-3 px-6 flex justify-between items-center border-b border-navbar-border shadow-xs"
 >
-  <div class="flex sm:hidden">
-    <app-icon name="menu" class="logo-icon"
+  <!-- menue & logo in small screens -->
+  <div class="flex items-center gap-4 sm:hidden">
+    <app-icon name="menu" class="logo-icon" color="#041b3c" [size]="18"
       (click)="clickMenue()"
       (keydown.enter)="clickMenue()"
       tabindex="0">
@@ -11,17 +12,17 @@
   </div>
 
   <div class="flex ms-auto">
-    <div
-      class="sm:flex flex-col hidden me-3 border border-l-border-gray border-t-0 border-b-0 border-r-0 pl-4 pr-3 text-end"
-    >
+    <!-- name & role in big screens -->
+    <div class="sm:flex flex-col hidden text-end me-4">
       @if (userprofile()) {
-        <p class="text-[14px]/[20px] tracking-normal font-semibold text-slate-dark">{{ userprofile()?.name }}</p>
-        <p class="text-[10px]/[20px] tracking-[1px] font-bold text-primary uppercase">
+        <p class="text-[0.875rem]/[1.25rem] tracking-normal font-semibold text-slate-dark">{{ userprofile()?.name }}</p>
+        <p class="text-[0.625rem]/[1.25rem] tracking-[0.0625rem] font-bold text-primary uppercase">
           {{ userprofile()?.department }}
         </p>
       }
     </div>
 
+    <!-- name avatar in all screens -->
     <app-name-avatar-icon [userName]="userprofile()?.name || '' " customBgColor="#0052cc" customTextColor="#ffffff"></app-name-avatar-icon>
   </div>
 </nav>

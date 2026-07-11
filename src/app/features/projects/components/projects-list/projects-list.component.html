@@ -1,6 +1,5 @@
-<div class="flex flex-col items-center h-full ps-3 sm:ps-6">
-  <!-- container -->
-  <div class="w-full h-full">
+<div class="flex flex-col h-full">
+
     @if (isloading()) {
       <!-- skeleton loader -->
       <div class="hidden sm:flex sm:flex-col pt-6 w-full">
@@ -30,7 +29,8 @@
         </div>
       </div>
     } @else if (isError()) {
-      <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
+      <div class="flex justify-center  h-full">
+        <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
         <a
           class="bg-error-msg-bg flex items-center justify-center text-slate-dark rounded-xl w-16 h-16"
           routerLink="/project/add"
@@ -48,8 +48,10 @@
           Retry Connection
         </button>
       </div>
+      </div>
     } @else if (isEmpty()) {
-      <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
+      <div class="flex justify-center  h-full">
+        <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
         <img class="w-full" src="assets/new_project.webp" alt="empty icon" />
         <div class="m-12 w-full text-center">
           <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">No Projects</h2>
@@ -63,50 +65,56 @@
           <app-icon name="plus" [size]="15" class="me-1"></app-icon> Create New Project
         </button>
       </div>
+      </div>
     } @else {
       <!-- header -->
-      <div class="hidden sm:flex sm:flex-col pt-6 w-full">
-        <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row">
-          <div class="mb-4 lg:mb-0">
-            <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Create New Project</h2>
-            <p>Manage and curate your projects</p>
+      <div class="flex flex-col">
+        <div class="flex justify-between flex-col md:flex-row md:items-end gap-2.5">
+          <div>
+            <h2 class="title-md">Projects</h2>
+            <p class="body-md ">Manage and curate your projects</p>
           </div>
 
-          <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" routerLink="/project/add">
-            <app-icon name="plus" [size]="15" class="me-1"></app-icon>
+          <button class="btn-primary sm:py-3 hidden sm:flex items-center gap-1 font-medium shadow btn-shadow h-fit max-w-fit" routerLink="/project/add">
+            <app-icon name="plus" [size]="10" class="me-1"></app-icon>
             Create New Project
           </button>
         </div>
       </div>
       <button
-        class="inline sm:hidden fixed bottom-2 right-2 btn-primary btn-shadow text-center px-4 py-3 font-bold mb-20"
+        class="inline sm:hidden fixed bottom-0 right-2 btn-primary btn-shadow rounded-xl text-center px-4 py-3 font-bold mb-20"
         routerLink="/project/add"
       >
-        <app-icon name="plus" ></app-icon>
+        <app-icon name="plus" [size]="14"></app-icon>
       </button>
 
       <!-- cards container -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div class="grid grid-cols-1 justify-items-stretch md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-6 md:mt-10">
         @for (project of projects(); track project.id) {
           <div
-            class="bg-white flex flex-col justify-between p-6 min-h-56 max-w-80 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer"
+            class="bg-white flex flex-col justify-between p-5 sm:p-6 min-h-56  rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer"
             (click)="goToEpics(project.id, project)"
             (keydown.enter)="goToEpics(project.id, project)"
             tabindex="0"
           >
-            <h3 class="text-third-heading text-[1.125rem]/[1.75rem] mb-3.5">{{ project.name }}</h3>
-            <p class="text-text-body text-sm/[1.4375rem] mb-10.5">{{ project.description }}</p>
-            <div class="flex justify-between items-center gap-16">
-              <span class="label-sm text-placeholder tracking-[-0.55px]">created at</span>
-              <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">{{
-                project.created_at | date: 'd MMMM yyyy'
-              }}</span>
+            <div class="flex justify-between">
+              <h3 class="card-title mb-3.5">{{ project.name }}</h3>
+              <app-icon [size]="10" name="more-vertical" class="label-sm text-placeholder"></app-icon>
+            </div>
+            
+            <p class="text-text-body text-sm/[1.4375rem] mb-6">{{ project.description }}</p>
+            <div class="flex md:justify-between items-center gap-2  pt-5 border-t border-border-gray">
+              <span class="label-sm text-placeholder tracking-[-0.55px] hidden md:inline">created at</span>
+              <app-icon name="date" [size]="10" class="md:hidden"></app-icon>
+              <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">
+                {{project.created_at | date: 'd MMMM yyyy'}}
+              </span>
             </div>
           </div>
         }
 
         <div
-          class="bg-white border-3 border-border-secodary border-dashed flex flex-col justify-center items-center gap-4 p-6 min-h-56 max-w-80 rounded-lg shadow-form-shadow text-sm/[1.25rem] font-bold"
+          class="bg-white border-3 border-border-secodary border-dashed flex flex-col justify-center items-center gap-4 p-6 min-h-56 w-full rounded-lg shadow-form-shadow text-sm/[1.25rem] font-bold"
         >
           <a
             class="bg-surface-low flex items-center justify-center text-slate-dark rounded-xl w-12 h-12"
@@ -125,7 +133,7 @@
         class="hidden sm:flex flex-col sm:flex-row justify-between items-center gap-4 w-full mt-10 pt-6 border-t border-slate-100"
       >
         <div class="text-sm text-text-body font-medium">
-          Showing <span class="text-slate-dark font-semibold">{{ projects().length }}</span> of
+          Showing <span class="text-slate-dark font-semibold">{{ currentLength() }}</span> of
           <span class="text-slate-dark font-semibold">{{ total() }}</span> active projects
         </div>
 
@@ -168,5 +176,5 @@
         </div>
       </div>
     }
-  </div>
+  
 </div>
