@@ -1,9 +1,9 @@
 <div class="flex flex-col items-center h-full">
   <!-- header -->
-  <div class="hidden sm:flex sm:flex-col pt-6 ps-8 w-full">
+  <div class="hidden sm:flex sm:flex-col w-full">
     <app-breadcrumb [breadcrumbs]="breadcrumbs()"></app-breadcrumb>
     <div class="mt-3 mb-10 flex justify-between">
-      <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">
+      <h2 class="title-md">
         {{ isEditMode() ? 'Edit Project' : 'Add New Project' }}
       </h2>
 
@@ -21,7 +21,7 @@
         <h2 class="text-[24px]/[32px] font-semibold text-slate-dark sm:tracking-[-0.75px] tracking-normal">
           {{ isEditMode() ? 'Edit Project' : 'Initialize New Project' }}
         </h2>
-        <p class="body-md sm:text-sm/[20px]">Define the scope and foundational details of your project.</p>
+        <p class="body-sm">Define the scope and foundational details of your project.</p>
       </div>
     </div>
     <!-- form -->
@@ -106,13 +106,15 @@
         >
           Back
         </button>
-        <button type="submit" class="btn-primary w-full sm:w-auto">
-          {{ isEditMode() ? 'edit project' : 'create project' }}
+        <button type="submit" class="btn-primary w-full sm:w-auto sm:px-8 rounded-lg sm:rounded-none">
+          {{ isEditMode() ? 'save changes' : 'create project' }}
         </button>
       </div>
 
-      <div
-        class="bg-surface-low text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5"
+      
+    </form>
+    <div
+        class="bg-surface-low w-full text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5"
       >
         <app-icon name="light" class="hidden! sm:inline-flex!"></app-icon>
 
@@ -121,6 +123,7 @@
           initial creation process.
         </p>
       </div>
-    </form>
+    
   </div>
+  
 </div>
