@@ -1,3 +1,4 @@
+<!-- Overlay to close side bar in small screens -->
 @if (isMobileOpen()) {
   <div
     class="fixed inset-0 z-10 sm:hidden bg-black/40"
@@ -6,29 +7,39 @@
     tabindex="0"
   ></div>
 }
+<!-- side bar -->
 <aside
-  [class.w-3xs]="!isCollapsed()"
-  [class.w-20]="isCollapsed()"
+  [class]="isCollapsed() && !isMobileOpen() ? 'w-20' : 'w-3xs'"
   [class.!translate-x-0]="isMobileOpen()"
   class="fixed inset-0 sm:sticky translate-x-[-350%] sm:translate-x-0 z-30 h-screen bg-surface-low text-slate-dark flex flex-col justify-between p-4 transition-all duration-300"
->
-  <div>
-    @if (!isCollapsed()) {
-      <div class="sm:flex items-center py-2 ps-1 mb-8 hidden">
-        <app-icon name="logo" class="logo-icon text-primary-container"></app-icon>
-        <span class="logo-text"> Taskly </span>
-      </div>
-    }
+  >
 
+  <div>
+      <!-- logo -->
+      <div class="flex items-center py-2 mb-8 ps-1"
+              [class.ps-3]="isCollapsed()">
+        <app-icon name="logo" class="logo-icon text-primary-container" [size]="18"></app-icon>
+         @if (!isCollapsed()) {
+        <span class="logo-text"> Taskly </span>
+         }
+      </div>
+    
+    <!-- navigation links -->
     <ul>
-      <li class="hover:bg-white rounded-md py-2.5 px-3 transition-all duration-300">
+      <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
         <a
           routerLink="/project"
-          routerLinkActive="!text-primary"
+          routerLinkActive="!text-primary bg-white"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+          [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
+          class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3  text-sm/[20px] hover:text-primary font-semibold"
         >
-          <app-icon name="folder" ></app-icon>
+          @if (!isCollapsed()) {
+            <app-icon name="folder" [size]="16"></app-icon>
+          }@else{
+            <app-icon name="folder-2" [size]="18"></app-icon>
+          }
+
           @if (!isCollapsed()) {
             <span>Projects</span>
           }
@@ -36,52 +47,61 @@
       </li>
 
       @if (projectId()) {
-        <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
           <a
             [routerLink]="['/project', projectId(), 'epics']"
-            routerLinkActive="!text-primary"
-            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+            routerLinkActive="!text-primary bg-white"
+            [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
+            class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3 text-sm hover:text-primary font-semibold"
           >
-            <app-icon name="tasks" ></app-icon>
+            <app-icon name="tasks" [size]="isCollapsed()? 16 : 18 "></app-icon>
             @if (!isCollapsed()) {
               <span>Project Epics</span>
             }
           </a>
         </li>
 
-        <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
           <a
             [routerLink]="['/project', projectId(), 'tasks']"
-            routerLinkActive="!text-primary"
-            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+            routerLinkActive="!text-primary bg-white"
+            [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
+            class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3  text-sm hover:text-primary font-semibold"
           >
-            <app-icon name="tasks-checked" ></app-icon>
+            @if (!isCollapsed()) {
+              <app-icon name="tasks-checked" [size]="16"></app-icon>
+            }@else{
+              <app-icon name="tasks-checked-2" [size]="18"></app-icon>
+            }
+
             @if (!isCollapsed()) {
               <span>Project Tasks</span>
             }
           </a>
         </li>
 
-        <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
           <a
             [routerLink]="['/project', projectId(), 'members']"
-            routerLinkActive="!text-primary"
-            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+            routerLinkActive="!text-primary bg-white"
+            [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
+            class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3  text-sm hover:text-primary font-semibold"
           >
-            <app-icon name="members" ></app-icon>
+            <app-icon name="members" [size]="isCollapsed()? 16 : 18 "></app-icon>
             @if (!isCollapsed()) {
               <span>Project Members</span>
             }
           </a>
         </li>
 
-        <li class="hover:bg-white rounded-md py-2.5 px-3">
+        <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
           <a
             [routerLink]="['/project', projectId(), 'edit']"
-            routerLinkActive="!text-primary"
-            class="flex items-center gap-3 sm:text-slate-dark text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+            routerLinkActive="!text-primary bg-white"
+            [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
+            class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3  text-sm hover:text-primary font-semibold"
           >
-            <app-icon name="warning" ></app-icon>
+            <app-icon name="warning" [size]="isCollapsed()? 16 : 18 "></app-icon>
             @if (!isCollapsed()) {
               <span>Project Details</span>
             }
@@ -90,12 +110,13 @@
       }
     </ul>
   </div>
-
+ 
+  <!-- logout & collapse -->
   <div class="border-t border-border-secodary pt-6">
     @if (!isMobileOpen()) {
       <button
         (click)="toggleSidebar()"
-        class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-dark font-medium text-sm/[20px] tracking-normal hover:bg-white"
+        class="-ms-1 w-full flex items-center gap-3 px-3 py-2.5 text-slate-dark font-medium text-sm tracking-normal hover:bg-white"
       >
         <app-icon name="arrow-back" class="transition-transform duration-300" [class.rotate-180]="isCollapsed()"></app-icon>
         @if (!isCollapsed()) {
@@ -106,7 +127,7 @@
 
     <button
       (click)="logout()"
-      class="w-full flex items-center gap-3 px-3 py-2.5 text-error font-medium text-sm/[20px] tracking-normal hover:bg-white"
+      class="w-full flex items-center gap-3 px-3 py-2.5 text-error font-medium text-sm tracking-normal hover:bg-white"
     >
       <app-icon name="logout" ></app-icon>
       @if (!isCollapsed()) {
@@ -116,6 +137,8 @@
   </div>
 </aside>
 
+
+<!-- bottom navigation bar in mobile -->
 <nav
   [class.!translate-y-0]="!isMobileOpen()"
   class="fixed bottom-0 z-30 bg-white sm:hidden translate-y-[350%] sm:translate-x-0 flex py-[14.5px] px-7 gap-2 sm:gap-10 justify-between w-full"
@@ -124,9 +147,9 @@
     routerLink="/project"
     routerLinkActive="!text-primary"
     [routerLinkActiveOptions]="{ exact: true }"
-    class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+    class="flex flex-col items-center text-sidebar-text text-[0.625rem] hover:text-primary font-semibold"
   >
-    <app-icon name="folder" ></app-icon>
+    <app-icon name="folder-2" [size]="18"></app-icon>
     <span>Projects</span>
   </a>
 
@@ -134,36 +157,36 @@
     <a
       [routerLink]="['/project', projectId(), 'epics']"
       routerLinkActive="!text-primary"
-      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+      class="flex flex-col items-center text-sidebar-text text-[0.625rem] hover:text-primary font-semibold"
     >
-      <app-icon name="tasks" ></app-icon>
+      <app-icon name="tasks" [size]="18"></app-icon>
       <span>Epics</span>
     </a>
 
     <a
       [routerLink]="['/project', projectId(), 'tasks']"
       routerLinkActive="!text-primary"
-      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+      class="flex flex-col items-center text-sidebar-text text-[0.625rem] hover:text-primary font-semibold"
     >
-      <app-icon name="tasks-checked" ></app-icon>
+      <app-icon name="tasks-checked-2" [size]="18"></app-icon>
       <span>Tasks</span>
     </a>
 
     <a
       [routerLink]="['/project', projectId(), 'members']"
       routerLinkActive="!text-primary"
-      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+      class="flex flex-col items-center text-sidebar-text text-[0.625rem] hover:text-primary font-semibold"
     >
-      <app-icon name="members" ></app-icon>
+      <app-icon name="members" [size]="18"></app-icon>
       <span>Members</span>
     </a>
 
     <a
       [routerLink]="['/project', projectId(), 'edit']"
       routerLinkActive="!text-primary"
-      class="flex flex-col items-center text-sidebar-text text-sm/[20px] hover:text-primary font-semibold"
+      class="flex flex-col items-center text-sidebar-text text-[0.625rem] hover:text-primary font-semibold"
     >
-      <app-icon name="warning" ></app-icon>
+      <app-icon name="warning" [size]="18"></app-icon>
       <span>Details</span>
     </a>
   }
