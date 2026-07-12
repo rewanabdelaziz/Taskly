@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class AuthServiceService {
   baseUrl = environment.baseUrl;
   private _http = inject(HttpClient);
-  private _router = inject(Router)
+  private _router = inject(Router);
   userProfile = signal<UserMetaData | null>(null);
   isLoggedIn = signal(false);
 
@@ -102,7 +102,7 @@ export class AuthServiceService {
   }
 
   // clear storage
-  clearStorage(){
+  clearStorage() {
     const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
     storage.removeItem(StorageKeys.ACCESS_TOKEN);
     storage.removeItem(StorageKeys.REFRESH_TOKEN);

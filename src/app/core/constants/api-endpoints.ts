@@ -12,5 +12,3 @@ export const ApiEndpoints = {
   ADD_PROJECT: '/rest/v1/projects',
   MEMBERS: '/rest/v1/get_project_members',
 } as const;
-
-

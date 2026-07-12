@@ -9,7 +9,7 @@ import { IconComponent } from '../icon/icon.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive,IconComponent],
+  imports: [RouterLink, RouterLinkActive, IconComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
@@ -23,8 +23,8 @@ export class SidebarComponent {
 
   private currentUrl = toSignal(
     this._router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),       
-      map(() => this._router.routerState.snapshot.root),  //snapshot of routes tree
+      filter((event) => event instanceof NavigationEnd),
+      map(() => this._router.routerState.snapshot.root), //snapshot of routes tree
     ),
   );
 
@@ -35,7 +35,7 @@ export class SidebarComponent {
       url = url.firstChild;
     }
     const id = url?.paramMap.get('id');
-    return id? id : null;
+    return id ? id : null;
   });
 
   toggleSidebar() {

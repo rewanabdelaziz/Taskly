@@ -9,48 +9,39 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
-  imports: [IconComponent,RouterLink,RouterLinkActive],
+  imports: [IconComponent, RouterLink, RouterLinkActive],
   templateUrl: './breadcrumb.component.html',
-  styleUrl: './breadcrumb.component.css'
+  styleUrl: './breadcrumb.component.css',
 })
-export class BreadcrumbComponent{
-  private _activateRouter = inject(ActivatedRoute)
-  private _project_management = inject(ProjectsManagementsService)
+export class BreadcrumbComponent {
+  private _activateRouter = inject(ActivatedRoute);
+  private _project_management = inject(ProjectsManagementsService);
 
-  currentProjectId = toSignal(this._activateRouter.paramMap.pipe(
-    map((paramMap) => paramMap.get('id') || null)
-  ))
- 
- breadcrumbs = computed<Breadcrumbs[]>(()=>{
-  const currentBreadCrumbs : Breadcrumbs[] =[];
-  currentBreadCrumbs.push({ label: 'projects', url: '/project' });
+  currentProjectId = toSignal(this._activateRouter.paramMap.pipe(map((paramMap) => paramMap.get('id') || null)));
 
-  const id = this.currentProjectId()
+  breadcrumbs = computed<Breadcrumbs[]>(() => {
+    const currentBreadCrumbs: Breadcrumbs[] = [];
+    currentBreadCrumbs.push({ label: 'projects', url: '/project' });
 
-  let pageData = this._activateRouter.snapshot.data['breadcrumb'];
+    const id = this.currentProjectId();
 
-  if(id){
-    const selectedProjectTitle = this._project_management.selectedProject()?.name
-    currentBreadCrumbs.push({ 
-        label: selectedProjectTitle!, 
-        url: `/project/${id}/epics` 
-    });
-  }
+    const pageData = this._activateRouter.snapshot.data['breadcrumb'];
 
+    if (id) {
+      const selectedProjectTitle = this._project_management.selectedProject()?.name;
+      currentBreadCrumbs.push({
+        label: selectedProjectTitle!,
+        url: `/project/${id}/epics`,
+      });
+    }
 
- 
-  if(pageData){
-    currentBreadCrumbs.push({ 
-        label: pageData!, 
-        url: `/project/${id}/${pageData}` 
-    });
-  }
+    if (pageData) {
+      currentBreadCrumbs.push({
+        label: pageData!,
+        url: `/project/${id}/${pageData}`,
+      });
+    }
 
-  return currentBreadCrumbs;
- })
-
-
-
-
-
+    return currentBreadCrumbs;
+  });
 }

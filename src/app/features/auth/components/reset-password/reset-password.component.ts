@@ -13,7 +13,7 @@ import { AuthNavBarComponent } from '../auth-nav-bar/auth-nav-bar.component';
   imports: [ReactiveFormsModule, RouterLink, IconComponent, AuthNavBarComponent],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
-  host: { class: 'flex flex-col flex-1 h-full' }
+  host: { class: 'flex flex-col flex-1 h-full' },
 })
 export class ResetPasswordComponent implements OnDestroy {
   private fb = inject(FormBuilder);
@@ -38,14 +38,23 @@ export class ResetPasswordComponent implements OnDestroy {
     return { hasMinLength, hasUpper, hasLower, hasDigit, hasSpecialChar };
   });
 
-
   constructor() {
     // init form
-    this.resetPasswordForm = this.fb.group({
-     password: ['', [Validators.required,Validators.pattern(FormValidators.passwordRegex),Validators.minLength(8),Validators.maxLength(64)]],
-     confirmPassword: ['', Validators.required],
-    },{ validators: passwordMatchValidator });
-
+    this.resetPasswordForm = this.fb.group(
+      {
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(FormValidators.passwordRegex),
+            Validators.minLength(8),
+            Validators.maxLength(64),
+          ],
+        ],
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: passwordMatchValidator },
+    );
 
     // store access token from state
     const currentNavigation = this._router.getCurrentNavigation();
@@ -67,8 +76,6 @@ export class ResetPasswordComponent implements OnDestroy {
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
     event.preventDefault();
-
-
 
     if (this.resetPasswordForm.valid) {
       const { password } = this.resetPasswordForm.value;

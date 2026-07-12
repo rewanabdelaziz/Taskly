@@ -9,7 +9,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [RouterLink, DatePipe, RouterLink,IconComponent],
+  imports: [RouterLink, DatePipe, RouterLink, IconComponent],
   templateUrl: './projects-list.component.html',
   styleUrl: './projects-list.component.css',
 })
@@ -26,20 +26,19 @@ export class ProjectsListComponent implements OnInit {
   total = signal(0);
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
 
-
   isMobileNow = signal<boolean>(false);
 
-  currentLength = computed(()=>{
-    if(this.currentPage()===1){
-      return this.projects().length
+  currentLength = computed(() => {
+    if (this.currentPage() === 1) {
+      return this.projects().length;
     }
-    return (this.limit() * (this.currentPage() -1) ) + this.projects().length
-  })
+    return this.limit() * (this.currentPage() - 1) + this.projects().length;
+  });
 
   ngOnInit(): void {
     this.getProjects();
     this.checkScreenSize();
-    this.project_managements.clearSelectedProject()
+    this.project_managements.clearSelectedProject();
   }
 
   @HostListener('window:scroll', [])
@@ -57,12 +56,12 @@ export class ProjectsListComponent implements OnInit {
 
   @HostListener('window:resize', [])
   checkScreenSize() {
-    const wasMobile = this.isMobileNow()
+    const wasMobile = this.isMobileNow();
     this.isMobileNow.set(window.innerWidth < 640); // sm:640px
 
-    if(wasMobile && !this.isMobileNow()){
-      this.currentPage.set(1)
-      this.getProjects(false)
+    if (wasMobile && !this.isMobileNow()) {
+      this.currentPage.set(1);
+      this.getProjects(false);
     }
   }
 

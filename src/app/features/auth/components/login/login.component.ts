@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { UserLoginPayload } from '../../models/user';
@@ -10,10 +10,10 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, RouterModule,IconComponent],
+  imports: [ReactiveFormsModule, RouterLink, RouterModule, IconComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  host: { class: 'flex flex-col flex-1' }
+  host: { class: 'flex flex-col flex-1' },
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -26,14 +26,12 @@ export class LoginComponent {
   loginPlayload!: UserLoginPayload;
   rememberMe = signal(false);
 
-
   constructor() {
     this.loginForm = this.fb.group({
-      email: ['',[Validators.required,Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       rememberMe: [false],
     });
-
   }
 
   onSubmit(event: Event) {

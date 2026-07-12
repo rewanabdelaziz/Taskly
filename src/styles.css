@@ -26,7 +26,7 @@
   --color-error-msg-bg: #ffdad6;
   --color-error-msg-text: #93000a;
   --color-success-toast-bg: #82f9be;
-  --color-success-msg-bg: #82F9BE33;
+  --color-success-msg-bg: #82f9be33;
   --color-success-msg-text: #005235;
   --color-active-task-label: #002113;
   --color-icon-card: #e8edff;
@@ -43,7 +43,7 @@
   --color-third-heading: #041b3c;
   --color-badge-member-bg: #cdddff;
   --color-badge-member: #51617e;
-  --color-table-bg:#E0E8FF4D;
+  --color-table-bg: #e0e8ff4d;
   /* shadows */
   --color-btn-shadow: #0000000d;
   --shadow-form-shadow: 0px 24px 48px 0px #041b3c0f;
@@ -64,10 +64,10 @@
   --font-mono: 'Liberation Mono';
 
   /* custom breakpoints */
-  --breakpoint-xs: 20rem
+  --breakpoint-xs: 20rem;
 }
-body{
-  font-family: var(--font-sans)
+body {
+  font-family: var(--font-sans);
 }
 /* ============== UTILITIES ================== */
 

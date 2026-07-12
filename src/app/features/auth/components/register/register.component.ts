@@ -7,11 +7,10 @@ import { ToastNotificationService } from '../../../../shared/services/toast-noti
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
 
-
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule,IconComponent],
+  imports: [ReactiveFormsModule, IconComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -35,22 +34,37 @@ export class RegisterComponent {
     return { hasMinLength, hasUpperLowerDigit, hasSpecialChar };
   });
 
-  
-
   constructor() {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required,Validators.email]],
-      password: ['', [Validators.required,Validators.pattern(FormValidators.passwordRegex),Validators.minLength(8),Validators.maxLength(64)]],
-      confirmPassword: ['', Validators.required],
-      data: this.fb.group({
-        name: ['', [Validators.required,Validators.pattern(FormValidators.nameRegex),Validators.minLength(3),Validators.maxLength(50)]],
-        department: [''],
-      }),
-    },{ validators: passwordMatchValidator });
-
-
+    this.registerForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(FormValidators.passwordRegex),
+            Validators.minLength(8),
+            Validators.maxLength(64),
+          ],
+        ],
+        confirmPassword: ['', Validators.required],
+        data: this.fb.group({
+          name: [
+            '',
+            [
+              Validators.required,
+              Validators.pattern(FormValidators.nameRegex),
+              Validators.minLength(3),
+              Validators.maxLength(50),
+            ],
+          ],
+          department: [''],
+        }),
+      },
+      { validators: passwordMatchValidator },
+    );
   }
-  
+
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
     event.preventDefault();
@@ -78,9 +92,9 @@ export class RegisterComponent {
           this.isSubmitted.set(false);
           // console.log(err);
           const fallbackMsg = 'Registration failed. Please try again.';
-          if(err.error.msg === "User already registered"){
-            this._globalMsg.showMsg("User already registered")
-          }else{
+          if (err.error.msg === 'User already registered') {
+            this._globalMsg.showMsg('User already registered');
+          } else {
             this._globalMsg.showMsg(fallbackMsg);
           }
         },
@@ -95,5 +109,4 @@ export class RegisterComponent {
   navigateToLogin() {
     this._router.navigate(['/login']);
   }
-
 }

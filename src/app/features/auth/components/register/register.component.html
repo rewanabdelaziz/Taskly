@@ -1,176 +1,189 @@
 <!-- Register form container-->
-<div class="bg-background sm:bg-white shadow-form-shadow px-6 py-8 sm:p-12 rounded-lg md:w-xl flex-1 sm:flex-initial sm:min-h-auto flex flex-col justify-between">
+<div
+  class="bg-background sm:bg-white shadow-form-shadow px-6 py-8 sm:p-12 rounded-lg md:w-xl flex-1 sm:flex-initial sm:min-h-auto flex flex-col justify-between"
+>
   <div class="flex-1">
-      <!-- form header -->
-       <div class="sm:text-center mb-10">
-         <h2 class="title-sm mb-2"> Create your workspace </h2>
-         <p class="body-sm hidden sm:inline">Join the editorial approach to task management.</p>
-         <p class="body-sm sm:hidden inline">Join the curated environment for institutional trust and task precision.</p>
-       </div>
-       <!-- form -->
-       <form class="flex-1 flex flex-col justify-center" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
-         <div class="form-control" formGroupName="data">
-          <label
-            for="name"
-            class="form-label"
-            [class.!error-label]="(isSubmitted() || registerForm.get('data.name')?.touched) && registerForm.get('data.name')?.errors"
-            >name</label
-          >
-          <input
-            type="text"
-            name="name"
-            id="name"
-            class="input-text"
-            placeholder="Enter your full name"
-            formControlName="name"
-          />
-          @if((isSubmitted() || registerForm.get('data.name')?.touched) && registerForm.get('data.name')?.errors){
-            @if (registerForm.get('data.name')?.errors?.['required']) {
+    <!-- form header -->
+    <div class="sm:text-center mb-10">
+      <h2 class="title-sm mb-2">Create your workspace</h2>
+      <p class="body-sm hidden sm:inline">Join the editorial approach to task management.</p>
+      <p class="body-sm sm:hidden inline">Join the curated environment for institutional trust and task precision.</p>
+    </div>
+    <!-- form -->
+    <form class="flex-1 flex flex-col justify-center" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
+      <div class="form-control" formGroupName="data">
+        <label
+          for="name"
+          class="form-label"
+          [class.!error-label]="
+            (isSubmitted() || registerForm.get('data.name')?.touched) && registerForm.get('data.name')?.errors
+          "
+          >name</label
+        >
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="input-text"
+          placeholder="Enter your full name"
+          formControlName="name"
+        />
+        @if ((isSubmitted() || registerForm.get('data.name')?.touched) && registerForm.get('data.name')?.errors) {
+          @if (registerForm.get('data.name')?.errors?.['required']) {
             <p class="error-msg mt-1.5">Name is required</p>
-          }@else if(registerForm.get('data.name')?.errors?.['minlength'] || registerForm.get('data.name')?.errors?.['maxlength']){
-             <p class="error-msg mt-1.5">Name must be [3-50] characters</p>
-          }@else if (registerForm.get('data.name')?.errors?.['pattern']) {
-             <p class="error-msg mt-1.5">Name can only contain letters and single spaces between names</p>
+          } @else if (
+            registerForm.get('data.name')?.errors?.['minlength'] || registerForm.get('data.name')?.errors?.['maxlength']
+          ) {
+            <p class="error-msg mt-1.5">Name must be [3-50] characters</p>
+          } @else if (registerForm.get('data.name')?.errors?.['pattern']) {
+            <p class="error-msg mt-1.5">Name can only contain letters and single spaces between names</p>
           } @else {
             <p class="text-[0.625rem]/[15px] text-slate-light tracking-normal mt-1.5 ms-1 font-normal">
               3-50 characters, letters only.
             </p>
           }
+        }
+      </div>
+      <div class="form-control">
+        <label
+          for="email"
+          class="form-label"
+          [class.!error-label]="
+            (isSubmitted() || registerForm.get('email')?.touched) && registerForm.get('email')?.errors
+          "
+          >email</label
+        >
+        <input
+          type="text"
+          name="email"
+          id="email"
+          class="input-text"
+          placeholder="yourname@company.com"
+          formControlName="email"
+        />
+        @if ((isSubmitted() || registerForm.get('email')?.touched) && registerForm.get('email')?.errors) {
+          @if (registerForm.get('email')?.errors?.['email']) {
+            <p class="error-msg mt-1.5">Invalid email format</p>
+          } @else if (registerForm.get('email')?.errors?.['required']) {
+            <p class="error-msg mt-1.5">Email is required</p>
           }
-          
-        </div>
-        <div class="form-control">
+        }
+      </div>
+      <div class="form-control" formGroupName="data">
+        <label for="job-title" class="form-label">Job Title <span class="optional-text">(Optional)</span></label>
+        <input
+          type="text"
+          name="job-title"
+          id="job-title"
+          class="input-text"
+          placeholder="e.g. Project Manager"
+          formControlName="department"
+        />
+      </div>
+      <div class="sm:flex sm:justify-between sm:gap-4">
+        <div class="form-control flex-1">
           <label
-            for="email"
+            for="password"
             class="form-label"
-            [class.!error-label]="(isSubmitted() || registerForm.get('email')?.touched) && registerForm.get('email')?.errors"
-            >email</label
+            [class.!error-label]="
+              (isSubmitted() || registerForm.get('password')?.touched) && registerForm.get('password')?.errors
+            "
+            >password</label
           >
           <input
-            type="text"
-            name="email"
-            id="email"
+            type="password"
+            name="password"
+            id="password"
             class="input-text"
-            placeholder="yourname@company.com"
-            formControlName="email"
+            placeholder="Password"
+            formControlName="password"
+            #password
+            (input)="this.passwordValue.set(password.value)"
           />
-          @if((isSubmitted() || registerForm.get('email')?.touched) && registerForm.get('email')?.errors){
-            @if (registerForm.get('email')?.errors?.['email']) {
-            <p class="error-msg mt-1.5">Invalid email format</p>
-            }@else if(registerForm.get('email')?.errors?.['required']){
-              <p class="error-msg mt-1.5">Email is required</p>
+          @if ((isSubmitted() || registerForm.get('password')?.touched) && registerForm.get('password')?.errors) {
+            @if (registerForm.get('password')?.errors?.['required']) {
+              <p class="error-msg mt-1.5">Password is required.</p>
+            } @else if (
+              registerForm.get('password')?.errors?.['minlength'] || registerForm.get('password')?.errors?.['maxlength']
+            ) {
+              <p class="error-msg mt-1.5">Name must be [8-64] characters</p>
+            } @else if (registerForm.get('password')?.errors?.['pattern']) {
+              <p class="error-msg mt-1.5">
+                Password must contain at least one uppercase, one lowercase, one number, and one special character.
+              </p>
             }
           }
-          
         </div>
-        <div class="form-control" formGroupName="data">
-          <label for="job-title" class="form-label">Job Title <span class="optional-text">(Optional)</span></label>
+        <div class="form-control flex-1">
+          <label
+            for="confirm-password"
+            class="form-label"
+            [class.!error-label]="
+              (isSubmitted() || registerForm.get('confirmPassword')?.touched) &&
+              registerForm.get('confirmPassword')?.errors
+            "
+            >confirm password</label
+          >
           <input
-            type="text"
-            name="job-title"
-            id="job-title"
+            type="password"
+            name="confirm-password"
+            id="confirm-password"
             class="input-text"
-            placeholder="e.g. Project Manager"
-            formControlName="department"
+            placeholder="Repeat your password"
+            formControlName="confirmPassword"
           />
+          @if (
+            (isSubmitted() || registerForm.get('confirmPassword')?.touched) &&
+            registerForm.get('confirmPassword')?.errors
+          ) {
+            @if (registerForm.get('confirmPassword')?.errors?.['required']) {
+              <p class="error-msg mt-1.5">confirm Password is required.</p>
+            } @else if (registerForm.get('confirmPassword')?.errors?.['passwordMismatch']) {
+              <p class="error-msg mt-1.5">Passwords do not match.</p>
+            }
+          }
         </div>
-        <div class="sm:flex sm:justify-between sm:gap-4">
-          <div class="form-control flex-1">
-            <label
-              for="password"
-              class="form-label"
-              [class.!error-label]="(isSubmitted() || registerForm.get('password')?.touched) && registerForm.get('password')?.errors"
-              >password</label
-            >
-            <input
-              type="password"
-              name="password"
-              id="password"
-              class="input-text"
-              placeholder="Password"
-              formControlName="password"
-              #password
-              (input)="this.passwordValue.set(password.value)"
-            />
-            @if( (isSubmitted() || registerForm.get('password')?.touched) && registerForm.get('password')?.errors){
-              @if (registerForm.get('password')?.errors?.['required'] ) {
-                <p class="error-msg mt-1.5">Password is required.</p>
-              }@else if(registerForm.get('password')?.errors?.['minlength'] || registerForm.get('password')?.errors?.['maxlength']){
-                <p class="error-msg mt-1.5">Name must be [8-64] characters</p>
-              }@else if(registerForm.get('password')?.errors?.['pattern']){
-                <p class="error-msg mt-1.5">Password must contain at least one uppercase, one lowercase, one number, and one special character.</p>
-              }
-            }
-            
-          </div>
-          <div class="form-control flex-1">
-            <label
-              for="confirm-password"
-              class="form-label"
-              [class.!error-label]="
-                (isSubmitted() || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors "
-              >confirm password</label
-            >
-            <input
-              type="password"
-              name="confirm-password"
-              id="confirm-password"
-              class="input-text"
-              placeholder="Repeat your password"
-              formControlName="confirmPassword"
-            />
-            @if( (isSubmitted() || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors){
-              @if (registerForm.get('confirmPassword')?.errors?.['required'] ) {
-                     <p class="error-msg mt-1.5">confirm Password is required.</p>
-              }@else if(registerForm.get('confirmPassword')?.errors?.['passwordMismatch']){
-                     <p class="error-msg mt-1.5">Passwords do not match.</p>
-              }     
-            }     
-          </div>
-        </div>      
-        <div class="hidden md:block requirements mb-6">
-          <div class="flex items-center">
-            @if (!passwordRequirements().hasMinLength) {
-              <app-icon name="circle" class="text-placeholder" [size]="15"></app-icon>
-            } @else {
-              <app-icon name="circle-checked" class="text-circle-checked" [size]="15"></app-icon>
-            }
-            <span class="ms-2">At least 8 characters</span>
-          </div>
-          <div class="flex items-center">
-            @if (!passwordRequirements().hasUpperLowerDigit) {
-              <app-icon name="circle" class="text-placeholder" [size]="15"></app-icon>
-            } @else {
-              <app-icon name="circle-checked" class="text-circle-checked" [size]="15"></app-icon>
-            }
-            <span class="ms-2">One uppercase, lowercase, and digit</span>
-          </div>
-          <div class="flex items-center">
-            @if(!passwordRequirements().hasSpecialChar) {
-              <app-icon name="circle" class="text-placeholder" [size]="15"></app-icon>     
-            } @else {     
-              <app-icon name="circle-checked" class="text-circle-checked" [size]="15"></app-icon>     
-            }     
-            <span class="ms-2">One special character</span>     
-          </div>     
-        </div>      
-        <button type="submit" class="btn-primary w-full mb-4 sm:rounded-none rounded-lg md:py-4">Create Account</button>      
-       
-      </form>
+      </div>
+      <div class="hidden md:block requirements mb-6">
+        <div class="flex items-center">
+          @if (!passwordRequirements().hasMinLength) {
+            <app-icon name="circle" class="text-placeholder" [size]="15"></app-icon>
+          } @else {
+            <app-icon name="circle-checked" class="text-circle-checked" [size]="15"></app-icon>
+          }
+          <span class="ms-2">At least 8 characters</span>
+        </div>
+        <div class="flex items-center">
+          @if (!passwordRequirements().hasUpperLowerDigit) {
+            <app-icon name="circle" class="text-placeholder" [size]="15"></app-icon>
+          } @else {
+            <app-icon name="circle-checked" class="text-circle-checked" [size]="15"></app-icon>
+          }
+          <span class="ms-2">One uppercase, lowercase, and digit</span>
+        </div>
+        <div class="flex items-center">
+          @if (!passwordRequirements().hasSpecialChar) {
+            <app-icon name="circle" class="text-placeholder" [size]="15"></app-icon>
+          } @else {
+            <app-icon name="circle-checked" class="text-circle-checked" [size]="15"></app-icon>
+          }
+          <span class="ms-2">One special character</span>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary w-full mb-4 sm:rounded-none rounded-lg md:py-4">Create Account</button>
+    </form>
   </div>
-  
 
-
-   <div class="pt-12 pb-8 sm:pb-0 sm:pt-8 text-center">
-      <p class="body-sm text-slate-medium">
-        Already have an account?
-        <span
-          class="text-primary font-semibold cursor-pointer"
-          (click)="navigateToLogin()"
-          (keydown.enter)="navigateToLogin()"
-          tabindex="0"
-          >Log in</span
-        >
-      </p>
-    </div>
+  <div class="pt-12 pb-8 sm:pb-0 sm:pt-8 text-center">
+    <p class="body-sm text-slate-medium">
+      Already have an account?
+      <span
+        class="text-primary font-semibold cursor-pointer"
+        (click)="navigateToLogin()"
+        (keydown.enter)="navigateToLogin()"
+        tabindex="0"
+        >Log in</span
+      >
+    </p>
+  </div>
 </div>

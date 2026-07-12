@@ -10,14 +10,14 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [ReactiveFormsModule,IconComponent,BreadcrumbComponent],
+  imports: [ReactiveFormsModule, IconComponent, BreadcrumbComponent],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.css',
 })
 export class AddProjectComponent implements OnDestroy, OnInit {
   private fb = inject(FormBuilder);
   private _router = inject(Router);
-  private _activateRoute = inject(ActivatedRoute)
+  private _activateRoute = inject(ActivatedRoute);
   private _pojectService = inject(ProjectsManagementsService);
   _globalToastMsg = inject(ToastNotificationService);
   successMsg = signal<string | null>(null);
@@ -27,39 +27,34 @@ export class AddProjectComponent implements OnDestroy, OnInit {
   addProjectPlayload!: AddProjectPayload;
   isSubmitted = signal(false);
 
-  projectId = signal<string | null>(null); 
-  private route$! : Subscription
-
+  projectId = signal<string | null>(null);
+  private route$!: Subscription;
 
   ngOnInit(): void {
     this.route$ = this._activateRoute.params.subscribe((params) => {
       const id = params['id'] || null;
       this.projectId.set(id);
       const project = this._pojectService.selectedProject();
-      if(id && project && project.id === id){
+      if (id && project && project.id === id) {
         this.addProjectForm.patchValue({
           name: project.name,
           description: project.description,
         });
       }
-    })
+    });
   }
 
   isEditMode = computed(() => {
     return this.projectId() !== null;
   });
 
-
-
   constructor() {
     this.addProjectForm = this.fb.group({
-      name: ['', [Validators.required,Validators.minLength(3),Validators.maxLength(100)]],
-      description: ['', [Validators.minLength(0),Validators.maxLength(500)]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      description: ['', [Validators.minLength(0), Validators.maxLength(500)]],
     });
-
   }
 
-  
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
     event.preventDefault();
@@ -97,8 +92,6 @@ export class AddProjectComponent implements OnDestroy, OnInit {
   }
 
   editProject(id: string) {
-
-
     if (this.addProjectForm.valid) {
       const { name, description } = this.addProjectForm.value;
       this.addProjectPlayload = { name, description };
@@ -125,7 +118,6 @@ export class AddProjectComponent implements OnDestroy, OnInit {
     this._router.navigate(['/project']);
   }
 
-
   ngOnDestroy(): void {
     if (this.timeOutId) {
       clearTimeout(this.timeOutId);
@@ -135,5 +127,4 @@ export class AddProjectComponent implements OnDestroy, OnInit {
       this.route$.unsubscribe();
     }
   }
-
 }

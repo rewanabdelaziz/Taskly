@@ -3,10 +3,15 @@
 >
   <!-- menue & logo in small screens -->
   <div class="flex items-center gap-4 sm:hidden">
-    <app-icon name="menu" class="logo-icon" color="#041b3c" [size]="18"
+    <app-icon
+      name="menu"
+      class="logo-icon"
+      color="#041b3c"
+      [size]="18"
       (click)="clickMenue()"
       (keydown.enter)="clickMenue()"
-      tabindex="0">
+      tabindex="0"
+    >
     </app-icon>
     <span class="logo-text"> Taskly </span>
   </div>
@@ -23,6 +28,10 @@
     </div>
 
     <!-- name avatar in all screens -->
-    <app-name-avatar-icon [userName]="userprofile()?.name || '' " customBgColor="#0052cc" customTextColor="#ffffff"></app-name-avatar-icon>
+    <app-name-avatar-icon
+      [userName]="userprofile()?.name || ''"
+      customBgColor="#0052cc"
+      customTextColor="#ffffff"
+    ></app-name-avatar-icon>
   </div>
 </nav>
