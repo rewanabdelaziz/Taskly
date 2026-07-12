@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { ToastComponent } from './shared/components/toast/toast.component';
 import { StorageKeys } from './core/constants/storage-keys';
 import { ToastNotificationService } from './shared/services/toast-notification.service';
-import { AuthServiceService } from './features/auth/services/auth-service.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,21 +16,24 @@ export class AppComponent implements OnInit {
   title = 'TASKLY';
 
   private _router = inject(Router);
-  private _activatedRouter = inject(ActivatedRoute);
   private _toast = inject(ToastNotificationService);
-  private _auth = inject(AuthServiceService);
 
   ngOnInit(): void {
-    this._activatedRouter.fragment.subscribe((frag) => {
-      // if url includes fragments (#)
-      if (frag) {
-        const params = new URLSearchParams(frag);
+    this._router.events
+      .pipe(filter((event) => event instanceof NavigationStart))
+      .subscribe(() => {
+        const fragments = window.location.hash;
+        // if url includes fragments (#)
+        if (fragments) {
+        
+        const params = new URLSearchParams(fragments);
         const type = params.get('type');
         const accessToken = params.get(StorageKeys.ACCESS_TOKEN);
 
         if (type === 'recovery') {
+          window.location.hash = '';
           if (accessToken) {
-            // console.log('Recovery token detected dynamically! Redirecting to reset-password...')
+            console.log('Recovery token detected dynamically! Redirecting to reset-password...')
             this._router.navigate(['/reset-password'], {
               state: { accessToken: accessToken },
             });
