@@ -19,29 +19,33 @@ export class AppComponent implements OnInit {
   private _toast = inject(ToastNotificationService);
 
   ngOnInit(): void {
-    this._router.events
-      .pipe(filter((event) => event instanceof NavigationStart))
-      .subscribe(() => {
-        const fragments = window.location.hash;
-        // if url includes fragments (#)
-        if (fragments) {
-        
-        const params = new URLSearchParams(fragments);
-        const type = params.get('type');
-        const accessToken = params.get(StorageKeys.ACCESS_TOKEN);
+    const currentUrl = window.location.href;
+    if (currentUrl.includes('type=recovery') && currentUrl.includes('access_token=')) {
+      
+      const delimiter = currentUrl.includes('#') ? '#' : '?';
+      const queryString = currentUrl.split(delimiter)[1];
+      
+      if (queryString) {
+        const params = new URLSearchParams(queryString);
+        const accessToken = params.get(StorageKeys.ACCESS_TOKEN); 
 
-        if (type === 'recovery') {
+        if (accessToken) {
+          console.log(accessToken);
+          
           window.location.hash = '';
-          if (accessToken) {
-            console.log('Recovery token detected dynamically! Redirecting to reset-password...')
+
+          setTimeout(() => {
             this._router.navigate(['/reset-password'], {
               state: { accessToken: accessToken },
             });
-          } else {
-            this._toast.showMsg('Invalid or expired reset link.');
-          }
+          }, 100);
+
+          return; 
+        }else{
+          this._toast.showMsg('Invalid or expired reset link.');
         }
       }
-    });
+    }
+    
   }
 }
