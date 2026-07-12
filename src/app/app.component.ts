@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ToastComponent } from './shared/components/toast/toast.component';
 import { StorageKeys } from './core/constants/storage-keys';
 import { ToastNotificationService } from './shared/services/toast-notification.service';
-import { filter } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -30,8 +30,7 @@ export class AppComponent implements OnInit {
         const accessToken = params.get(StorageKeys.ACCESS_TOKEN); 
 
         if (accessToken) {
-          console.log(accessToken);
-          
+        
           window.location.hash = '';
 
           setTimeout(() => {
