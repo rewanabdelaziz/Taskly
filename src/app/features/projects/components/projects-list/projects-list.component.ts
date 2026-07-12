@@ -39,6 +39,7 @@ export class ProjectsListComponent implements OnInit {
   ngOnInit(): void {
     this.getProjects();
     this.checkScreenSize();
+    this.project_managements.clearSelectedProject()
   }
 
   @HostListener('window:scroll', [])
@@ -86,7 +87,7 @@ export class ProjectsListComponent implements OnInit {
         if (this.projects().length == 0) {
           this.isEmpty.set(true);
         }
-        // content tange from header ex: 0-4/5 [(start index - end index) / total num]
+        // content range from header ex: 0-4/5 [(start index - end index) / total num]
         const contentRange = res.headers.get('content-range');
         if (contentRange) {
           const parts = contentRange.split('/');

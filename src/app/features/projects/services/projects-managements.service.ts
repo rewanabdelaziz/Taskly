@@ -12,17 +12,17 @@ export class ProjectsManagementsService {
   private _http = inject(HttpClient);
   baseUrl = environment.baseUrl;
 
-  private savedProject = localStorage.getItem(StorageKeys.SELECTED_PROJECT);
+  private savedProject = sessionStorage.getItem(StorageKeys.SELECTED_PROJECT);
   selectedProject = signal<Project | null>(this.savedProject ? JSON.parse(this.savedProject) : null);
 
   setSelectedProject(project: Project) {
     this.selectedProject.set(project);
-    localStorage.setItem(StorageKeys.SELECTED_PROJECT, JSON.stringify(project));
+    sessionStorage.setItem(StorageKeys.SELECTED_PROJECT, JSON.stringify(project));
   }
 
   clearSelectedProject() {
     this.selectedProject.set(null);
-    localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
+    sessionStorage.removeItem(StorageKeys.SELECTED_PROJECT);
   }
 
   addNewProject(projectPayload: AddProjectPayload) {

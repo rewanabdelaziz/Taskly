@@ -107,7 +107,7 @@ export class AuthServiceService {
     storage.removeItem(StorageKeys.ACCESS_TOKEN);
     storage.removeItem(StorageKeys.REFRESH_TOKEN);
     storage.removeItem(StorageKeys.USER_PROFILE);
-    localStorage.removeItem(StorageKeys.SELECTED_PROJECT);
+    sessionStorage.removeItem(StorageKeys.SELECTED_PROJECT);
     this.isLoggedIn.set(false);
     this.userProfile.set(null);
     this._router.navigate(['/login']);

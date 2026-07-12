@@ -23,21 +23,19 @@ export class SidebarComponent {
 
   private currentUrl = toSignal(
     this._router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      map((event) => event.urlAfterRedirects),
+      filter((event) => event instanceof NavigationEnd),       
+      map(() => this._router.routerState.snapshot.root),  //snapshot of routes tree
     ),
-    { initialValue: this._router.url },
   );
 
   projectId = computed(() => {
-    const url = this.currentUrl();
-    const segments = url.split('/');
-
-    const idSegment = segments[2];
-    if (idSegment && idSegment !== 'add') {
-      return idSegment;
+    let url = this.currentUrl();
+    // to reach last child of rotes tree
+    while (url?.firstChild) {
+      url = url.firstChild;
     }
-    return null;
+    const id = url?.paramMap.get('id');
+    return id? id : null;
   });
 
   toggleSidebar() {
