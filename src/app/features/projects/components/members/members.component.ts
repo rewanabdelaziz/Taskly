@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { ProjectsManagementsService } from '../../services/projects-managements.service';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { Member } from '../../models/members';
 import { MembersManagementsService } from '../../services/members-managements.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -22,30 +22,16 @@ export class MembersComponent {
   private project_managements = inject(ProjectsManagementsService);
   private _members = inject(MembersManagementsService);
   private _router = inject(Router);
+  private _activateRoute = inject(ActivatedRoute)
   members = signal<Member[]>([]);
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
   breadcrumbs = signal<Breadcrumbs[]>([{label:'projects',url:'/project'}])
 
-  private currentUrl = toSignal(
-    this._router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      map((event) => event.urlAfterRedirects),
-    ),
-    { initialValue: this._router.url },
+  projectId = toSignal(
+    this._activateRoute.params.pipe(map((params) => params['id'] || null))
   );
-
-  projectId = computed(() => {
-    const url = this.currentUrl();
-    const segments = url.split('/');
-    
-    const idSegment = segments[2];
-    if (idSegment && idSegment !== 'add') {
-      return idSegment;
-    }
-    return null;
-  });
 
   constructor() {
     effect(() => {
@@ -81,8 +67,9 @@ export class MembersComponent {
   }
 
   retry() {
-    if (this.projectId() !== null) {
-      this.getMembers(this.projectId() || '');
+    const id = this.projectId();
+    if (id) {
+      this.getMembers(id);
     }
   }
 }
