@@ -24,26 +24,26 @@ export const globalErrorsHandlerInterceptor: HttpInterceptorFn = (req, next) => 
           _errService.showMsg('internal server error. please try again.');
           break;
         case 401:
-          if(refreshToken){
+          if (refreshToken) {
             return _auth.refreshToken(refreshToken).pipe(
               switchMap((res: LoginResponse) => {
                 storage.setItem(StorageKeys.ACCESS_TOKEN, res.access_token);
                 storage.setItem(StorageKeys.REFRESH_TOKEN, res.refresh_token);
-        
+
                 const cloneReq = req.clone({
                   setHeaders: { Authorization: `Bearer ${res.access_token}` },
                 });
-        
+
                 return next(cloneReq);
               }),
-        
+
               catchError((err) => {
-                _auth.clearStorage()
+                _auth.clearStorage();
                 return throwError(() => err);
               }),
             );
-          }else{
-            _auth.clearStorage()
+          } else {
+            _auth.clearStorage();
           }
           break;
         case 0:
@@ -55,5 +55,3 @@ export const globalErrorsHandlerInterceptor: HttpInterceptorFn = (req, next) => 
     }),
   );
 };
-
-

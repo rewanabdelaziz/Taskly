@@ -6,7 +6,6 @@
       <h2 class="title-md">
         {{ isEditMode() ? 'Edit Project' : 'Add New Project' }}
       </h2>
-
     </div>
   </div>
 
@@ -34,12 +33,10 @@
         <label
           for="name"
           class="form-label"
-          [class.!error-label]="(isSubmitted() || addProjectForm.get('name')?.touched) && addProjectForm.get('name')?.errors"
-          >Project TITLE
-          <span
-            class="text-[11px]/[100%] tracking-normal text-error"
-            >*</span
-          ></label
+          [class.!error-label]="
+            (isSubmitted() || addProjectForm.get('name')?.touched) && addProjectForm.get('name')?.errors
+          "
+          >Project TITLE <span class="text-[11px]/[100%] tracking-normal text-error">*</span></label
         >
         <input
           type="text"
@@ -50,12 +47,14 @@
           formControlName="name"
         />
         @if ((isSubmitted() || addProjectForm.get('name')?.touched) && addProjectForm.get('name')?.errors) {
-          @if(addProjectForm.get('name')?.errors?.['required']){
+          @if (addProjectForm.get('name')?.errors?.['required']) {
             <p class="text-error mt-2 gap-1.5 flex items-center">
               <app-icon name="warning"></app-icon>
               project title is required
             </p>
-          }@else if(addProjectForm.get('name')?.errors?.['minlength'] || addProjectForm.get('name')?.errors?.['maxlength']){
+          } @else if (
+            addProjectForm.get('name')?.errors?.['minlength'] || addProjectForm.get('name')?.errors?.['maxlength']
+          ) {
             <p class="text-error mt-2 gap-1.5 flex items-center">
               <app-icon name="warning"></app-icon>
               project title must be at [3 - 100] charachter
@@ -89,8 +88,10 @@
         <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
           >{{ addProjectForm.get('description')?.value?.length || 0 }}/ 500 characters</span
         >
-        @if ((isSubmitted() || addProjectForm.get('description')?.touched)  && addProjectForm.get('description')?.errors) {
-          @if(addProjectForm.get('description')?.errors?.['maxlength']){
+        @if (
+          (isSubmitted() || addProjectForm.get('description')?.touched) && addProjectForm.get('description')?.errors
+        ) {
+          @if (addProjectForm.get('description')?.errors?.['maxlength']) {
             <p class="text-error mt-2 gap-1.5 flex items-center">
               <app-icon name="warning"></app-icon>
               project title must be at most 500 charachter
@@ -110,20 +111,16 @@
           {{ isEditMode() ? 'save changes' : 'create project' }}
         </button>
       </div>
-
-      
     </form>
     <div
-        class="bg-surface-low w-full text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5"
-      >
-        <app-icon name="light" class="hidden! sm:inline-flex!"></app-icon>
+      class="bg-surface-low w-full text-slate-medium text-[12px]/[100%] tracking-normal font-medium flex p-6 items-center gap-1.5"
+    >
+      <app-icon name="light" class="hidden! sm:inline-flex!"></app-icon>
 
-        <p>
-          <span class="font-bold">Pro Tip:</span> You can invite project members and assign epics immediately after the
-          initial creation process.
-        </p>
-      </div>
-    
+      <p>
+        <span class="font-bold">Pro Tip:</span> You can invite project members and assign epics immediately after the
+        initial creation process.
+      </p>
+    </div>
   </div>
-  
 </div>

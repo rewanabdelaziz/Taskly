@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal, untracked } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Member } from '../../models/members';
 import { MembersManagementsService } from '../../services/members-managements.service';
@@ -11,31 +11,30 @@ import { NameAvatarIconComponent } from '../../../../shared/components/name-avat
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [NgClass, RouterLink,IconComponent,BreadcrumbComponent,NameAvatarIconComponent],
+  imports: [NgClass, RouterLink, IconComponent, BreadcrumbComponent, NameAvatarIconComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
 })
-export class MembersComponent implements OnInit,OnDestroy{
+export class MembersComponent implements OnInit, OnDestroy {
   private _members = inject(MembersManagementsService);
-  private _activateRoute = inject(ActivatedRoute)
+  private _activateRoute = inject(ActivatedRoute);
   members = signal<Member[]>([]);
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
   projectId = signal<string | null>(null);
-  
-  private route$! : Subscription
+
+  private route$!: Subscription;
 
   ngOnInit(): void {
     this.route$ = this._activateRoute.params.subscribe((params) => {
       const id = params['id'] || null;
       this.projectId.set(id);
-      if(id){
-        this.getMembers(id)
+      if (id) {
+        this.getMembers(id);
       }
-    })
+    });
   }
-  
 
   getMembers(id: string) {
     this.isloading.set(true);

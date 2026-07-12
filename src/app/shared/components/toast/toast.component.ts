@@ -6,7 +6,7 @@ import { IconComponent } from '../icon/icon.component';
 @Component({
   selector: 'app-toast',
   standalone: true,
-  imports: [NgClass,IconComponent],
+  imports: [NgClass, IconComponent],
   templateUrl: './toast.component.html',
   styleUrl: './toast.component.css',
 })
