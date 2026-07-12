@@ -7,32 +7,38 @@ export const routes: Routes = [
 
   {
     path: 'project',
+    data: { breadcrumb: 'projects' },
     loadComponent: () =>
       import('./features/projects/components/projects/projects.component').then((m) => m.ProjectsComponent),
     canActivate: [authGuard],
     children: [
       {
         path: 'add',
+        data: { breadcrumb: 'add new project' },
         loadComponent: () =>
           import('./features/projects/components/add-project/add-project.component').then((m) => m.AddProjectComponent),
       },
       {
         path: ':id/edit',
+        data: { breadcrumb: 'edit' },
         loadComponent: () =>
           import('./features/projects/components/add-project/add-project.component').then((m) => m.AddProjectComponent),
       },
       {
         path: ':id/epics',
+        data: { breadcrumb: 'epics' },
         loadComponent: () =>
           import('./features/projects/components/epics/epics.component').then((m) => m.EpicsComponent),
       },
       {
         path: ':id/members',
+        data: { breadcrumb: 'members' },
         loadComponent: () =>
           import('./features/projects/components/members/members.component').then((m) => m.MembersComponent),
       },
       {
         path: ':id/tasks',
+        data: { breadcrumb: 'tasks' },
         loadComponent: () =>
           import('./features/projects/components/tasks/tasks.component').then((m) => m.TasksComponent),
       },

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-epics',
   standalone: true,
-  imports: [],
+  imports: [BreadcrumbComponent],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
 })
