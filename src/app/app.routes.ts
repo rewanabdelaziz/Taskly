@@ -40,13 +40,13 @@ export const routes: Routes = [
         path: ':id/members',
         data: { breadcrumb: 'members' },
         loadComponent: () =>
-          import('./features/projects/components/members/members.component').then((m) => m.MembersComponent),
+          import('./features/members/components/members/members.component').then((m) => m.MembersComponent),
       },
       {
         path: ':id/tasks',
         data: { breadcrumb: 'tasks' },
         loadComponent: () =>
-          import('./features/projects/components/tasks/tasks.component').then((m) => m.TasksComponent),
+          import('./features/tasks/components/tasks/tasks.component').then((m) => m.TasksComponent),
       },
       {
         path: '',

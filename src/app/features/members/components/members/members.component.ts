@@ -1,13 +1,12 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Member } from '../../models/members';
-import { MembersManagementsService } from '../../services/members-managements.service';
 import { Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
 import { SharedMembersService } from '../../../../shared/services/shared-members.service';
+import { MembersManagementsService } from '../../services/members-managements.service';
 
 @Component({
   selector: 'app-members',

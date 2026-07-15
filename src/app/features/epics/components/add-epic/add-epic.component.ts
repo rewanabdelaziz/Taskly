@@ -8,7 +8,7 @@ import { AddEpicPayload } from '../../models/epics';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { EpicsManagementsService } from '../../services/epics-managements.service';
 import { SharedMembersService } from '../../../../shared/services/shared-members.service';
-import { Member } from '../../../projects/models/members';
+import { Member } from '../../../members/models/members';
 
 @Component({
   selector: 'app-add-epic',
