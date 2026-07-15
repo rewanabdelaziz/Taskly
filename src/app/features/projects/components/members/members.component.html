@@ -121,7 +121,7 @@
         </thead>
 
         <tbody>
-          @for (member of members(); track member.member_id) {
+          @for (member of _sharedMembers.members(); track member.member_id) {
             <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
               <td class="px-6 py-4">
                 <div class="flex items-center gap-4">
@@ -165,7 +165,7 @@
 
     <!-- cards container in medium & small screen -->
     <div class="lg:hidden flex flex-col justify-center items-center">
-      @for (member of members(); track member.member_id) {
+      @for (member of _sharedMembers.members(); track member.member_id) {
         <div class="flex justify-between items-center rounded-lg p-4 gap-5 md:gap-10 bg-white shadow-form-shadow">
           <div class="flex gap-2 items-center">
             <app-name-avatar-icon [userName]="member.metadata.name" [size]="40"></app-name-avatar-icon>

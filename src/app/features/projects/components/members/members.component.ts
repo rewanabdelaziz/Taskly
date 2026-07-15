@@ -7,6 +7,7 @@ import { NgClass } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
+import { SharedMembersService } from '../../../../shared/services/shared-members.service';
 
 @Component({
   selector: 'app-members',
@@ -18,10 +19,11 @@ import { NameAvatarIconComponent } from '../../../../shared/components/name-avat
 export class MembersComponent implements OnInit, OnDestroy {
   private _members = inject(MembersManagementsService);
   private _activateRoute = inject(ActivatedRoute);
-  members = signal<Member[]>([]);
-  isloading = signal<boolean>(false);
-  isEmpty = signal<boolean>(false);
-  isError = signal<boolean>(false);
+  _sharedMembers = inject(SharedMembersService)
+  isloading = this._sharedMembers.isloading
+  isEmpty = this._sharedMembers.isEmpty;
+  isError = this._sharedMembers.isError;
+
   projectId = signal<string | null>(null);
 
   private route$!: Subscription;
@@ -31,34 +33,17 @@ export class MembersComponent implements OnInit, OnDestroy {
       const id = params['id'] || null;
       this.projectId.set(id);
       if (id) {
-        this.getMembers(id);
+        this._sharedMembers.getMembers(id)
       }
     });
+    
   }
 
-  getMembers(id: string) {
-    this.isloading.set(true);
-    this.isError.set(false);
-    this.isEmpty.set(false);
-    this._members.getProjectMembers(id).subscribe({
-      next: (res: Member[]) => {
-        this.isloading.set(false);
-        if (res.length == 0) {
-          this.isEmpty.set(true);
-        }
-        this.members.set(res);
-      },
-      error: () => {
-        this.isloading.set(false);
-        this.isError.set(true);
-      },
-    });
-  }
 
   retry() {
     const id = this.projectId();
     if (id) {
-      this.getMembers(id);
+      this._sharedMembers.getMembers(id)
     }
   }
 
