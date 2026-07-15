@@ -44,6 +44,10 @@
   --color-badge-member-bg: #cdddff;
   --color-badge-member: #51617e;
   --color-table-bg: #e0e8ff4d;
+  --color-dark-green:#004E32;
+  --color-medium-green:#65DCA4;
+  --color-light-green:#82F9BE;
+
   /* shadows */
   --color-btn-shadow: #0000000d;
   --shadow-form-shadow: 0px 24px 48px 0px #041b3c0f;

@@ -1,0 +1,194 @@
+
+<div class="flex flex-col h-full">
+  @if (isloading()) {
+    <!-- skeleton loader -->
+    <div class="hidden sm:flex sm:flex-col pt-6 w-full">
+      <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row">
+        <div class="mb-4 lg:mb-0">
+          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Projects</h2>
+          <p>Manage and curate your projects</p>
+        </div>
+
+        <div class="h-12 w-44 bg-slate-200 rounded-lg animate-pulse"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full animate-pulse">
+        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+          <div class="bg-white flex flex-col justify-between p-6 h-56 w-full rounded-lg shadow-form-shadow">
+            <div>
+              <div class="h-6 w-3/4 bg-slate-200 rounded mb-4"></div>
+              <div class="h-4 w-full bg-slate-200 rounded mb-2"></div>
+              <div class="h-4 w-5/6 bg-slate-200 rounded"></div>
+            </div>
+
+            <div class="flex justify-between items-center gap-4 mt-auto">
+              <div class="h-3 w-16 bg-slate-200 rounded"></div>
+              <div class="h-3 w-24 bg-slate-200 rounded"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else if (isError()) {
+    <div class="flex justify-center h-full">
+      <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
+        <a
+          class="bg-error-msg-bg flex items-center justify-center text-slate-dark rounded-xl w-16 h-16"
+          routerLink="/project/add"
+        >
+          <app-icon name="cloud-off" class="text-error"></app-icon>
+        </a>
+        <div class="m-6 w-full text-center">
+          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Something went wrong</h2>
+          <p class="text-text-body text-lg/tight">
+            We're having trouble retrieving your projects right now. Please try again in a moment.
+          </p>
+        </div>
+
+        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" (click)="retry()">
+          Retry Connection
+        </button>
+      </div>
+    </div>
+  } @else if (isEmpty()) {
+    <div class="flex justify-center h-full">
+      <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
+        <img class="w-full" src="assets/new_project.webp" alt="empty icon" />
+        <div class="m-12 w-full text-center">
+          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">No Projects</h2>
+          <p class="text-text-body text-lg/tight">
+            You don’t have any projects yet. Start by defining your first architectural workspace to begin tracking
+            tasks and epics.
+          </p>
+        </div>
+
+        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" routerLink="/project/add">
+          <app-icon name="plus" [size]="15" class="me-1"></app-icon> Create New Project
+        </button>
+      </div>
+    </div>
+  } @else {
+    <!-- header -->
+    <div class="flex flex-col w-full">
+    <app-breadcrumb class="hidden sm:block"></app-breadcrumb>
+    <div class="mt-3 flex justify-between">
+      <h2 class="title-md">Project Epics</h2>
+      <div class="flex justify-between h-auto">
+        <input type="text" name="serch" id="search" class="input-text py-1.5 px-3 me-8" placeholder="search">
+        <button
+          class="btn-primary sm:py-3 hidden sm:flex items-center gap-1 font-medium shadow btn-shadow whitespace-nowrap "
+          [routerLink]="['/project',currentProject()?.id,'epics','new']"
+        >
+          <app-icon name="plus" [size]="10" class="me-1"></app-icon> new epic
+        </button>
+      </div>
+    </div>
+  </div>
+    <button
+      class="inline sm:hidden fixed bottom-0 right-2 btn-primary btn-shadow rounded-xl text-center px-4 py-3 font-bold mb-20"
+      [routerLink]="['/project',currentProject()?.id,'epics','new']"
+    >
+      <app-icon name="plus" [size]="14"></app-icon>
+    </button>
+
+    <!-- cards container -->
+    <div class="grid grid-cols-1 justify-items-stretch  lg:grid-cols-2 gap-6 w-full mt-6 md:mt-10">
+      @for (epic of epics(); track epic.id) {
+        <div
+          class="bg-white flex flex-col justify-between p-5 sm:p-6 min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer border-l-4 border-dark-green"
+        >
+          <div class="flex justify-between mb-4">
+            <span class="bg-light-green text-success-msg-text py-1 px-2.5 text-[10px] font-bold">{{epic.epic_id}}</span>
+            <app-icon [size]="10" name="more-vertical" class="label-sm text-placeholder"></app-icon>
+          </div>
+
+         <h3 class="card-title mb-3">{{ epic.title }}</h3>
+         <div class="flex items-center gap-3">
+          <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40"></app-name-avatar-icon>
+           <div class="flex flex-col">
+             <span class="text-[12px] font-medium text-text-body">Assignee</span>
+             <span class="body-sm text-slate-dark">{{epic.assignee.name}}</span>
+           </div>
+
+         </div>
+          <div class="flex md:justify-between items-center gap-2 pt-5 border-t border-border-gray">
+
+            <div class="  text-placeholder tracking-[-0.55px] flex items-center">
+              <app-icon name="created-by" [size]="10" class="me-1"></app-icon>
+              <span class=" font-normal text-[16px]">Created by: <span class="text-slate-dark font-semibold">{{epic.created_by.name}}</span></span>
+            </div>
+
+           <div class="flex items-center">
+              <app-icon name="date" [size]="10" class="me-1"></app-icon>
+              <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">
+                {{ epic.created_at | date: 'd MMMM yyyy' }}
+              </span>
+           </div>
+          </div>
+        </div>
+      }
+
+      <div
+        class="bg-white border-3 border-border-secodary border-dashed flex flex-col justify-center items-center gap-4 p-6 min-h-56 w-full rounded-lg shadow-form-shadow text-sm/[1.25rem] font-bold"
+      >
+        <a
+          class="bg-surface-low flex items-center justify-center text-slate-dark rounded-xl w-12 h-12"
+          routerLink="/project/add"
+        >
+          <app-icon name="plus-with-circle"></app-icon>
+        </a>
+
+        <p class="text-text-body uppercase tracking-[0.0875rem]">add project</p>
+      </div>
+    </div>
+
+    <!-- paginaion -->
+
+    <div
+      class="hidden sm:flex flex-col sm:flex-row justify-between items-center gap-4 w-full mt-10 pt-6 border-t border-slate-100"
+    >
+      <div class="text-sm text-text-body font-medium">
+        Showing <span class="text-slate-dark font-semibold">{{ currentLength() }}</span> of
+        <span class="text-slate-dark font-semibold">{{ total() }}</span> active projects
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          (click)="prev()"
+          [disabled]="currentPage() === 1 || isloading()"
+          class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <app-icon name="arrow-back"></app-icon>
+        </button>
+
+        <button
+          type="button"
+          class="flex items-center justify-center w-9 h-9 bg-primary text-white font-bold rounded shadow-sm cursor-pointer"
+        >
+          {{ currentPage() }}
+        </button>
+
+        @if (EndPageNum() > 1 && currentPage() !== EndPageNum()) {
+          <div class="text-slate-400 text-sm px-1">...</div>
+          <button
+            type="button"
+            (click)="currentPage.set(EndPageNum()); getEpics()"
+            class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-700 font-semibold rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer"
+          >
+            {{ EndPageNum() }}
+          </button>
+        }
+
+        <button
+          type="button"
+          (click)="next()"
+          [disabled]="currentPage() === EndPageNum() || isloading()"
+          class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <app-icon name="next-arrow" class="text-[18px]"></app-icon>
+        </button>
+      </div>
+    </div>
+  }
+</div>
+

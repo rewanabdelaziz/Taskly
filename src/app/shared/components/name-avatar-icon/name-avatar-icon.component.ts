@@ -25,7 +25,7 @@ export class NameAvatarIconComponent {
     return nameParts[0].substring(0, 2).toUpperCase();
   });
 
-  Colors = computed(() => {
+  colors = computed(() => {
     if (this.customBgColor() && this.customTextColor()) {
       return { bg: this.customBgColor(), text: this.customTextColor() };
     }

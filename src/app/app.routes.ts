@@ -28,7 +28,13 @@ export const routes: Routes = [
         path: ':id/epics',
         data: { breadcrumb: 'epics' },
         loadComponent: () =>
-          import('./features/projects/components/epics/epics.component').then((m) => m.EpicsComponent),
+          import('./features/epics/components/epics/epics.component').then((m) => m.EpicsComponent),
+      },
+      {
+        path: ':id/epics/new',
+        data: { breadcrumb: 'new epic' },
+        loadComponent: () =>
+          import('./features/epics/components/add-epic/add-epic.component').then((m) => m.AddEpicComponent),
       },
       {
         path: ':id/members',
@@ -84,5 +90,5 @@ export const routes: Routes = [
       import('./features/auth/components/reset-password/reset-password.component').then(
         (m) => m.ResetPasswordComponent,
       ),
-  },
+  }
 ];
