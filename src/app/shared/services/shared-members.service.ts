@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { MembersManagementsService } from '../../features/projects/services/members-managements.service';
 import { Member } from '../../features/projects/models/members';
+import { MembersManagementsService } from '../../features/members/services/members-managements.service';
 
 @Injectable({
   providedIn: 'root'
