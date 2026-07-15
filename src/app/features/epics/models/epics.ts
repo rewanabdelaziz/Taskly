@@ -1,9 +1,9 @@
 export interface AddEpicPayload {
   title: string;
-  description: string;
-  assignee_id: string; //userId
+  description?: string;
+  assignee_id?: string; //userId
   project_id: string;
-  deadline: string;
+  deadline?: string;
 }
 
 export interface Epic {

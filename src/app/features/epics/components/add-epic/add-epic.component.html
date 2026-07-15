@@ -19,83 +19,26 @@
       [formGroup]="addEpicForm"
       (ngSubmit)="onSubmit($event)"
     >
-      <div class="mb-8 md:flex justify-between items-center">
-        <label
-          for="title"
-          class="form-label md:w-1/4"
-          [class.!error-label]="
-            (isSubmitted() || addEpicForm.get('title')?.touched) && addEpicForm.get('title')?.errors
-          "
-          >TITLE <span class="text-[11px]/[100%] tracking-normal text-error">*</span></label
-        >
-        <div class="flex flex-col flex-1">
-            <input
-          type="text"
-          name="title"
-          id="title"
-          class="input-text py-3"
-          placeholder="project title"
-          formControlName="title"
-        />
-        @if ((isSubmitted() || addEpicForm.get('title')?.touched) && addEpicForm.get('title')?.errors) {
-          @if (addEpicForm.get('title')?.errors?.['required']) {
-            <p class="text-error mt-2 gap-1.5 flex items-center">
-              <app-icon name="warning"></app-icon>
-              project title is required
-            </p>
-          } @else if (
-            addEpicForm.get('title')?.errors?.['minlength'] || addEpicForm.get('title')?.errors?.['maxlength']
-          ) {
-            <p class="text-error mt-2 gap-1.5 flex items-center">
-              <app-icon name="warning"></app-icon>
-              project title must be at [3 - 100] charachter
-            </p>
-          }
-        }
-        </div>
-      </div>
+      <app-form-field id="title"
+            [control]="titleControl"
+            type="text"
+            name="title"
+            [isRequired]="true"
+            label="title"
+            placeholder="Epic title"
+            [isHorizontal]="true"
+        ></app-form-field>
 
-      <div class="mb-8 md:flex justify-between items-center">
-        <div class="flex justify-between md:flex-col md:w-1/4">
-          <label
-            for="description"
-            class="form-label "
-            [class.!error-label]="
-              (isSubmitted() || addEpicForm.get('description')?.touched) && addEpicForm.get('description')?.errors
-            "
-            >description</label
-          >
-          <span class="optional-text text-second-optional-label sm:ms-1">Optional</span>
-        </div>
-
-        <div class="flex flex-col flex-1">
-        <div>
-            <textarea
-              type="description"
-              name="description"
-              id="description"
-              class="resize-none input-text pt-3 h-37 text-[16px]/[24px]"
-              placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
-              formControlName="description"
-              maxlength="500"
-            ></textarea>
-    
-            <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
-              >{{ addEpicForm.get('description')?.value?.length || 0 }}/ 500 characters</span
-            >
-        </div>
-        @if (
-          (isSubmitted() || addEpicForm.get('description')?.touched) && addEpicForm.get('description')?.errors
-        ) {
-          @if (addEpicForm.get('description')?.errors?.['maxlength']) {
-            <p class="text-error mt-2 gap-1.5 flex items-center">
-              <app-icon name="warning"></app-icon>
-              project title must be at most 500 charachter
-            </p>
-          }
-        }
-        </div>
-      </div>
+        <app-form-field id="description"
+            [control]="descriptionControl"
+            type="textarea"
+            name="description"
+            label="description"
+            placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
+            [isHorizontal]="true"
+            [maxlength]="500"
+        ></app-form-field>
+        
 
       <div class="mb-8 flex flex-col justify-between sm:gap-8 sm:flex-row">
         <div class="flex flex-col gap-2 flex-1 mb-8 sm:mb-0">
@@ -109,8 +52,13 @@
         </div>
     
         <div class="flex flex-col gap-2 flex-1">
-          <label for="deadline" class="form-label font-semibold">DEADLINE</label>
-          <input type="date" id="deadline" [min]="minDate" class="input-text py-3 w-full" formControlName="deadline"/>
+          <app-form-field id="deadline"
+            [control]="deadlineControl"
+            type="date"
+            name="deadline"
+            label="deadline"
+            [minDate]="minDate"
+          ></app-form-field>
         </div>
       </div>
 

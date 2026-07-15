@@ -1,40 +1,33 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserRegisterPayload } from '../../models/user';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
+import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { single } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent,FormFieldComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent {
+export class RegisterComponent{
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
   _globalMsg = inject(ToastNotificationService);
 
-  registerForm: FormGroup;
+  registerForm!: FormGroup;
   registerPlayload!: UserRegisterPayload;
   isSubmitted = signal(false);
-  passwordValue = signal('');
-
-  passwordRequirements = computed(() => {
-    const hasMinLength = this.passwordValue().length >= 8;
-    const hasUpperLowerDigit =
-      /[A-Z]/.test(this.passwordValue()) && /[a-z]/.test(this.passwordValue()) && /\d/.test(this.passwordValue());
-    const hasSpecialChar = /[!@#$%^&*]/.test(this.passwordValue());
-
-    return { hasMinLength, hasUpperLowerDigit, hasSpecialChar };
-  });
-
-  constructor() {
+  passwordValue
+  constructor(){
     this.registerForm = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -63,6 +56,40 @@ export class RegisterComponent {
       },
       { validators: passwordMatchValidator },
     );
+
+   this.passwordValue = toSignal(
+    this.registerForm.get('password')!.valueChanges,
+    {initialValue: ''}
+   )
+  }
+  
+
+  passwordRequirements = computed(() => {
+    const hasMinLength = this.passwordValue().length >= 8;
+    const hasUpperLowerDigit =
+      /[A-Z]/.test(this.passwordValue()) && /[a-z]/.test(this.passwordValue()) && /\d/.test(this.passwordValue());
+    const hasSpecialChar = /[!@#$%^&*]/.test(this.passwordValue());
+
+    return { hasMinLength, hasUpperLowerDigit, hasSpecialChar };
+  });
+
+
+
+  get emailControl() {
+    return this.registerForm.get('email') as FormControl;
+  }
+
+  get passwordControl() {
+    return this.registerForm.get('password') as FormControl;
+  }
+  get confirmPasswordControl() {
+    return this.registerForm.get('confirmPassword') as FormControl;
+  }
+  get nameControl() {
+    return this.registerForm.get('data.name') as FormControl;
+  }
+  get departmentControl() {
+    return this.registerForm.get('data.department') as FormControl;
   }
 
   onSubmit(event: Event) {

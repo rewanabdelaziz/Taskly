@@ -1,16 +1,18 @@
 import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
 import { AuthNavBarComponent } from '../auth-nav-bar/auth-nav-bar.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, IconComponent, AuthNavBarComponent],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent, AuthNavBarComponent,FormFieldComponent],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
   host: { class: 'flex flex-col flex-1 h-full' },
@@ -24,9 +26,10 @@ export class ResetPasswordComponent implements OnDestroy {
   resetPasswordForm: FormGroup;
   resetPasswordPlayload!: { password: string };
   isSubmitted = signal(false);
-  passwordValue = signal('');
+  passwordValue
   private timeOutId: null | number = null;
   private state;
+  
 
   passwordRequirements = computed(() => {
     const hasMinLength = this.passwordValue().length >= 8 && this.passwordValue().length <= 64;
@@ -56,6 +59,11 @@ export class ResetPasswordComponent implements OnDestroy {
       { validators: passwordMatchValidator },
     );
 
+    this.passwordValue = toSignal(
+        this.resetPasswordForm.get('password')!.valueChanges,
+        {initialValue: ''}
+    )
+
     // store access token from state
     const currentNavigation = this._router.getCurrentNavigation();
     this.state = currentNavigation?.extras.state as { accessToken: string };
@@ -65,6 +73,13 @@ export class ResetPasswordComponent implements OnDestroy {
       this._router.navigate(['/login']);
       return;
     }
+  }
+
+  get passwordControl() {
+    return this.resetPasswordForm.get('password') as FormControl;
+  }
+  get confirmPasswordControl() {
+    return this.resetPasswordForm.get('confirmPassword') as FormControl;
   }
 
   ngOnDestroy(): void {

@@ -5,8 +5,7 @@
     <div class="hidden sm:flex sm:flex-col pt-6 w-full">
       <div class="mt-3 mb-10 flex justify-between flex-col lg:flex-row">
         <div class="mb-4 lg:mb-0">
-          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Projects</h2>
-          <p>Manage and curate your projects</p>
+          <h2 class="title-md">Project Epics</h2>
         </div>
 
         <div class="h-12 w-44 bg-slate-200 rounded-lg animate-pulse"></div>
@@ -102,13 +101,15 @@
           </div>
 
          <h3 class="card-title mb-3">{{ epic.title }}</h3>
+         
          <div class="flex items-center gap-3">
-          <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40"></app-name-avatar-icon>
-           <div class="flex flex-col">
-             <span class="text-[12px] font-medium text-text-body">Assignee</span>
-             <span class="body-sm text-slate-dark">{{epic.assignee.name}}</span>
-           </div>
-
+          @if(epic.assignee.name){
+            <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40"></app-name-avatar-icon>
+            <div class="flex flex-col">
+              <span class="text-[12px] font-medium text-text-body">Assignee</span>
+              <span class="body-sm text-slate-dark">{{epic.assignee.name}}</span>
+            </div>
+          }
          </div>
           <div class="flex md:justify-between items-center gap-2 pt-5 border-t border-border-gray">
 
@@ -116,6 +117,7 @@
               <app-icon name="created-by" [size]="10" class="me-1"></app-icon>
               <span class=" font-normal text-[16px]">Created by: <span class="text-slate-dark font-semibold">{{epic.created_by.name}}</span></span>
             </div>
+           
 
            <div class="flex items-center">
               <app-icon name="date" [size]="10" class="me-1"></app-icon>
