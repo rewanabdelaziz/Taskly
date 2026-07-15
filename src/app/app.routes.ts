@@ -46,7 +46,7 @@ export const routes: Routes = [
         path: ':id/tasks',
         data: { breadcrumb: 'tasks' },
         loadComponent: () =>
-          import('./features/projects/components/tasks/tasks.component').then((m) => m.TasksComponent),
+          import('./features/tasks/components/tasks/tasks.component').then((m) => m.TasksComponent),
       },
       {
         path: '',

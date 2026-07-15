@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Member } from '../../features/projects/models/members';
+import { Member } from '../../features/members/models/members';
 import { MembersManagementsService } from '../../features/members/services/members-managements.service';
 
 @Injectable({
