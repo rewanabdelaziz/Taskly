@@ -1,0 +1,74 @@
+<div [class]="isHorizontal() ? 'md:flex justify-between items-center mb-8':'form-control' ">
+    @if(label()){
+        @if(isRequired()){
+            <label
+            [for]="id()"
+            class="form-label"
+            [class]="isHorizontal() ? 'md:w-1/4':''"
+            [class.!error-label]="hasError()"
+            >
+              {{label()}}
+              <span class="text-[11px]/[100%] tracking-normal text-error">*</span>
+            </label>
+        }@else {
+            <div class="flex justify-between" [class]="isHorizontal() ? 'md:flex-col md:w-1/4' : ''">
+                <label
+                [for]="id()"
+                class="form-label"
+
+                [class.!error-label]="hasError()"
+                >
+                  {{label()}}
+                </label>
+                @if(forgetPasswordFlag()){
+                    <a
+                      class="text-[0.6875rem]/[1rem] tracking-normal no-underline font-bold text-primary sm:hidden block cursor-pointer"
+                      routerLink="/forgot-password"
+                      >Forgot?</a
+                    >
+                }
+                @if(type() === "textarea"){
+                    <span class="optional-text text-second-optional-label"
+                          [class]="isHorizontal() ? 'sm:ms-1' : '' ">Optional</span>
+                }
+
+            </div>
+        }
+      
+    }
+    <div class="flex flex-col flex-1">
+        @if(type() === "textarea"){
+            <textarea
+              [name]="name()"
+              [id]="id()"
+              class="resize-none input-text pt-3 h-37 text-[16px]/[24px]"
+              [placeholder]="placeholder()"
+              [formControl]="control()"
+              [maxlength]="maxlength()"
+            ></textarea>
+            <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
+            >{{ control()!.value?.length || 0 }}/ 500 characters</span
+        >
+        }@else {
+            <input
+              [type]="type()"
+              [name]="name()"
+              [id]="id()"
+              class="input-text"
+              [class]="inputCustomClass()? inputCustomClass() : '' "
+              [placeholder]="placeholder()"
+              [formControl]="control()"
+              [min]="minDate()"   
+            />
+        }
+        @if(!hasError() && description()){
+            <p class="text-[0.625rem]/[15px] text-slate-light tracking-normal mt-1.5 ms-1 font-normal">
+              {{description()}}
+            </p>
+        }
+        @if (hasError()) {
+          <p class="error-msg mt-1.5">{{errorMessage}}</p>
+        }
+    </div>
+    
+</div>

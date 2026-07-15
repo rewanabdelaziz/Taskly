@@ -9,58 +9,26 @@
       <p class="body-sm">Please enter your details to access your workspace</p>
     </div>
     <!-- form -->
-    <form class="flex-1 flex flex-col justify-center" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
-      <div class="form-control">
-        <label
-          for="email"
-          class="form-label"
-          [class.!error-label]="(isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors"
-          >email</label
-        >
-        <input
+    <form class="flex-1 flex flex-col justify-center border-b border-border-secodary" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+      <app-form-field 
+          id="email"
+          [control]="emailControl"
           type="text"
           name="email"
-          id="email"
-          class="input-text"
+          label="email"
           placeholder="yourname@company.com"
-          formControlName="email"
-        />
-        @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['required']) {
-          <p class="error-msg mt-1.5">Email is required</p>
-        }
-        @if ((isSubmitted() || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.['email']) {
-          <p class="error-msg mt-1.5">Invalid email format</p>
-        }
-      </div>
-      <div class="form-control">
-        <div class="flex justify-between">
-          <label
-            for="password"
-            class="form-label"
-            [class.!error-label]="
-              (isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors
-            "
-            >password</label
-          >
-          <a
-            class="text-[0.6875rem]/[1rem] tracking-normal no-underline font-bold text-primary sm:hidden block cursor-pointer"
-            routerLink="/forgot-password"
-            >Forgot?</a
-          >
-        </div>
+      ></app-form-field>
 
-        <input
+      <app-form-field 
+          id="password"
+          [control]="passwordControl"
           type="password"
           name="password"
-          id="password"
-          class="input-text"
+          label="password"
           placeholder="Password"
-          formControlName="password"
-        />
-        @if ((isSubmitted() || loginForm.get('password')?.touched) && loginForm.get('password')?.errors?.['required']) {
-          <p class="error-msg mt-1.5">Password is required</p>
-        }
-      </div>
+      ></app-form-field>
+
+     
       <div class="sm:flex sm:justify-between mb-6">
         <div class="form-check flex items-center">
           <input class="form-check-input" type="checkbox" value="remember" id="remember" formControlName="rememberMe" />
@@ -74,7 +42,7 @@
         >
       </div>
 
-      <button type="submit" class="btn-primary w-full mb-4 md:py-4 hidden sm:inline">Log In</button>
+      <button type="submit" class="btn-primary w-full mb-8 md:py-4 hidden sm:inline">Log In</button>
       <button
         type="submit"
         class="btn-primary w-full mb-4 md:py-4 rounded-lg sm:hidden flex items-center justify-center"

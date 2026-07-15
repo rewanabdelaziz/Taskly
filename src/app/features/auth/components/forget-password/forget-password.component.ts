@@ -1,14 +1,15 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { AuthServiceService } from '../../services/auth-service.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 
 @Component({
   selector: 'app-forget-password',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, IconComponent, IconComponent],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent, FormFieldComponent],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })
@@ -17,31 +18,30 @@ export class ForgetPasswordComponent implements OnDestroy, OnInit {
   private _authServie = inject(AuthServiceService);
   _globalMsg = inject(ToastNotificationService);
 
-  forgetPasswordFrom: FormGroup;
+  forgetPasswordFrom!: FormGroup;
   isSubmitted = signal(false);
   isDisabeled = signal(false);
-  isSuccess;
-  timerMin;
-  timerSec;
+  isSuccess = signal(false);
+  timerMin = signal(4);
+  timerSec = signal(59);
   private timeIntervalId: null | number = null;
   forgetPasswordPlayload!: string;
   private readonly TIMER_KEY = 'otp_expiry_time';
 
-  constructor() {
-    this.timerMin = signal(4);
-    this.timerSec = signal(59);
-    this.isSuccess = signal(false);
+  ngOnInit(): void {
 
     this.forgetPasswordFrom = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
-  }
-  ngOnInit(): void {
+
     this.checkIfExcitTimer();
   }
-  ngOnDestroy(): void {
-    if (this.timeIntervalId) clearInterval(this.timeIntervalId);
+
+  get emailControl() {
+    return this.forgetPasswordFrom.get('email') as FormControl;
   }
+
+ 
 
   onSubmit(event: Event) {
     this.isSubmitted.set(true);
@@ -119,5 +119,9 @@ export class ForgetPasswordComponent implements OnDestroy, OnInit {
 
     this.isSubmitted.set(false);
     this.isDisabeled.set(false);
+  }
+
+  ngOnDestroy(): void {
+    if (this.timeIntervalId) clearInterval(this.timeIntervalId);
   }
 }

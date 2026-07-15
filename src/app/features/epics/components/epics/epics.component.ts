@@ -77,7 +77,7 @@ export class EpicsComponent {
     this._epics_management.getAllEpics(this.offset(), this.limit()).subscribe({
       next: (res: HttpResponse<Epic[]>) => {
 
-        console.log(res.body)
+        // console.log(res.body)
 
         this.isloading.set(false);
         if (isAppend) {

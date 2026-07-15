@@ -3,17 +3,17 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { Router } from '@angular/router';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddEpicPayload } from '../../models/epics';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { EpicsManagementsService } from '../../services/epics-managements.service';
 import { SharedMembersService } from '../../../../shared/services/shared-members.service';
-import { Member } from '../../../members/models/members';
+import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 
 @Component({
   selector: 'app-add-epic',
   standalone: true,
-  imports: [BreadcrumbComponent,IconComponent,ReactiveFormsModule],
+  imports: [BreadcrumbComponent,ReactiveFormsModule,FormFieldComponent,IconComponent],
   templateUrl: './add-epic.component.html',
   styleUrl: './add-epic.component.css'
 })
@@ -37,9 +37,9 @@ export class AddEpicComponent implements OnInit{
   ngOnInit(): void {
     this.addEpicForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      description: ['', [Validators.minLength(0), Validators.maxLength(500)]],
-      assignee_id: [''],
-      deadline: [''],
+      description: [null, [Validators.minLength(0), Validators.maxLength(500)]],
+      assignee_id: [null],
+      deadline: [null],
     });
 
     // calculate min date 
@@ -58,7 +58,15 @@ export class AddEpicComponent implements OnInit{
 
      if (this.addEpicForm.valid) {
       const { title, description ,deadline ,assignee_id } = this.addEpicForm.value;
-      this.addEpicPlayload = { title, description ,deadline,assignee_id, project_id:this.currentProject()!.id };
+      const cleanValue = (val: any) => ( val === undefined || String(val).trim() === '') ? null : val;
+
+      this.addEpicPlayload = {
+         title, 
+         description: cleanValue(description) ,
+         deadline: cleanValue(deadline),
+         assignee_id: cleanValue(assignee_id), 
+         project_id:this.currentProject()!.id };
+
       this._epicsService.addNewEpics(this.addEpicPlayload).subscribe({
         next: () => {
           this.isSubmitted.set(false);
@@ -69,7 +77,7 @@ export class AddEpicComponent implements OnInit{
         },
         error: () => {
           this.isSubmitted.set(false);
-          this._globalToastMsg.showMsg(`Failed to create project`);
+          this._globalToastMsg.showMsg(`Failed to create Epic! try again`);
         },
       });
     } else {
@@ -78,6 +86,20 @@ export class AddEpicComponent implements OnInit{
     }
 
   }
+
+  get titleControl() {
+    return this.addEpicForm.get('title') as FormControl;
+  }
+  get descriptionControl() {
+    return this.addEpicForm.get('description') as FormControl;
+  }
+   get deadlineControl() {
+    return this.addEpicForm.get('deadline') as FormControl;
+  }
+   get assigneeIdControl() {
+    return this.addEpicForm.get('assignee_id') as FormControl;
+  }
+  
   navigateToEpicsList() {
     this._router.navigate([`/project/${this.currentProject()?.id}/epics`]);
   }
