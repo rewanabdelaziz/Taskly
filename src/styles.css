@@ -62,6 +62,8 @@
     var(--color-primary-container) 100%
   );
   --background-image-gradient-none: none;
+  --background-image-gradient-gray: linear-gradient(135deg, #FFFFFF 0%, #F1F3FF 100%);
+
 
   /*Typography */
   --font-sans: 'Inter', sans-serif;
@@ -111,6 +113,28 @@ body {
 @utility label-sm {
   @apply text-[0.6875rem]/[16.5px]  text-slate-dark uppercase tracking-widest font-bold;
 }
+
+@utility popup-label{
+  @apply  text-[clamp(0.625rem,0.7rem+1.25vw,0.75rem)]/[clamp(0.9375rem,0.95rem+1vw,1rem)] font-bold uppercase sm:text-sidebar-text text-primary
+}
+
+@utility popup-form-label{
+  @apply  text-[clamp(0.625rem,0.63rem+1.25vw,0.6875rem)]/[clamp(0.9375rem,0.95rem+1vw,1.03125rem)] font-bold uppercase tracking-[clamp(0rem,0.1rem+1.25vw,0.034375rem)] text-slate-medium sm:text-slate-dark/66
+}
+
+@utility popup-title {
+  @apply text-[clamp(1rem,1.1rem+1.25vw,1.25rem)]/[clamp(1.5rem,1.75rem+1vw,2rem)] text-slate-dark capitalize tracking-normal font-semibold sm:font-bold;
+}
+
+@utility popup-description {
+  @apply text-[clamp(0.875rem,0.9rem+1.25vw,1rem)]/[clamp(1.25rem,1.4rem+1vw,1.625rem)] sm:text-slate-dark text-slate-medium  tracking-normal font-normal;
+}
+
+@utility popup-body {
+  @apply text-[clamp(0.75rem,0.8rem+1.25vw,0.875rem)]/[1.25rem]  text-slate-dark normal-case  tracking-normal font-normal;
+}
+
+
 /* buttons */
 @utility btns-basic {
   @apply py-3 px-6 sm:py-4 rounded-xs capitalize tracking-normal text-sm/[20px] cursor-pointer;

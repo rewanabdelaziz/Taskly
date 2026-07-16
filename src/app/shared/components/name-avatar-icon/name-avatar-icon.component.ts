@@ -12,6 +12,7 @@ export class NameAvatarIconComponent {
   size = input<number>(40);
   customBgColor = input<string | null>(null);
   customTextColor = input<string | null>(null);
+  customClass = input<string | null>(null);
 
   avatar = computed(() => {
     const name = this.userName().trim();

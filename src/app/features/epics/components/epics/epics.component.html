@@ -92,7 +92,8 @@
     <!-- cards container -->
     <div class="grid grid-cols-1 justify-items-stretch  lg:grid-cols-2 gap-6 w-full mt-6 md:mt-10">
       @for (epic of epics(); track epic.id) {
-        <div
+        <div 
+        (click)="setSelectedEpic(epic)"
           class="bg-white flex flex-col justify-between p-5 sm:p-6 min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer border-l-4 border-dark-green"
         >
           <div class="flex justify-between mb-4">
@@ -134,12 +135,12 @@
       >
         <a
           class="bg-surface-low flex items-center justify-center text-slate-dark rounded-xl w-12 h-12"
-          routerLink="/project/add"
+          [routerLink]="['/project',currentProject()?.id,'epics','new']"
         >
           <app-icon name="plus-with-circle"></app-icon>
         </a>
 
-        <p class="text-text-body uppercase tracking-[0.0875rem]">add project</p>
+        <p class="text-text-body uppercase tracking-[0.0875rem]">add epic</p>
       </div>
     </div>
 
@@ -193,4 +194,5 @@
     </div>
   }
 </div>
+<app-epic-popup [selectedEpic]="selectedEpic()" [isOpenPopUpInput]="isOpenPopUp()" (close)="handleClose()"></app-epic-popup>
 

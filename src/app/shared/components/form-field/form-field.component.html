@@ -4,6 +4,7 @@
             <label
             [for]="id()"
             class="form-label"
+             [class]="labelCustomClass()? labelCustomClass() : '' "
             [class]="isHorizontal() ? 'md:w-1/4':''"
             [class.!error-label]="hasError()"
             >
@@ -15,7 +16,7 @@
                 <label
                 [for]="id()"
                 class="form-label"
-
+                 [class]="labelCustomClass()? labelCustomClass() : '' "
                 [class.!error-label]="hasError()"
                 >
                   {{label()}}
@@ -41,14 +42,18 @@
             <textarea
               [name]="name()"
               [id]="id()"
+              [class]="inputCustomClass()? inputCustomClass() : '' "
               class="resize-none input-text pt-3 h-37 text-[16px]/[24px]"
               [placeholder]="placeholder()"
               [formControl]="control()"
               [maxlength]="maxlength()"
             ></textarea>
-            <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
-            >{{ control()!.value?.length || 0 }}/ 500 characters</span
-        >
+            @if(withLettersCount()){
+              <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
+              >{{ control()!.value?.length || 0 }}/ 500 characters</span>
+            }
+
+        
         }@else {
             <input
               [type]="type()"
@@ -67,7 +72,10 @@
             </p>
         }
         @if (hasError()) {
-          <p class="error-msg mt-1.5">{{errorMessage}}</p>
+          <div class="font-medium text-[12px] text-error mt-1.5 flex items-center gap-1">
+             <app-icon name="warning-2" [size]="13" ></app-icon>
+            <span>{{errorMessage}}</span>
+          </div>
         }
     </div>
     
