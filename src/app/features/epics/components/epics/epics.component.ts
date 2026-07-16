@@ -2,16 +2,17 @@ import { Component, computed, HostListener, inject, signal } from '@angular/core
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { EpicsManagementsService } from '../../services/epics-managements.service';
 import { HttpResponse } from '@angular/common/http';
 import { Epic } from '../../models/epics';
 import { DatePipe } from '@angular/common';
 import { NameAvatarIconComponent } from "../../../../shared/components/name-avatar-icon/name-avatar-icon.component";
+import { EpicPopupComponent } from '../epic-popup/epic-popup.component';
 @Component({
   selector: 'app-epics',
   standalone: true,
-  imports: [BreadcrumbComponent, IconComponent, RouterLink, DatePipe, NameAvatarIconComponent, NameAvatarIconComponent],
+  imports: [BreadcrumbComponent, IconComponent, RouterLink, DatePipe, NameAvatarIconComponent,EpicPopupComponent],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
 })
@@ -19,18 +20,21 @@ export class EpicsComponent {
   private _project_management = inject(ProjectsManagementsService)
   private _epics_management = inject(EpicsManagementsService)
   currentProject = this._project_management.selectedProject
-  private _router = inject(Router);
   epics = signal<Epic[]>([]);
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
+  selectedEpic = signal<Epic>({} as Epic)
+  isOpenPopUp = signal(false)
+
   currentPage = signal(1);
-  limit = signal(5);
+  limit = signal(3);
   offset = computed(() => (this.currentPage() - 1) * this.limit());
   total = signal(0);
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
 
   isMobileNow = signal<boolean>(false);
+
 
   currentLength = computed(() => {
     if (this.currentPage() === 1) {
@@ -122,6 +126,17 @@ export class EpicsComponent {
 
   retry() {
     this.getEpics(this.isMobileNow() && this.currentPage() > 1);
+  }
+
+  setSelectedEpic(epic: Epic){
+    this.selectedEpic.set(epic)
+    this.isOpenPopUp.set(true)
+    document.body.classList.add('overflow-hidden');
+  }
+
+  handleClose(){
+    this.isOpenPopUp.set(false)
+    document.body.classList.remove('overflow-hidden');
   }
 
 }

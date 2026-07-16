@@ -4,7 +4,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 import { Router } from '@angular/router';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AddEpicPayload } from '../../models/epics';
+import { AddEpicPayload, Epic } from '../../models/epics';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { EpicsManagementsService } from '../../services/epics-managements.service';
 import { SharedMembersService } from '../../../../shared/services/shared-members.service';
@@ -26,11 +26,11 @@ export class AddEpicComponent implements OnInit{
   _globalToastMsg = inject(ToastNotificationService);
   addEpicForm!: FormGroup;
   minDate = ''
+ 
 
 
 
   currentProject = this._project_management.selectedProject
-  isEditMode = signal(false)
   addEpicPlayload!: AddEpicPayload;
   isSubmitted = signal(false);
 
@@ -103,6 +103,8 @@ export class AddEpicComponent implements OnInit{
   navigateToEpicsList() {
     this._router.navigate([`/project/${this.currentProject()?.id}/epics`]);
   }
+
+ 
 
 
 }

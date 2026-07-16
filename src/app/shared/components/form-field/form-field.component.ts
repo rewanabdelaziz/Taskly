@@ -1,10 +1,12 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { IconComponent } from '../icon/icon.component';
+
 
 @Component({
   selector: 'app-form-field',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,IconComponent],
   templateUrl: './form-field.component.html',
   styleUrl: './form-field.component.css'
 })
@@ -22,8 +24,11 @@ export class FormFieldComponent {
   description = input<string>()
   patternErrorMsg = input<string>('invalid format')
   forgetPasswordFlag = input<boolean>(false)
-  inputCustomClass = input<string>()
-  
+  inputCustomClass = input<string|null>(null)
+  labelCustomClass = input<string|null>(null)
+  withLettersCount = input<boolean>(true)
+
+
   hasError(): boolean {
     const ctrl = this.control();
     return !!(ctrl && ctrl.invalid && ctrl.touched);

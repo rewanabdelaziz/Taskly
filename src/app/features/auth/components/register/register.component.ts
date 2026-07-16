@@ -8,7 +8,6 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 import { FormValidators, passwordMatchValidator } from '../../../../shared/validators/custom-validators';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { single } from 'rxjs';
 
 @Component({
   selector: 'app-register',
