@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-project',
@@ -31,6 +32,7 @@ export class AddProjectComponent implements OnDestroy, OnInit {
 
   projectId = signal<string | null>(null);
   private route$!: Subscription;
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.addProjectForm = this.fb.group({
@@ -38,7 +40,7 @@ export class AddProjectComponent implements OnDestroy, OnInit {
       description: ['', [Validators.minLength(0), Validators.maxLength(500)]],
     });
 
-    this.route$ = this._activateRoute.params.subscribe((params) => {
+    this.route$ = this._activateRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const id = params['id'] || null;
       this.projectId.set(id);
       const project = this._pojectService.selectedProject();
@@ -133,9 +135,9 @@ export class AddProjectComponent implements OnDestroy, OnInit {
       clearTimeout(this.timeOutId);
     }
 
-    if (this.route$) {
-      this.route$.unsubscribe();
-    }
+    // if (this.route$) {
+    //   this.route$.unsubscribe();
+    // }
   }
 
 }
