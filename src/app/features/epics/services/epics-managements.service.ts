@@ -18,8 +18,10 @@ export class EpicsManagementsService {
     return this._http.post(`${this.baseUrl}${ApiEndpoints.ADD_EPIC}`, epicPayload);
   }
 
-  getAllEpics(offset: number, limit: number): Observable<HttpResponse<Epic[]>> {
-    const params = new HttpParams().set('limit', limit.toString()).set('offset', offset.toString());
+  getAllEpics(offset: number, limit: number,projectId:string): Observable<HttpResponse<Epic[]>> {
+    const params = new HttpParams().set('limit', limit.toString())
+                  .set('offset', offset.toString())
+                  .set('project_id', `eq.${projectId}`);
 
     const headers = new HttpHeaders().set('Prefer', 'count=exact');
 
@@ -28,6 +30,13 @@ export class EpicsManagementsService {
       params,
       observe: 'response', //to return all response (header + body)
     });
+  }
+
+  getEpicDetails(epicId: string, projectId: string): Observable<Epic[]> {
+    const params = new HttpParams().set('id', `eq.${epicId}`)
+                  .set('project_id', `eq.${projectId}`);
+
+    return this._http.get<Epic[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_EPICS}`, {params: params});
   }
 
   editEpics(epicPayload: AddEpicPayload, epicId: string) {

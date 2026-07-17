@@ -1,4 +1,4 @@
-import { Component, input} from '@angular/core';
+import { Component, input, output} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '../icon/icon.component';
 
@@ -28,6 +28,8 @@ export class FormFieldComponent {
   labelCustomClass = input<string|null>(null)
   withLettersCount = input<boolean>(true)
 
+  change = output<string>()
+
 
   hasError(): boolean {
     const ctrl = this.control();
@@ -48,6 +50,10 @@ export class FormFieldComponent {
     
     
     return null;
+  }
+
+  changeValue(value:string){
+    this.change.emit(value)
   }
 
 }

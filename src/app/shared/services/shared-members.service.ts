@@ -14,7 +14,7 @@ export class SharedMembersService {
   isError = signal<boolean>(false);
 
   getMembers(id: string){
-   if(this.members().length ===0){
+
     this.isloading.set(true);
     this.isError.set(false);
     this.isEmpty.set(false);
@@ -31,7 +31,7 @@ export class SharedMembersService {
         this.isError.set(true);
       },
     });
-   }
+   
   }
 
 }

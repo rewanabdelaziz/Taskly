@@ -3,6 +3,7 @@
   <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 flex items-center justify-center">
     <!-- popup container -->
     <div class=" bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 z-50 max-h-[90vh] overflow-y-auto">
+      <form  [formGroup]="epicForm">
         <!-- header -->
          <div class="pb-2 sm:pb-8 border-b border-border-secodary  px-6 py-2 sm:p-8 bg-gradient-gray sm:bg-gradient-none">
             <div class="flex justify-between mb-3 sm:mb-4 ">
@@ -19,7 +20,7 @@
                     name="title"
                     placeholder="epic title"
                     [isRequired]="true"
-                    [withLettersCount]="false"
+                    (change)="edit()"
                 ></app-form-field>
         </div>
         <!-- body -->
@@ -33,6 +34,8 @@
               type="textarea"
               [control]="descriptionControl"
               placeholder="No description provided"
+              [withLettersCount]="false"
+              (change)="edit()"
             ></app-form-field>
 
             <div class="grid grid-col-2 sm:grid-cols-3 gap-6 mb-6">
@@ -43,17 +46,31 @@
                         <span class="popup-body">{{selectedEpic()?.created_by!.name}}</span>
                     </div>
                 </div>
-    
+
+               
                 <div class="flex flex-col gap-2">
                     <label for="assignee" class="popup-form-label">ASSIGNEE</label>
-                    <div class="relative h-10">
-                        <select id="assignee" class="w-full h-full px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest" formControlName="assignee_id">
-                          <option [value]="selectedEpic()?.assignee!.sub" class="flex items-center">
-                            <app-name-avatar-icon [userName]="selectedEpic()?.assignee!.name" [size]="28"></app-name-avatar-icon>
-                            {{selectedEpic()?.assignee!.name}}</option>
+                    <div class="flex relative w-full h-10">
+                        <div class="bg-transparent border border-surface-highest flex justify-between items-center h-10 p-4 rounded-lg absolute inset-0 z-40 pointer-events-none ">
+                           
+                            <div class="flex justify-between items-center">
+                                @if(currentAssignee()?.member_id ){
+                                    <app-name-avatar-icon [userName]="currentAssignee()?.metadata?.name || '' " [size]="28" color="#4F5F7B" class="me-2"></app-name-avatar-icon>
+                                    <span >{{currentAssignee()?.metadata?.name}}</span>
+                                }@else{
+                                    <app-icon name="unassigne" [size]="13"></app-icon>
+                                    <span class="ms-2">unassigne</span>
+                                }
+                            </div>  
+                             <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>   
+                        </div>
+
+                        <select id="assignee"
+                                (change)="edit()"
+                                class="w-full h-10 px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest absolute inset-0 z-50 deadline-input cursor-pointer opacity-0" formControlName="assignee_id">
+                            <option [value]="null" >unassigne</option>
                           @for(member of _sharedMembers.members() ; track member.member_id){
                               <option [value]="member.user_id" class="flex items-center">
-                                <app-name-avatar-icon [userName]="member.metadata.name" [size]="28"></app-name-avatar-icon>
                                 {{member.metadata.name}}
                               </option>
                           }
@@ -61,22 +78,35 @@
                     </div>
                     
                 </div>
-    
-                <div class="flex flex-col gap-2 max-h-10">
-                    <app-form-field id="deadline"
-                      [control]="deadlineControl"
-                      type="date"
-                      name="deadline"
-                      label="deadline"
-                      [minDate]="minDate"
-                      [withLettersCount]="false"
-                      customLabelClass="popup-form-label mb-2"
-                      inputCustomClass="bg-transparent border border-surface-highest"
-                    ></app-form-field>
-                </div>
+               
                 
-                <div class="flex flex-col mb-8">
-                    <span class="popup-form-label mb-2">created by</span>
+
+                <div class="flex flex-col gap-2">
+                    <label for="assignee" class="popup-form-label ">deadline</label>
+                    <div class="flex relative w-full h-10">
+                        <div class="bg-transparent border border-surface-highest flex justify-between items-center h-10 p-4 rounded-lg absolute inset-0 z-40 pointer-events-none ">
+                            <span class="">{{deadlineControl.value ? deadlineControl.value : 'select deadline'}}</span>
+                            <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>
+                        </div>
+                        
+                        <app-form-field id="deadline"
+                          [control]="deadlineControl"
+                          type="date"
+                          name="deadline"
+                          [minDate]="minDate"
+                          [withLettersCount]="false"
+                          (change)="edit()"
+                          customLabelClass="popup-form-label mb-2"
+                          inputCustomClass="bg-transparent border border-surface-highest h-10 absolute inset-0 z-50 deadline-input cursor-pointer opacity-0"
+                        ></app-form-field>
+                    </div>
+                    
+                </div>
+               
+                
+                
+                <div class="flex flex-col mb-8 ">
+                    <span class="popup-form-label">created at</span>
                     <div class="flex items-center gap-1.5 h-10">
                        <app-icon name="date" [size]="15" class="me-1"></app-icon>
                        <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">
@@ -113,6 +143,7 @@
             </div>
 
         </div>
+      </form>
          
 
 

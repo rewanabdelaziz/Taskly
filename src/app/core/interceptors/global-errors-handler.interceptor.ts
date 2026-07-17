@@ -14,6 +14,10 @@ export const globalErrorsHandlerInterceptor: HttpInterceptorFn = (req, next) => 
   const storage = localStorage.getItem(StorageKeys.ACCESS_TOKEN) ? localStorage : sessionStorage;
   const refreshToken = storage.getItem(StorageKeys.REFRESH_TOKEN);
 
+  if (req.url.includes('/auth/v1/token')) {
+    return next(req);
+  }
+
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       switch (err.status) {

@@ -78,7 +78,8 @@ export class EpicsComponent {
       this.isloading.set(true);
     }
     this.isError.set(false);
-    this._epics_management.getAllEpics(this.offset(), this.limit()).subscribe({
+    const projectId=this._project_management.selectedProject()?.id
+    this._epics_management.getAllEpics(this.offset(), this.limit(),projectId!).subscribe({
       next: (res: HttpResponse<Epic[]>) => {
 
         // console.log(res.body)
@@ -137,6 +138,7 @@ export class EpicsComponent {
   handleClose(){
     this.isOpenPopUp.set(false)
     document.body.classList.remove('overflow-hidden');
+    this.getEpics();
   }
 
 }

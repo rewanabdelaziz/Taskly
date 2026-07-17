@@ -44,7 +44,7 @@
         <div class="flex flex-col gap-2 flex-1 mb-8 sm:mb-0">
           <label for="assignee" class="form-label font-semibold">ASSIGNEE</label>
           <select id="assignee" class="input-text py-3 w-full " formControlName="assignee_id">
-            <option value="">Select a member...</option>
+            <option [value]="null">Select a member...</option>
             @for(member of _sharedMembers.members() ; track member.member_id){
                 <option [value]="member.user_id">{{member.metadata.name}}</option>
             }

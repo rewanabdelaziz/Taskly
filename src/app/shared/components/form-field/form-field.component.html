@@ -47,6 +47,8 @@
               [placeholder]="placeholder()"
               [formControl]="control()"
               [maxlength]="maxlength()"
+              (blur)="changeValue(control().value)"  
+              (change)="changeValue(control().value)"   
             ></textarea>
             @if(withLettersCount()){
               <span class="text-slate-medium text-[11px]/[16.5px] font-medium tracking-normal block text-end w-full mt-2"
@@ -63,7 +65,9 @@
               [class]="inputCustomClass()? inputCustomClass() : '' "
               [placeholder]="placeholder()"
               [formControl]="control()"
-              [min]="minDate()"   
+              [min]="minDate()"
+              (blur)="changeValue(control().value)" 
+              (change)="changeValue(control().value)"   
             />
         }
         @if(!hasError() && description()){
