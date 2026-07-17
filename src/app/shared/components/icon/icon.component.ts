@@ -13,12 +13,12 @@ export class IconComponent implements OnInit {
   private http = inject(HttpClient);
   private sanitizer = inject(DomSanitizer);
 
-  // input signals
   name = input.required<string>();
   size = input<number>(24);
   color = input<string>('currentColor');
-  // final inner HtML
-  safeSvgContent = signal<SafeHtml>('');
+
+  
+  safeSvgContent = signal<SafeHtml>(''); // final inner HtML
 
   ngOnInit(): void {
     if (this.name()) {

@@ -9,6 +9,7 @@ export interface AddEpicPayload {
 export interface Epic {
   id: string; //uuid
   epic_id: string;
+  project_id:string;
   title: string;
   description: string;
   deadline: string;

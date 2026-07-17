@@ -39,7 +39,7 @@
         <div class="m-6 w-full text-center">
           <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">Something went wrong</h2>
           <p class="text-text-body text-lg/tight">
-            We're having trouble retrieving your projects right now. Please try again in a moment.
+            We're having trouble retrieving your Epics right now. Please try again in a moment.
           </p>
         </div>
 
@@ -53,15 +53,15 @@
       <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
         <img class="w-full" src="assets/new_project.webp" alt="empty icon" />
         <div class="m-12 w-full text-center">
-          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">No Projects</h2>
+          <h2 class="font-semibold text-4xl/[40px] tracking-[-0.9px] text-slate-dark">No Epics</h2>
           <p class="text-text-body text-lg/tight">
-            You don’t have any projects yet. Start by defining your first architectural workspace to begin tracking
+            You don’t have any Epics yet. Start by defining your first architectural workspace to begin tracking
             tasks and epics.
           </p>
         </div>
 
-        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" routerLink="/project/add">
-          <app-icon name="plus" [size]="15" class="me-1"></app-icon> Create New Project
+        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold"  [routerLink]="['/project',currentProject()?.id,'epics','new']">
+          <app-icon name="plus" [size]="15" class="me-1"></app-icon> Create New Epic
         </button>
       </div>
     </div>
