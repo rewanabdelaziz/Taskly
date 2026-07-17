@@ -3,7 +3,7 @@
   <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 flex items-center justify-center">
     <!-- popup container -->
     <div class=" bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 z-50 max-h-[90vh] overflow-y-auto">
-      <form  [formGroup]="epicForm" (ngSubmit)="onSubmit($event)">
+      <form  [formGroup]="epicForm">
         <!-- header -->
          <div class="pb-2 sm:pb-8 border-b border-border-secodary  px-6 py-2 sm:p-8 bg-gradient-gray sm:bg-gradient-none">
             <div class="flex justify-between mb-3 sm:mb-4 ">
@@ -20,6 +20,7 @@
                     name="title"
                     placeholder="epic title"
                     [isRequired]="true"
+                    (change)="edit()"
                 ></app-form-field>
         </div>
         <!-- body -->
@@ -34,6 +35,7 @@
               [control]="descriptionControl"
               placeholder="No description provided"
               [withLettersCount]="false"
+              (change)="edit()"
             ></app-form-field>
 
             <div class="grid grid-col-2 sm:grid-cols-3 gap-6 mb-6">
@@ -63,8 +65,10 @@
                              <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>   
                         </div>
 
-                        <select id="assignee" class="w-full h-10 px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest absolute inset-0 z-50 deadline-input cursor-pointer opacity-0" formControlName="assignee_id">
-                            <option [value]="null">unassigne</option>
+                        <select id="assignee"
+                                (change)="edit()"
+                                class="w-full h-10 px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest absolute inset-0 z-50 deadline-input cursor-pointer opacity-0" formControlName="assignee_id">
+                            <option [value]="null" >unassigne</option>
                           @for(member of _sharedMembers.members() ; track member.member_id){
                               <option [value]="member.user_id" class="flex items-center">
                                 {{member.metadata.name}}
@@ -91,6 +95,7 @@
                           name="deadline"
                           [minDate]="minDate"
                           [withLettersCount]="false"
+                          (change)="edit()"
                           customLabelClass="popup-form-label mb-2"
                           inputCustomClass="bg-transparent border border-surface-highest h-10 absolute inset-0 z-50 deadline-input cursor-pointer opacity-0"
                         ></app-form-field>

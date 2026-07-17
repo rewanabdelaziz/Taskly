@@ -138,6 +138,7 @@ export class EpicsComponent {
   handleClose(){
     this.isOpenPopUp.set(false)
     document.body.classList.remove('overflow-hidden');
+    this.getEpics();
   }
 
 }
