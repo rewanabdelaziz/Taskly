@@ -47,6 +47,7 @@
   --color-dark-green:#004E32;
   --color-medium-green:#65DCA4;
   --color-light-green:#82F9BE;
+  --color-popup-label:#041B3C66;
 
   /* shadows */
   --color-btn-shadow: #0000000d;
@@ -115,24 +116,33 @@ body {
 }
 
 @utility popup-label{
-  @apply  text-[clamp(0.625rem,0.7rem+1.25vw,0.75rem)]/[clamp(0.9375rem,0.95rem+1vw,1rem)] font-bold uppercase sm:text-sidebar-text text-primary
+  @apply  text-[clamp(0.625rem,0.4rem+1.25vw,0.75rem)]/[clamp(0.9375rem,0.8rem+1vw,1rem)] font-bold uppercase text-popup-label
 }
 
 @utility popup-form-label{
-  @apply  text-[clamp(0.625rem,0.63rem+1.25vw,0.6875rem)]/[clamp(0.9375rem,0.95rem+1vw,1.03125rem)] font-bold uppercase tracking-[clamp(0rem,0.1rem+1.25vw,0.034375rem)] text-slate-medium sm:text-slate-dark/66
+  @apply  text-[clamp(0.625rem,0.4rem+1.25vw,0.6875rem)]/[clamp(0.9375rem,0.8rem+1vw,1.03125rem)] font-bold uppercase tracking-[clamp(0rem,0.1rem+1.25vw,0.034375rem)] text-slate-medium sm:text-slate-dark/66
 }
 
 @utility popup-title {
-  @apply text-[clamp(1rem,1.1rem+1.25vw,1.25rem)]/[clamp(1.5rem,1.75rem+1vw,2rem)] text-slate-dark capitalize tracking-normal font-semibold sm:font-bold;
+  @apply text-[clamp(1rem,0.8rem+1.25vw,1.25rem)]/[clamp(1.5rem,1.4rem+1vw,2rem)] text-slate-dark capitalize tracking-normal font-semibold sm:font-bold;
 }
 
 @utility popup-description {
-  @apply text-[clamp(0.875rem,0.9rem+1.25vw,1rem)]/[clamp(1.25rem,1.4rem+1vw,1.625rem)] sm:text-slate-dark text-slate-medium  tracking-normal font-normal;
+  @apply text-[clamp(0.875rem,0.7rem+1.25vw,1rem)]/[clamp(1.25rem,1.1rem+1vw,1.625rem)] sm:text-slate-dark text-slate-medium  tracking-normal font-normal;
 }
 
 @utility popup-body {
-  @apply text-[clamp(0.75rem,0.8rem+1.25vw,0.875rem)]/[1.25rem]  text-slate-dark normal-case  tracking-normal font-normal;
+  @apply text-[clamp(0.75rem,0.6rem+1.25vw,0.875rem)]/[1.25rem]  text-slate-dark normal-case  tracking-normal font-normal;
 }
+
+@utility popup-task-title {
+  @apply text-[clamp(0.875rem,0.7rem+1.25vw,1rem)]/[clamp(1.25rem,1.1rem+1vw,1.5rem)] text-slate-dark capitalize tracking-normal font-semibold sm:font-medium;
+}
+@utility popup-task-name{
+  @apply  text-[clamp(0.6875rem,0.5rem+1.25vw,0.75rem)]/[1rem]  capitalize tracking-normal text-text-body sm:text-sidebar-text font-medium sm:font-normal
+}
+
+
 
 
 /* buttons */

@@ -1,8 +1,8 @@
 @if (isOpenPopUpInput() && selectedEpic()) {
     <!-- popup overlay  -->
-  <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 flex items-center justify-center">
+  <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 flex items-center justify-center ">
     <!-- popup container -->
-    <div class=" bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 z-50 max-h-[90vh] overflow-y-auto">
+    <div class=" bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 z-50 max-h-[90vh] md:w-2xl overflow-y-auto">
       <form  [formGroup]="epicForm">
         <!-- header -->
          <div class="pb-2 sm:pb-8 border-b border-border-secodary  px-6 py-2 sm:p-8 bg-gradient-gray sm:bg-gradient-none">
@@ -11,7 +11,10 @@
                     <app-icon name="epic" [size]="20" class="text-primary hidden sm:inline"></app-icon>
                     <span class="popup-label">{{ selectedEpic()?.epic_id }}</span>
                 </div>
-                <app-icon name="exit" [size]="14" class="text-third-heading cursor-pointer" (click)="closePopUp()" (keydown.enter)="closePopUp()" tabindex="0"></app-icon>
+                <button class="cursor-pointer" (click)="closePopUp()">
+                    <app-icon name="exit" [size]="14" class="text-third-heading cursor-pointer" ></app-icon>
+                </button>
+                
             </div>
                 <app-form-field id="title"
                     inputCustomClass="!popup-title p-2 sm:p-3 border sm:border-surface-highest rounded-xl border-slate-light/80 bg-white"
@@ -38,7 +41,7 @@
               (change)="edit()"
             ></app-form-field>
 
-            <div class="grid grid-col-2 sm:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-col-2 md:grid-cols-3 items-end  gap-6 mb-6">
                 <div class="flex flex-col gap-2">
                     <span class="popup-form-label">created by</span>
                     <div class="flex items-center gap-2 h-10">
@@ -50,16 +53,16 @@
                
                 <div class="flex flex-col gap-2">
                     <label for="assignee" class="popup-form-label">ASSIGNEE</label>
-                    <div class="flex relative w-full h-10">
+                    <div class="flex relative w-full h-10 whitespace-nowrap">
                         <div class="bg-transparent border border-surface-highest flex justify-between items-center h-10 p-4 rounded-lg absolute inset-0 z-40 pointer-events-none ">
                            
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center ">
                                 @if(currentAssignee()?.member_id ){
                                     <app-name-avatar-icon [userName]="currentAssignee()?.metadata?.name || '' " [size]="28" color="#4F5F7B" class="me-2"></app-name-avatar-icon>
-                                    <span >{{currentAssignee()?.metadata?.name}}</span>
+                                    <span class="popup-body">{{currentAssignee()?.metadata?.name}}</span>
                                 }@else{
                                     <app-icon name="unassigne" [size]="13"></app-icon>
-                                    <span class="ms-2">unassigne</span>
+                                    <span class="ms-2 popup-body">unassigne</span>
                                 }
                             </div>  
                              <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>   
@@ -68,24 +71,25 @@
                         <select id="assignee"
                                 (change)="edit()"
                                 class="w-full h-10 px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest absolute inset-0 z-50 deadline-input cursor-pointer opacity-0" formControlName="assignee_id">
-                            <option [value]="null" >unassigne</option>
+                            <option [value]="null" class="popup-body">unassigne</option>
                           @for(member of _sharedMembers.members() ; track member.member_id){
-                              <option [value]="member.user_id" class="flex items-center">
+                              <option [value]="member.user_id" class="flex items-center popup-body">
                                 {{member.metadata.name}}
                               </option>
                           }
                         </select>
                     </div>
                     
+                    
                 </div>
                
                 
-
+              
                 <div class="flex flex-col gap-2">
                     <label for="assignee" class="popup-form-label ">deadline</label>
                     <div class="flex relative w-full h-10">
                         <div class="bg-transparent border border-surface-highest flex justify-between items-center h-10 p-4 rounded-lg absolute inset-0 z-40 pointer-events-none ">
-                            <span class="">{{deadlineControl.value ? deadlineControl.value : 'select deadline'}}</span>
+                            <span class="popup-body">{{deadlineControl.value ? deadlineControl.value : 'select deadline'}}</span>
                             <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>
                         </div>
                         
@@ -97,7 +101,7 @@
                           [withLettersCount]="false"
                           (change)="edit()"
                           customLabelClass="popup-form-label mb-2"
-                          inputCustomClass="bg-transparent border border-surface-highest h-10 absolute inset-0 z-50 deadline-input cursor-pointer opacity-0"
+                          inputCustomClass="bg-transparent border border-surface-highest h-10 absolute inset-0 z-50 deadline-input cursor-pointer opacity-0 popup-body"
                         ></app-form-field>
                     </div>
                     
@@ -108,7 +112,7 @@
                 <div class="flex flex-col mb-8 ">
                     <span class="popup-form-label">created at</span>
                     <div class="flex items-center gap-1.5 h-10">
-                       <app-icon name="date" [size]="15" class="me-1"></app-icon>
+                       <app-icon name="date" [size]="15" color="#041B3C66"></app-icon>
                        <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">
                          {{ selectedEpic()?.created_at | date: 'd MMMM yyyy' }}
                        </span>
@@ -119,25 +123,129 @@
 
             <!-- tasks -->
             <div>
-                <div class="flex justify-between mb-6">
-                    <span class="uppercase font-bold text-[clamp(0.6875rem,0.7rem+1.25vw,1.125rem)] text-slate-medium sm:text-slate-dark">Tasks</span>
-                    <span class="capitalize flex items-center gap-1 text-primary" (click)=" navigateToAddTaskPage()">
+                <div class="flex justify-between mb-6 uppercase font-bold text-[clamp(0.6875rem,0.5rem+1.25vw,1.125rem)] text-slate-medium sm:text-slate-dark">
+                    <span>Tasks</span>
+                    <button class="capitalize items-center gap-1 text-primary cursor-pointer hidden sm:flex text-[14px]" (click)=" navigateToAddTaskPage()">
                         <app-icon name="plus" [size]="10" ></app-icon>
                         add task
-                    </span>
+                    </button>
+
+                    <span class="py-0.5 px-2 rounded-xl sm:hidden bg-surface-dark">{{_sharedTasks.tasks()?.length}} tasks</span>
                 </div>
                 <div>
-                    <!-- if empty -->
-                     <div class="p-12 bg-[#F1F3FF] flex  items-center justify-center flex-col border border-dashed border-primary/20 rounded-lg">
-                        <app-icon name="list" [size]="20" class="text-slate-dark p-4 rounded-xl bg-surface-highest flex-initial"></app-icon>
-                        <p class="text-[16px] text-slate-dar my-4">No tasks have been added to this epic yet</p>
-                        <button
-                          class="btn-primary sm:py-3 flex items-center gap-1 font-medium shadow btn-shadow whitespace-nowrap "
-                          (click)=" navigateToAddTaskPage()"
-                        >
-                          <app-icon name="plus" [size]="10" class="me-1"></app-icon> add task
-                        </button>
-                     </div>
+                    @if(_sharedTasks.isLoading()){
+                        <div class="flex flex-col gap-3 animate-pulse">
+                        @for(i of [1, 2, 3]; track i) {
+                            <div class="flex justify-between items-center border border-border-secodary p-4 rounded-xl bg-slate-50/50">
+                              <div class="flex flex-col gap-2 flex-1">
+                                <div class="h-4 bg-slate-200 rounded w-1/3"></div>
+                                <div class="flex items-center gap-2">
+                                  <div class="w-6 h-6 bg-slate-200 rounded-full"></div>
+                                  <div class="h-3 bg-slate-200 rounded w-20"></div>
+                                </div>
+                              </div>
+                              <div class="flex flex-col items-end gap-2 shrink-0">
+                                <div class="h-3 bg-slate-200 rounded w-12"></div>
+                                <div class="h-4 bg-slate-200 rounded w-24"></div>
+                              </div>
+                            </div>
+                        }
+                        </div>
+                    }@else if(_sharedTasks.isError()){
+                        <div class="p-8 bg-red-50/50 flex items-center justify-center flex-col border border-dashed border-red-200 rounded-xl text-center">
+                          <app-icon name="list" [size]="20" class="text-error mb-2"></app-icon>
+                          <p class="text-[14px] font-medium text-error mb-1">Failed to load tasks</p>
+                          <p class="text-xs text-slate-500">Please check your connection or try again later.</p>
+                        </div>
+                    }@else if(_sharedTasks.isEmpty()){
+                        <div class="p-12 bg-[#F1F3FF] flex  items-center justify-center flex-col border border-dashed border-primary/20 rounded-lg">
+                            <app-icon name="list" [size]="20" class="text-slate-dark p-4 rounded-xl bg-surface-highest flex-initial"></app-icon>
+                            <p class="text-[16px] text-slate-dar my-4">No tasks have been added to this epic yet</p>
+                            <button
+                              class="btn-primary sm:py-3 flex items-center gap-1 font-medium shadow btn-shadow whitespace-nowrap "
+                              (click)=" navigateToAddTaskPage()"
+                            >
+                              <app-icon name="plus" [size]="10" class="me-1"></app-icon> add task
+                            </button>
+                        </div>
+                    }@else{
+                        <div class="border border-border-secodary rounded-lg hidden sm:block">
+                            @for(task of _sharedTasks.tasks(); track task.id){
+                                
+                                <div class="flex justify-between items-center border-b border-border-secodary p-4 rounded-xl mb-3">
+
+                                    <div class="flex flex-col justify-between ">
+                                        <span class="popup-task-title mb-1">{{task.title}}</span>
+                                        <div class="flex items-center">
+                                            @if(task.assignee.id){
+                                                <app-name-avatar-icon [userName]="task.assignee.name || '' " [size]="30" class="me-2 rounded-full"></app-name-avatar-icon>
+                                                <span class="popup-task-name">{{task.assignee.name | slice:0:10}}</span>
+                                            }@else{
+                                                <app-icon name="unassigne" [size]="25" color="#041B3C" customClass="bg-icon-card rounded-[4px] p-[4px]"></app-icon>
+                                                <span class="ms-2 popup-task-name ">unassigne</span>
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                    <div class="flex flex-col justify-between">
+                                        <span class="popup-form-label">due date</span>
+                                           <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">
+                                             {{ task.created_at | date: 'd MMMM yyyy' }}
+                                           </span>
+                                    </div>
+
+                                    
+                                </div>
+                               
+                            }
+                        </div>
+
+                        @for(task of _sharedTasks.tasks(); track task.id){
+                                
+                                <div class="border border-border-secodary p-4 sm:hidden mb-3 rounded-xl">
+
+                                    <div class="flex flex-col justify-between">
+                                        <span class="popup-task-title mb-1">{{task.title}}</span>
+                                        <div class="flex justify-between">
+                                            <div class="flex items-center">
+                                            @if(task.assignee.id){
+                                                <app-name-avatar-icon [userName]="task.assignee.name || '' " [size]="30" class="me-2 rounded-full"></app-name-avatar-icon>
+                                                <span class="popup-task-name">{{task.assignee.name | slice:0:10}}</span>
+                                            }@else{
+                                                <app-icon name="unassigne" [size]="25" color="#041B3C" customClass="bg-icon-card rounded-[4px] p-[4px]"></app-icon>
+                                                <span class="ms-2 popup-task-name ">unassigne</span>
+                                            }
+                                        </div>
+                                        <div class="flex items-center">
+                                           <app-icon name="date" [size]="10" color="#434654B2" class="me-0.5"></app-icon>
+                                           <span class="text-text-body font-medium text-sm/[1.25rem] tracking-normal">
+                                             {{ task.created_at | date: 'd MMMM yyyy' }}
+                                           </span>
+                                        </div>
+                                        </div>
+
+                                    </div>
+
+                                    
+
+                                    
+                                </div>
+                               
+                        }
+
+                        <div class="flex justify-center items-center border border-dashed border-border-secodary p-4 sm:hidden">
+                            <button
+                              class="flex items-center gap-1 text-[12px] font-medium text-ghost-link"
+                              (click)=" navigateToAddTaskPage()"
+                            >
+                              <app-icon name="plus-with-circle" [size]="10" class="me-1"></app-icon> 
+                              <span>add new task</span>
+                            </button>
+                        </div>
+                    }
+                    
+                    
                 
                 </div>
             </div>
