@@ -1,0 +1,99 @@
+<div class="flex flex-col items-center h-full ">
+  <!-- header -->
+  <div class="flex-col w-full ">
+    <app-breadcrumb class="hidden md:flex"></app-breadcrumb>
+    <div class="mt-3 mb-10 flex justify-between">
+        <div>
+          <h2 class="title-md">Create New Task</h2>
+          <p class="body-md">Initialize a new work item within the Architectural Workspace ecosystem.</p>
+        </div>
+    </div>
+  </div>
+
+  <!-- form container -->
+    <div class="bg-white shadow shadow-add-project-form-box-shadow rounded-lg  w-full ">
+
+    <!-- form -->
+    <form
+      class="flex-1 flex flex-col justify-center p-8 sm:px-6"
+      [formGroup]="addTaskForm"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <app-form-field id="title"
+            [control]="titleControl"
+            type="text"
+            name="title"
+            [isRequired]="true"
+            label="title"
+            placeholder="Epic title"
+        ></app-form-field>
+
+       
+        
+
+      <div class="mb-8 flex flex-col justify-between sm:gap-8 sm:flex-row">
+        <div class="flex flex-col gap-2 flex-1 mb-8 sm:mb-0">
+          <label for="assignee" class="form-label font-semibold">status  <span class="text-[11px]/[100%] tracking-normal text-error">*</span></label>
+          <select id="assignee" class="input-text py-3 w-full " formControlName="status">
+            @for(stat of status ; track stat){
+                <option [value]="stat">{{stat | statusLabel}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-2 flex-1">
+          <label for="assignee" class="form-label font-semibold">ASSIGNEE</label>
+          <select id="assignee" class="input-text py-3 w-full " formControlName="assignee_id">
+            <option [value]="null">Select a member...</option>
+            @for(member of _sharedMembers.members() ; track member.member_id){
+                <option [value]="member.user_id">{{member.metadata.name}}</option>
+            }
+          </select>
+        </div>
+    
+      </div>
+
+        <div class="flex flex-col gap-2 mb-8">
+          <label for="assignee" class="form-label font-semibold">Epic</label>
+          <select id="assignee" class="input-text py-3 w-full " formControlName="epic_id">
+            <option [value]="null">Select an Epic...</option>
+            @for(epic of _current_project_Epics.epics() ; track epic.epic_id){
+                <option [value]="epic.id">{{epic.epic_id}} {{epic.title | slice:0:100}}</option>
+            }
+          </select>
+        </div>
+
+       <app-form-field id="deadline"
+            [control]="deadlineControl"
+            type="date"
+            name="deadline"
+            label="due date"
+            [minDate]="minDate"
+        ></app-form-field>
+
+       <app-form-field id="description"
+            [control]="descriptionControl"
+            type="textarea"
+            name="description"
+            label="description"
+            placeholder="Provide detailed context for this task..."
+            [maxlength]="500"
+            [withLettersCount]="false"
+        ></app-form-field>
+
+      <div class="flex flex-col-reverse sm:flex-row justify-between items-center mb-12">
+        <button
+          class="btn-ghost sm:text-slate-medium text-primary w-full sm:w-auto shadow-none"
+          (click)="navigateToTasksList()"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary w-full sm:w-auto sm:px-8 rounded-lg sm:rounded-none">
+          create Epic
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+

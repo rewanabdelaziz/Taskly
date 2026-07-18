@@ -4,4 +4,5 @@ export const StorageKeys = {
   EXPIRES_AT: 'expires_at',
   USER_PROFILE: 'user_profile',
   SELECTED_PROJECT: 'selected_Project',
+  SELECTED_EPIC :'selected_Epic'
 } as const;

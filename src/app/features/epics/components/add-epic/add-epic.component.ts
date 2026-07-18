@@ -24,12 +24,9 @@ export class AddEpicComponent implements OnInit{
   private _epicsService = inject(EpicsManagementsService);
   _sharedMembers = inject(SharedMembersService);
   _globalToastMsg = inject(ToastNotificationService);
+  
   addEpicForm!: FormGroup;
   minDate = ''
- 
-
-
-
   currentProject = this._project_management.selectedProject
   addEpicPlayload!: AddEpicPayload;
   isSubmitted = signal(false);
