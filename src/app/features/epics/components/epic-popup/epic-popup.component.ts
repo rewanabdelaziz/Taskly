@@ -29,6 +29,7 @@ export class EpicPopupComponent implements OnInit{
   private fb = inject(FormBuilder);
   private _project_management = inject(ProjectsManagementsService)
   private _epicsService = inject(EpicsManagementsService);
+  private _router = inject(Router)
   _sharedMembers = inject(SharedMembersService);
   _globalToastMsg = inject(ToastNotificationService);
   epicForm!: FormGroup;
@@ -142,10 +143,15 @@ export class EpicPopupComponent implements OnInit{
   })
  }
 
- edit(){
-  if(this.epicForm.valid){
-    this.autoSave$.next()
+  edit(){
+    if(this.epicForm.valid){
+      this.autoSave$.next()
+    }
   }
 
- }
+  navigateToAddTaskPage(){
+    this._router.navigate(['/project',this.currentProject()?.id,'tasks','new'])
+    this._epicsService.setElectedEpic(this.selectedEpic()!)
+    this.closePopUp() // to remove overflow-hidden from body
+  }
 }

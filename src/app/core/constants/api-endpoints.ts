@@ -21,4 +21,8 @@ export const ApiEndpoints = {
   GET_PROJECT_EPICS: `${REST_BASE}/project_epics`,
   ADD_EPIC: `${REST_BASE}/epics`,
 
+  // tasks
+  ADD_TASK : `${REST_BASE}/tasks`,
+  GET_PROJECT_TASK : `${REST_BASE}/project_tasks` 
+
 } as const;

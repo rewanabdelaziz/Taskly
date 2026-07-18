@@ -9,6 +9,7 @@ import { Epic } from '../../models/epics';
 import { DatePipe } from '@angular/common';
 import { NameAvatarIconComponent } from "../../../../shared/components/name-avatar-icon/name-avatar-icon.component";
 import { EpicPopupComponent } from '../epic-popup/epic-popup.component';
+import { CurrentProjectEpicsService } from '../../../../shared/services/current-project-epics.service';
 @Component({
   selector: 'app-epics',
   standalone: true,
@@ -19,18 +20,26 @@ import { EpicPopupComponent } from '../epic-popup/epic-popup.component';
 export class EpicsComponent {
   private _project_management = inject(ProjectsManagementsService)
   private _epics_management = inject(EpicsManagementsService)
+  private _current_project_epics= inject(CurrentProjectEpicsService)
+  
   currentProject = this._project_management.selectedProject
-  epics = signal<Epic[]>([]);
-  isloading = signal<boolean>(false);
-  isEmpty = signal<boolean>(false);
-  isError = signal<boolean>(false);
+  // epics = signal<Epic[]>([]);
+  // isloading = signal<boolean>(false);
+  // isEmpty = signal<boolean>(false);
+  // isError = signal<boolean>(false);
+  epics=this._current_project_epics.epics
+  isLoading=this._current_project_epics.isloading
+  isEmpty=this._current_project_epics.isEmpty
+  isError=this._current_project_epics.isError
+
   selectedEpic = signal<Epic>({} as Epic)
   isOpenPopUp = signal(false)
 
   currentPage = signal(1);
   limit = signal(3);
   offset = computed(() => (this.currentPage() - 1) * this.limit());
-  total = signal(0);
+  // total = signal(0);
+  total = this._current_project_epics.total
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
 
   isMobileNow = signal<boolean>(false);
@@ -50,7 +59,7 @@ export class EpicsComponent {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    if (!this.isMobileNow() || this.isloading() || this.currentPage() >= this.EndPageNum()) return;
+    if (!this.isMobileNow() || this.isLoading() || this.currentPage() >= this.EndPageNum()) return;
 
     const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
     const max = document.documentElement.scrollHeight;
@@ -75,40 +84,41 @@ export class EpicsComponent {
   getEpics(isAppend = false) {
     if (!isAppend) {
       this.isEmpty.set(false);
-      this.isloading.set(true);
+      this.isLoading.set(true);
     }
     this.isError.set(false);
     const projectId=this._project_management.selectedProject()?.id
-    this._epics_management.getAllEpics(this.offset(), this.limit(),projectId!).subscribe({
-      next: (res: HttpResponse<Epic[]>) => {
+    this._current_project_epics.getCurrentProjectEpics(this.offset(),this.limit(),isAppend)
+    // this._epics_management.getAllEpics(projectId!,this.offset(), this.limit()).subscribe({
+    //   next: (res: HttpResponse<Epic[]>) => {
 
-        // console.log(res.body)
+    //     // console.log(res.body)
 
-        this.isloading.set(false);
-        if (isAppend) {
-          const newProj = res.body || [];
-          this.epics.update((prev) => [...prev, ...newProj]);
-        } else {
-          this.epics.set(res.body || []);
-        }
+    //     this.isloading.set(false);
+    //     if (isAppend) {
+    //       const newProj = res.body || [];
+    //       this.epics.update((prev) => [...prev, ...newProj]);
+    //     } else {
+    //       this.epics.set(res.body || []);
+    //     }
 
-        if (this.epics().length == 0) {
-          this.isEmpty.set(true);
-        }
-        // content range from header ex: 0-4/5 [(start index - end index) / total num]
-        const contentRange = res.headers.get('content-range');
-        if (contentRange) {
-          const parts = contentRange.split('/');
-          const total = parseInt(parts[1]);
-          this.total.set(total);
-        }
-      },
-      error: () => {
-        // console.log(err)
-        this.isloading.set(false);
-        this.isError.set(true);
-      },
-    });
+    //     if (this.epics().length == 0) {
+    //       this.isEmpty.set(true);
+    //     }
+    //     // content range from header ex: 0-4/5 [(start index - end index) / total num]
+    //     const contentRange = res.headers.get('content-range');
+    //     if (contentRange) {
+    //       const parts = contentRange.split('/');
+    //       const total = parseInt(parts[1]);
+    //       this.total.set(total);
+    //     }
+    //   },
+    //   error: () => {
+    //     // console.log(err)
+    //     this.isloading.set(false);
+    //     this.isError.set(true);
+    //   },
+    // });
   }
 
   next() {
