@@ -16,6 +16,7 @@ export class IconComponent implements OnInit {
   name = input.required<string>();
   size = input<number>(24);
   color = input<string>('currentColor');
+  customClass = input<string | null>(null)
 
   
   safeSvgContent = signal<SafeHtml>(''); // final inner HtML

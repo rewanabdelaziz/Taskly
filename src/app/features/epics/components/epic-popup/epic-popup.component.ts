@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, OnChanges, OnInit, output, signal, SimpleChanges, untracked } from '@angular/core';
 import { AddEpicPayload, Epic } from '../../models/epics';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { Router, RouterLink } from '@angular/router';
@@ -9,15 +9,16 @@ import { SharedMembersService } from '../../../../shared/services/shared-members
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
-import { DatePipe } from '@angular/common';
+import { DatePipe, SlicePipe } from '@angular/common';
 import { Member } from '../../../members/models/members';
 import { Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FetchTasksHanlingService } from '../../../../shared/services/fetch-tasks-hanling.service';
 
 @Component({
   selector: 'app-epic-popup',
   standalone: true,
-  imports: [IconComponent,FormFieldComponent,NameAvatarIconComponent,DatePipe,RouterLink,ReactiveFormsModule],
+  imports: [IconComponent,FormFieldComponent,NameAvatarIconComponent,DatePipe,RouterLink,ReactiveFormsModule,SlicePipe],
   templateUrl: './epic-popup.component.html',
   styleUrl: './epic-popup.component.css'
 })
@@ -32,6 +33,8 @@ export class EpicPopupComponent implements OnInit{
   private _router = inject(Router)
   _sharedMembers = inject(SharedMembersService);
   _globalToastMsg = inject(ToastNotificationService);
+  _sharedTasks = inject(FetchTasksHanlingService)
+  
   epicForm!: FormGroup;
   minDate = ''
   currentAssignee = signal< Member | undefined> (undefined) 
@@ -46,6 +49,11 @@ export class EpicPopupComponent implements OnInit{
     effect(()=>{
       if(this.isOpenPopUpInput()&&this.epicForm && this.selectedEpic()){
         this.getEpicDetail()
+        untracked(()=>{
+          this._sharedTasks.getTasksForEpic(this.selectedEpic()!.id)
+        })
+        
+        
         // this.EpicForm.patchValue(this.selectedEpic()!)
       }
     })
@@ -82,6 +90,8 @@ export class EpicPopupComponent implements OnInit{
     })
 
     this.autoEdit()
+    
+    
   }
 
   get titleControl() {
