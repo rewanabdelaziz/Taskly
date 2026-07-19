@@ -4,7 +4,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 import { Router } from '@angular/router';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AddEpicPayload, Epic } from '../../models/epics';
+import { AddEpicPayload} from '../../models/epics';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { EpicsManagementsService } from '../../services/epics-managements.service';
 import { SharedMembersService } from '../../../../shared/services/shared-members.service';
@@ -33,7 +33,7 @@ export class AddEpicComponent implements OnInit{
 
   ngOnInit(): void {
     this.addEpicForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      title: ['', [Validators.required, Validators.minLength(3)]],
       description: [null, [Validators.minLength(0), Validators.maxLength(500)]],
       assignee_id: [null],
       deadline: [null],

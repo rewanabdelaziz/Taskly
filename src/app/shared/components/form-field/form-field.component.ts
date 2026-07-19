@@ -26,6 +26,7 @@ export class FormFieldComponent {
   forgetPasswordFlag = input<boolean>(false)
   inputCustomClass = input<string|null>(null)
   labelCustomClass = input<string|null>(null)
+  errorMsgCustomClass = input<string|null>(null)
   withLettersCount = input<boolean>(true)
 
   change = output<string>()

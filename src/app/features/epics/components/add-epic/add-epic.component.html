@@ -1,11 +1,12 @@
 <div class="flex flex-col items-center h-full lg:px-16">
   <!-- header -->
   <div class="flex-col w-full ">
-    <app-breadcrumb class="hidden md:flex"></app-breadcrumb>
+    <app-breadcrumb class="hidden md:flex" CustomClass="font-semibold"></app-breadcrumb>
     <div class="mt-3 mb-10 flex justify-between">
         <div>
           <h2 class="title-md">Create New Epic</h2>
-          <p class="body-md">Define a major project phase or high-level milestone to group related tasks and track architectural progress.</p>
+          <p class="body-md hidden sm:inline">Define a major project phase or high-level milestone to group<br> related tasks and track architectural progress.</p>
+          <p class="body-md text-[14px] sm:hidden">Define a high-level goal and organizational structure for your architectural phase.</p>
         </div>
     </div>
   </div>
@@ -25,8 +26,10 @@
             name="title"
             [isRequired]="true"
             label="title"
-            placeholder="Epic title"
+            placeholder="e.g. Structural Foundation Phase"
             [isHorizontal]="true"
+            errorMsgCustomClass = "font-medium uppercase tracking-[0.55px]"
+            inputCustomClass = "rounded-sm"
         ></app-form-field>
 
         <app-form-field id="description"
@@ -34,19 +37,21 @@
             type="textarea"
             name="description"
             label="description"
-            placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
+            placeholder="Describe the scope and objectives of this epic..."
             [isHorizontal]="true"
             [maxlength]="500"
+             errorMsgCustomClass = "font-medium uppercase tracking-[0.55px]"
+             inputCustomClass = "rounded-sm"
         ></app-form-field>
         
 
-      <div class="mb-8 flex flex-col justify-between sm:gap-8 sm:flex-row">
-        <div class="flex flex-col gap-2 flex-1 mb-8 sm:mb-0">
-          <label for="assignee" class="form-label font-semibold">ASSIGNEE</label>
-          <select id="assignee" class="input-text py-3 w-full " formControlName="assignee_id">
-            <option [value]="null">Select a member...</option>
+      <div class="mb-8 flex flex-col justify-between sm:gap-8 sm:flex-row ">
+        <div class="flex flex-col flex-1 mb-8 sm:mb-0">
+          <label for="assignee" class="form-label mb-2 sm:mb-4">ASSIGNEE</label>
+          <select id="assignee" class="input-text py-3 w-full rounded-sm" formControlName="assignee_id">
+            <option [value]="null" class="text-slate-dark">Select a member...</option>
             @for(member of _sharedMembers.members() ; track member.member_id){
-                <option [value]="member.user_id">{{member.metadata.name}}</option>
+                <option [value]="member.user_id" class="text-slate-dark">{{member.metadata.name}}</option>
             }
           </select>
         </div>
@@ -58,11 +63,14 @@
             name="deadline"
             label="deadline"
             [minDate]="minDate"
+            errorMsgCustomClass = "font-medium uppercase tracking-[0.55px]"
+            inputCustomClass = "text-slate-dark rounded-sm"
+            labelCustomClass = "mb-2 sm:mb-4"
           ></app-form-field>
         </div>
       </div>
 
-      <div class="flex flex-col-reverse sm:flex-row justify-between items-center mb-12">
+      <div class="flex flex-col-reverse sm:flex-row justify-between items-center mb-12 sm:w-1/2 sm:ms-auto sm:justify-end sm:gap-4">
         <button
           class="btn-ghost sm:text-slate-medium text-primary w-full sm:w-auto shadow-none"
           (click)="navigateToEpicsList()"

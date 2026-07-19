@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Breadcrumbs } from '../../models/breadcrumbs';
 import { IconComponent } from '../icon/icon.component';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -14,6 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './breadcrumb.component.css',
 })
 export class BreadcrumbComponent {
+  CustomClass = input<string|null>(null)
   private _activateRouter = inject(ActivatedRoute);
   private _project_management = inject(ProjectsManagementsService);
   private _router = inject(Router);
