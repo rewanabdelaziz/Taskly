@@ -3,7 +3,7 @@
     <a
       class="text-ghost-link hover:text-primary"
       [routerLink]="crumbs.url"
-      routerLinkActive="text-primary"
+      [routerLinkActive]="crumbs.withRouterLinkActive? 'text-primary' : '' "
       [routerLinkActiveOptions]="{ exact: true }"
       >{{ crumbs.label }}</a
     >
