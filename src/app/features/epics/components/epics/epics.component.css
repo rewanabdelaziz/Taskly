@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@reference "tailwindcss";
 
 @utility card-title {
   @apply text-[clamp(1.125rem,1.2rem+1.25vw,1.25rem)]/[clamp(1.357rem,1.2rem+1.25vw,1.75rem)] text-(--color-third-heading) capitalize tracking-normal font-semibold;
