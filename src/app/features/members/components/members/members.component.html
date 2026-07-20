@@ -166,7 +166,7 @@
     <!-- cards container in medium & small screen -->
     <div class="lg:hidden flex flex-col justify-center items-center">
       @for (member of _sharedMembers.members(); track member.member_id) {
-        <div class="flex justify-between items-center rounded-lg p-4 gap-5 md:gap-10 bg-white shadow-form-shadow">
+        <div class="flex justify-between items-center rounded-lg p-4 gap-5 md:gap-10 bg-white shadow-form-shadow w-full mb-2">
           <div class="flex gap-2 items-center">
             <app-name-avatar-icon [userName]="member.metadata.name" [size]="40"></app-name-avatar-icon>
             <div class="flex flex-col">
@@ -186,7 +186,7 @@
               "
               >{{ member.role }}</span
             >
-            @if (member.role === 'owner') {
+            @if (member.role !== 'owner') {
               <app-icon name="more-vertical" class="text-text-body" [size]="10"></app-icon>
             }
           </div>
