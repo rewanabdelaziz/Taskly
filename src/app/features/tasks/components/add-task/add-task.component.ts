@@ -41,11 +41,11 @@ export class AddTaskComponent implements OnDestroy{
   ngOnInit(): void {
     this.addTaskForm = this.fb.group({
      title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-     description: [null, [Validators.minLength(0), Validators.maxLength(500)]],
+     description: [null, Validators.maxLength(500)],
      assignee_id: [null],
      due_date: [null],
      epic_id: [this.selectedEpic()? this.selectedEpic()?.id : null],
-     status: [Status.TO_DO],
+     status: [Status.TO_DO,Validators.required],
     });
 
     // calculate min date 

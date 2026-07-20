@@ -25,7 +25,7 @@
             name="title"
             [isRequired]="true"
             label="title"
-            placeholder="Epic title"
+            placeholder="Task title"
         ></app-form-field>
 
        
@@ -83,6 +83,7 @@
 
       <div class="flex flex-col-reverse sm:flex-row justify-between items-center mb-12">
         <button
+          type="button"
           class="btn-ghost sm:text-slate-medium text-primary w-full sm:w-auto shadow-none"
           (click)="navigateToTasksList()"
         >
