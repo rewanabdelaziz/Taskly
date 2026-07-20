@@ -22,9 +22,11 @@ export class FetchTasksHanlingService {
         this.isLoading.set(false)
         if(res.length === 0){
           this.isEmpty.set(true)
+        }else{
+          this.isEmpty.set(false)
         }
         this.tasks.set(res)
-        this.isEmpty.set(false)
+        
         // console.log(this.tasks())
         // console.log(epicId)
         
@@ -37,4 +39,13 @@ export class FetchTasksHanlingService {
       }
     })
   }
+
+   resetState() {
+    this.tasks.set([]);
+    this.isEmpty.set(false);
+    this.isError.set(false);
+    this.isLoading.set(false);
+  }
+
+  
 }

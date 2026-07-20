@@ -50,6 +50,7 @@ export class EpicPopupComponent implements OnInit{
       if(this.isOpenPopUpInput()&&this.epicForm && this.selectedEpic()){
         this.getEpicDetail()
         untracked(()=>{
+          this._sharedTasks.resetState()
           this._sharedTasks.getTasksForEpic(this.selectedEpic()!.id)
         })
         
@@ -132,6 +133,8 @@ export class EpicPopupComponent implements OnInit{
  
  closePopUp(){
   this.close.emit()
+  this._sharedTasks.resetState()
+  console.log(this._sharedTasks.isEmpty())
  }
 
  autoEdit(){
