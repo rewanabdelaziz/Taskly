@@ -8,10 +8,10 @@ import { ToastNotificationService } from '../../../../shared/services/toast-noti
 import { FormFieldComponent } from '../../../../shared/components/form-field/form-field.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AddTaskPayload, Status } from '../../models/task';
-import { StatusLabelPipe } from '../../pipes/status-label.pipe';
 import { CurrentProjectEpicsService } from '../../../../shared/services/current-project-epics.service';
 import { TasksManagementService } from '../../services/tasks-management.service';
 import { SlicePipe } from '@angular/common';
+import { StatusLabelPipe } from '../../pipes/status-label.pipe';
 
 @Component({
   selector: 'app-add-task',
