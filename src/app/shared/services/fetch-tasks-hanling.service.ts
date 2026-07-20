@@ -15,16 +15,18 @@ export class FetchTasksHanlingService {
   isEmpty = signal(false)
   isError = signal(false)
 
-  getTasksForEpic(epicid:string){
+  getTasksForEpic(epicId:string){
     this.isLoading.set(true)
-    this._tasks_management.getProjectTasksbyEpicId(epicid).subscribe({
+    this._tasks_management.getProjectTasksbyEpicId(epicId).subscribe({
       next: (res:Task[])=>{
         this.isLoading.set(false)
         if(res.length === 0){
           this.isEmpty.set(true)
         }
         this.tasks.set(res)
+        this.isEmpty.set(false)
         // console.log(this.tasks())
+        // console.log(epicId)
         
       },
       error:(err)=>{
