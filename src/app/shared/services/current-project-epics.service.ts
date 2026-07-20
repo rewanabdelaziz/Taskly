@@ -18,6 +18,7 @@ export class CurrentProjectEpicsService {
   total = signal(0);
 
   getCurrentProjectEpics(offset? : number , limit? : number,isAppend?:boolean){
+    // console.log(...arguments)
      const projectId=this._project_management.selectedProject()?.id
         this._epics_management.getAllEpics(projectId!,offset,limit,).subscribe({
           next: (res: HttpResponse<Epic[]>) => {
@@ -29,6 +30,7 @@ export class CurrentProjectEpicsService {
             } else {
               this.epics.set(res.body || []);
             }
+            // console.log(res.body)
     
             if (this.epics().length == 0) {
               this.isEmpty.set(true);
@@ -47,5 +49,13 @@ export class CurrentProjectEpicsService {
             this.isError.set(true);
           },
         });
+  }
+
+  resetState() {
+    this.epics.set([]);
+    this.total.set(0);
+    this.isEmpty.set(false);
+    this.isError.set(false);
+    this.isloading.set(false);
   }
 }

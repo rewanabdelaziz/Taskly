@@ -34,10 +34,10 @@ export class EpicsManagementsService {
 
   getAllEpics(projectId:string,offset?: number, limit?: number): Observable<HttpResponse<Epic[]>> {
 
-    const params = new HttpParams().set('project_id', `eq.${projectId}`);
+    let params = new HttpParams().set('project_id', `eq.${projectId}`);
     
-    if(offset && limit){
-      params.set('limit', limit.toString())
+    if(offset !== undefined && limit !== undefined){
+      params = params.set('limit', limit.toString())
             .set('offset', offset.toString())          
     }
     

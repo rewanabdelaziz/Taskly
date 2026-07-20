@@ -3,8 +3,6 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { RouterLink } from '@angular/router';
-import { EpicsManagementsService } from '../../services/epics-managements.service';
-import { HttpResponse } from '@angular/common/http';
 import { Epic } from '../../models/epics';
 import { DatePipe } from '@angular/common';
 import { NameAvatarIconComponent } from "../../../../shared/components/name-avatar-icon/name-avatar-icon.component";
@@ -19,7 +17,6 @@ import { CurrentProjectEpicsService } from '../../../../shared/services/current-
 })
 export class EpicsComponent {
   private _project_management = inject(ProjectsManagementsService)
-  private _epics_management = inject(EpicsManagementsService)
   private _current_project_epics= inject(CurrentProjectEpicsService)
   
   currentProject = this._project_management.selectedProject
@@ -48,8 +45,10 @@ export class EpicsComponent {
   });
 
   ngOnInit(): void {
+    this._current_project_epics.resetState()
     this.getEpics();
     this.checkScreenSize();
+    
   }
 
   @HostListener('window:scroll', [])
@@ -84,6 +83,7 @@ export class EpicsComponent {
     this.isError.set(false);
     // const projectId=this._project_management.selectedProject()?.id
     this._current_project_epics.getCurrentProjectEpics(this.offset(),this.limit(),isAppend)
+
   }
 
   next() {
