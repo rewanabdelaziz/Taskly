@@ -5,44 +5,48 @@ import { DatePipe } from '@angular/common';
 import { Project } from '../../models/projects';
 import { HttpResponse } from '@angular/common/http';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { PaginationService } from '../../../../shared/services/pagination.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-projects-list',
   standalone: true,
   imports: [RouterLink, DatePipe, RouterLink, IconComponent,PaginationComponent],
+  providers:[PaginationService],
   templateUrl: './projects-list.component.html',
   styleUrl: './projects-list.component.css',
 })
 export class ProjectsListComponent implements OnInit {
   private project_managements = inject(ProjectsManagementsService);
   private _router = inject(Router);
+   _pagination = inject(PaginationService);
   projects = signal<Project[]>([]);
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
 
-  currentPage = signal(1);
-  limit = signal(5);
-  offset = computed(() => (this.currentPage() - 1) * this.limit());
+
+
   total = signal(0);
-  EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
+  currentLength = computed(() => 
+    this._pagination.currentLength(this.projects().length)
+  )
+  endPageNum = computed(() => 
+    this._pagination.getEndPageNum(this.total())
+  );
 
-  currentLength = computed(() => {
-    if (this.currentPage() === 1) {
-      return this.projects().length;
-    }
-    return this.limit() * (this.currentPage() - 1) + this.projects().length;
-  });
-
-  isMobileNow = signal<boolean>(false);
 
   onPageChange(newPage: number) {
-    this.currentPage.set(newPage);
+    this._pagination.goToPage(newPage,this.total());
     this.getProjects();
   }
 
+  isMobileNow = signal<boolean>(false);
+
+
+
   ngOnInit(): void {
+    this._pagination.init(5);
     this.getProjects();
     this.checkScreenSize();
     this.project_managements.clearSelectedProject();
@@ -50,13 +54,13 @@ export class ProjectsListComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    if (!this.isMobileNow() || this.isloading() || this.currentPage() >= this.EndPageNum()) return;
+    if (!this.isMobileNow() || this.isloading() || this._pagination.currentPage() >= this.endPageNum()) return;
 
     const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
     const max = document.documentElement.scrollHeight;
 
     if (pos >= max - 150) {
-      this.currentPage.update((prev) => prev + 1);
+      this._pagination.currentPage.update((prev) => prev + 1);
       this.getProjects(true);
     }
   }
@@ -67,7 +71,7 @@ export class ProjectsListComponent implements OnInit {
     this.isMobileNow.set(window.innerWidth < 640); // sm:640px
 
     if (wasMobile && !this.isMobileNow()) {
-      this.currentPage.set(1);
+      this._pagination.currentPage.set(1);
       this.getProjects(false);
     }
   }
@@ -78,7 +82,7 @@ export class ProjectsListComponent implements OnInit {
       this.isloading.set(true);
     }
     this.isError.set(false);
-    this.project_managements.getAllProjects(this.offset(), this.limit()).subscribe({
+    this.project_managements.getAllProjects(this._pagination.offset(), this._pagination.limit()).subscribe({
       next: (res: HttpResponse<Project[]>) => {
         // console.log(res.body)
 
@@ -112,7 +116,7 @@ export class ProjectsListComponent implements OnInit {
 
 
   retry() {
-    this.getProjects(this.isMobileNow() && this.currentPage() > 1);
+    this.getProjects(this.isMobileNow() && this._pagination.currentPage() > 1);
   }
 
   goToEpics(id: string, project: Project) {

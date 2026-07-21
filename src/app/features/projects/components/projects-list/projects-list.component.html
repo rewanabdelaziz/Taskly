@@ -130,15 +130,16 @@
     </div>
 
     <!-- paginaion -->
-     <app-pagination
-      [currentPage]="currentPage()"
+      <app-pagination
+      [currentPage]="_pagination.currentPage()"
       [total]="total()"
-      [limit]="limit()"
+      [limit]="_pagination.limit()"
       [currentLength]="currentLength()"
       [isLoading]="isloading()"
-      [itemsLabel]="'active projects'"
+      itemsLabel="active projects"
       (pageChange)="onPageChange($event)"
      />
+
 
   
   }
