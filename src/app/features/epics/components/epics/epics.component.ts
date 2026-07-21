@@ -92,19 +92,6 @@ export class EpicsComponent {
 
   }
 
-  // next() {
-  //   if (this.currentPage() < this.EndPageNum()) {
-  //     this.currentPage.update((prev) => prev + 1);
-  //     this.getEpics();
-  //   }
-  // }
-
-  // prev() {
-  //   if (this.currentPage() > 1) {
-  //     this.currentPage.update((prev) => prev - 1);
-  //     this.getEpics();
-  //   }
-  // }
 
   retry() {
     this.getEpics(this.isMobileNow() && this.currentPage() > 1);

@@ -21,7 +21,6 @@ export class PaginationComponent {
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
 
   onPageChange(page: number) {
-    // if (page < 1 || page > this.endPageNum() || this.isLoading()) return;
     this.pageChange.emit(page);
   }
 
