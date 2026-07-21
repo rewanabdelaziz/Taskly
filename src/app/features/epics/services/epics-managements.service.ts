@@ -61,4 +61,22 @@ export class EpicsManagementsService {
     const params = new HttpParams().set('id', `eq.${epicId}`);
     return this._http.patch(`${this.baseUrl}${ApiEndpoints.ADD_EPIC}`, epicPayload, { params: params });
   }
+
+  searchEpicsBytitle(projectId:string,searchTerm:string):Observable<HttpResponse<Epic[]>>{
+    let params = new HttpParams().set('project_id', `eq.${projectId}`);
+
+    if (searchTerm && searchTerm.trim() !== '') {
+      params = params.set('title', `ilike.%${searchTerm}%`);
+    }
+
+    const headers = new HttpHeaders().set('Prefer', 'count=exact');
+
+    return this._http.get<Epic[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_EPICS}`,
+       {
+        headers,
+        params,
+        observe: 'response', //to return all response (header + body)
+      });
+    
+  }
 }

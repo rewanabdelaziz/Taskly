@@ -8,10 +8,12 @@ import { DatePipe } from '@angular/common';
 import { NameAvatarIconComponent } from "../../../../shared/components/name-avatar-icon/name-avatar-icon.component";
 import { EpicPopupComponent } from '../epic-popup/epic-popup.component';
 import { CurrentProjectEpicsService } from '../../../../shared/services/current-project-epics.service';
+import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 @Component({
   selector: 'app-epics',
   standalone: true,
-  imports: [BreadcrumbComponent, IconComponent, RouterLink, DatePipe, NameAvatarIconComponent,EpicPopupComponent],
+  imports: [BreadcrumbComponent, IconComponent, RouterLink, DatePipe, NameAvatarIconComponent,EpicPopupComponent,SearchInputComponent,PaginationComponent],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
 })
@@ -27,15 +29,12 @@ export class EpicsComponent {
 
   selectedEpic = signal<Epic>({} as Epic)
   isOpenPopUp = signal(false)
-
+ 
   currentPage = signal(1);
   limit = signal(3);
   offset = computed(() => (this.currentPage() - 1) * this.limit());
   total = this._current_project_epics.total
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
-
-  isMobileNow = signal<boolean>(false);
-
 
   currentLength = computed(() => {
     if (this.currentPage() === 1) {
@@ -43,6 +42,13 @@ export class EpicsComponent {
     }
     return this.limit() * (this.currentPage() - 1) + this.epics().length;
   });
+
+  onPageChange(newPage: number) {
+    this.currentPage.set(newPage);
+    this.getEpics();
+  }
+
+  isMobileNow = signal<boolean>(false);
 
   ngOnInit(): void {
     this._current_project_epics.resetState()
@@ -86,19 +92,19 @@ export class EpicsComponent {
 
   }
 
-  next() {
-    if (this.currentPage() < this.EndPageNum()) {
-      this.currentPage.update((prev) => prev + 1);
-      this.getEpics();
-    }
-  }
+  // next() {
+  //   if (this.currentPage() < this.EndPageNum()) {
+  //     this.currentPage.update((prev) => prev + 1);
+  //     this.getEpics();
+  //   }
+  // }
 
-  prev() {
-    if (this.currentPage() > 1) {
-      this.currentPage.update((prev) => prev - 1);
-      this.getEpics();
-    }
-  }
+  // prev() {
+  //   if (this.currentPage() > 1) {
+  //     this.currentPage.update((prev) => prev - 1);
+  //     this.getEpics();
+  //   }
+  // }
 
   retry() {
     this.getEpics(this.isMobileNow() && this.currentPage() > 1);
@@ -114,6 +120,10 @@ export class EpicsComponent {
     this.isOpenPopUp.set(false)
     document.body.classList.remove('overflow-hidden');
     this.getEpics();
+  }
+
+  onSearchEpics(val : string){
+    console.log(val)
   }
 
 }
