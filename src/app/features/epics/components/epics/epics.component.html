@@ -133,11 +133,6 @@
     <div class="md:mt-3 md:flex md:justify-between ">
       <h2 class="title-md hidden md:block ">Project Epics</h2>
       <div class="md:flex md:justify-between h-auto gap-8">
-        <!-- <div class="relative">
-          <app-icon name="search" [size]="13" class="absolute left-4 top-1/2 -translate-y-1/2 text-placeholder"></app-icon> 
-          
-          <input type="text" name="serch" id="search" class="input-text pe-4 px-3 ps-10 md:me-8 w-full md:W-auto rounded-xl md:rounded-none" placeholder="Search epics ...">
-        </div> -->
         <app-search-input placeholder="Search epics..." (searchValue)="onSearchEpics($event)"></app-search-input>
         <button
           class="btn-primary md:py-3 hidden md:flex items-center gap-1 font-medium shadow btn-shadow whitespace-nowrap rounded-sm "
@@ -230,9 +225,9 @@
 
     <!-- paginaion -->
      <app-pagination
-      [currentPage]="currentPage()"
-      [total]="total()"
-      [limit]="limit()"
+      [currentPage]="_pagination.currentPage()"
+      [total]="_current_project_epics.total()"
+      [limit]="_pagination.limit()"
       [currentLength]="currentLength()"
       [isLoading]="isLoading()"
       itemsLabel="active epics"
