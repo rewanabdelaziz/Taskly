@@ -1,0 +1,11 @@
+<div class="relative flex items-center">
+    <app-icon name="search" [size]="13" class="absolute left-4 z-10  text-placeholder"></app-icon> 
+    
+    <input type="text"
+           name="serch"
+           id="search"
+           class="input-text pe-4 px-3 ps-10 md:me-8 w-full md:W-auto rounded-xl md:rounded-none"
+           [class]="customClass()"
+           [placeholder]="placeholder()"
+           (input)="onSearch($event)">
+</div>
