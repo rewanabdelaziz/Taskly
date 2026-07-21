@@ -11,6 +11,7 @@ export class CurrentProjectEpicsService {
 
   private _project_management = inject(ProjectsManagementsService)
   private _epics_management = inject(EpicsManagementsService)
+
   epics = signal<Epic[]>([]);
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
@@ -29,7 +30,9 @@ export class CurrentProjectEpicsService {
               this.epics.update((prev) => [...prev, ...newProj]);
             } else {
               this.epics.set(res.body || []);
+              
             }
+            
             // console.log(res.body)
     
             if (this.epics().length == 0) {
