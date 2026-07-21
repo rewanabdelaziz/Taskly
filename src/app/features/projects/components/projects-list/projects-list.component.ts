@@ -5,11 +5,12 @@ import { DatePipe } from '@angular/common';
 import { Project } from '../../models/projects';
 import { HttpResponse } from '@angular/common/http';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [RouterLink, DatePipe, RouterLink, IconComponent],
+  imports: [RouterLink, DatePipe, RouterLink, IconComponent,PaginationComponent],
   templateUrl: './projects-list.component.html',
   styleUrl: './projects-list.component.css',
 })
@@ -20,13 +21,12 @@ export class ProjectsListComponent implements OnInit {
   isloading = signal<boolean>(false);
   isEmpty = signal<boolean>(false);
   isError = signal<boolean>(false);
+
   currentPage = signal(1);
   limit = signal(5);
   offset = computed(() => (this.currentPage() - 1) * this.limit());
   total = signal(0);
   EndPageNum = computed(() => Math.ceil(this.total() / this.limit()) || 1);
-
-  isMobileNow = signal<boolean>(false);
 
   currentLength = computed(() => {
     if (this.currentPage() === 1) {
@@ -34,6 +34,13 @@ export class ProjectsListComponent implements OnInit {
     }
     return this.limit() * (this.currentPage() - 1) + this.projects().length;
   });
+
+  isMobileNow = signal<boolean>(false);
+
+  onPageChange(newPage: number) {
+    this.currentPage.set(newPage);
+    this.getProjects();
+  }
 
   ngOnInit(): void {
     this.getProjects();
@@ -102,19 +109,7 @@ export class ProjectsListComponent implements OnInit {
     });
   }
 
-  next() {
-    if (this.currentPage() < this.EndPageNum()) {
-      this.currentPage.update((prev) => prev + 1);
-      this.getProjects();
-    }
-  }
 
-  prev() {
-    if (this.currentPage() > 1) {
-      this.currentPage.update((prev) => prev - 1);
-      this.getProjects();
-    }
-  }
 
   retry() {
     this.getProjects(this.isMobileNow() && this.currentPage() > 1);

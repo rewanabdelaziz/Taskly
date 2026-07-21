@@ -133,11 +133,12 @@
     <div class="md:mt-3 md:flex md:justify-between ">
       <h2 class="title-md hidden md:block ">Project Epics</h2>
       <div class="md:flex md:justify-between h-auto gap-8">
-        <div class="relative">
+        <!-- <div class="relative">
           <app-icon name="search" [size]="13" class="absolute left-4 top-1/2 -translate-y-1/2 text-placeholder"></app-icon> 
           
           <input type="text" name="serch" id="search" class="input-text pe-4 px-3 ps-10 md:me-8 w-full md:W-auto rounded-xl md:rounded-none" placeholder="Search epics ...">
-        </div>
+        </div> -->
+        <app-search-input placeholder="Search epics..." (searchValue)="onSearchEpics($event)"></app-search-input>
         <button
           class="btn-primary md:py-3 hidden md:flex items-center gap-1 font-medium shadow btn-shadow whitespace-nowrap rounded-sm "
           [routerLink]="['/project',currentProject()?.id,'epics','new']"
@@ -228,53 +229,16 @@
     </div>
 
     <!-- paginaion -->
+     <app-pagination
+      [currentPage]="currentPage()"
+      [total]="total()"
+      [limit]="limit()"
+      [currentLength]="currentLength()"
+      [isLoading]="isLoading()"
+      itemsLabel="active epics"
+      (pageChange)="onPageChange($event)"
+     />
 
-    <div
-      class="hidden sm:flex flex-col sm:flex-row justify-between items-center gap-4 w-full mt-10 pt-6 border-t border-slate-100"
-    >
-      <div class="text-sm text-text-body font-medium">
-        Showing <span class="text-slate-dark font-semibold">{{ currentLength() }}</span> of
-        <span class="text-slate-dark font-semibold">{{ total() }}</span> active projects
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button
-          type="button"
-          (click)="prev()"
-          [disabled]="currentPage() === 1 || isLoading()"
-          class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <app-icon name="arrow-back"></app-icon>
-        </button>
-
-        <button
-          type="button"
-          class="flex items-center justify-center w-9 h-9 bg-primary text-white font-bold rounded shadow-sm cursor-pointer"
-        >
-          {{ currentPage() }}
-        </button>
-
-        @if (EndPageNum() > 1 && currentPage() !== EndPageNum()) {
-          <div class="text-slate-400 text-sm px-1">...</div>
-          <button
-            type="button"
-            (click)="currentPage.set(EndPageNum()); getEpics()"
-            class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-700 font-semibold rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer"
-          >
-            {{ EndPageNum() }}
-          </button>
-        }
-
-        <button
-          type="button"
-          (click)="next()"
-          [disabled]="currentPage() === EndPageNum() || isLoading()"
-          class="flex items-center justify-center w-9 h-9 border border-slate-200 text-slate-500 rounded bg-white hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <app-icon name="next-arrow" class="text-[18px]"></app-icon>
-        </button>
-      </div>
-    </div>
   }
 </div>
 <app-epic-popup [selectedEpic]="selectedEpic()" [isOpenPopUpInput]="isOpenPopUp()" (close)="handleClose()"></app-epic-popup>
