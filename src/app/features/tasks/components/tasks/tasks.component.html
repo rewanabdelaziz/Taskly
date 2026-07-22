@@ -1,9 +1,47 @@
-<div class="flex flex-col items-center h-full">
+<div class="flex flex-col items-center h-full w-full">
   <!-- header -->
-  <div class="hidden sm:flex sm:flex-col w-full">
+  <div class="hidden sm:flex sm:flex-col w-full mb-6">
     <app-breadcrumb></app-breadcrumb>
-    <div class="mt-3 mb-10 flex justify-between">
-      <h2 class="title-md">Project Tasks</h2>
+
+    <div class="md:mt-3 md:flex md:justify-between md:items-center gap-4">
+      <!-- title -->
+      <div class="hidden md:block">
+        <h2 class="title-md mb-1">Active Workboard</h2>
+        <p class="body-sm text-[#64748B]">Curating Project Alpha's production pipeline and milestones</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <app-search-input placeholder="Search Tasks..." 
+                          (searchValue)="onSearchEpics($event)"
+                          customClass="!rounded-sm md:!me-0"></app-search-input>
+
+        <div class="relative w-40 h-10 shrink-0">
+
+          <div class="bg-transparent border border-surface-highest flex justify-between items-center h-full px-3 py-2 rounded-lg absolute inset-0 z-10 pointer-events-none">
+            <div class="flex items-center gap-2 w-full">
+              @if(viewControl.value === 'list'){
+                <app-icon name="list" class="text-primary" [size]="13"></app-icon>
+              }@else{
+                <app-icon name="board" [size]="13"></app-icon>
+              }
+              <span class="popup-body capitalize">{{ viewControl.value }} view</span>
+            </div>  
+            <app-icon name="arrow-down" [size]="10"></app-icon>   
+          </div>
+
+          <select 
+            [formControl]="viewControl" 
+            id="view"
+            class="w-full h-full rounded-lg bg-transparent absolute inset-0 z-20 cursor-pointer opacity-0 appearance-none">
+            <option value="board">Board View</option>
+            <option value="list">List View</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-surface-highest shrink-0 cursor-pointer">
+          <app-icon name="filter" color="#041B3C" [size]="13"></app-icon>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
