@@ -1,6 +1,6 @@
 
 <div class="flex flex-col h-full">
-  @if (isLoading()) {
+  @if (isLoading() && searchTerm()=='') {
      <!-- skeleton loader -->
     <div class="flex flex-col w-full pt-6">
       <div class="w-full mb-6">
@@ -54,7 +54,7 @@
         }
       </div>
     </div>
-  } @else if (isError()) {
+  } @else if (isError() && searchTerm()=='') {
     <div class="flex justify-center h-full">
       <div class="max-w-xs gap-4 flex flex-col justify-center items-center h-full">
         <a
@@ -75,7 +75,7 @@
         </button>
       </div>
     </div>
-  } @else if (isEmpty()) {
+  } @else if (isEmpty() && searchTerm()=='') {
     <div class="flex justify-center h-full">
       <div class="gap-4 flex flex-col justify-center items-center h-full flex-1">
         <div class="bg-white max-w-56 max-h-56 rounded-4xl shadow-form-shadow p-10">
@@ -149,82 +149,117 @@
     >
       <app-icon name="plus" [size]="14"></app-icon>
     </button>
-
-    <!-- cards container -->
-    <div class="grid grid-cols-1 justify-items-stretch  lg:grid-cols-2 gap-6 w-full mt-6 md:mt-10">
-      @for (epic of epics(); track epic.id) {
-        <div 
-        (click)="setSelectedEpic(epic)"
-          class="bg-white flex flex-col justify-between p-5 md:p-6 md:min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer md:border-l-4 md:border-dark-green"
-        >
-          <div class="flex justify-between mb-4">
-            <span class="bg-badge-bg md:bg-light-green text-primary md:text-success-msg-text py-1 px-2.5 text-[10px] font-bold rounded-xs">{{epic.epic_id}}</span>
-            <app-icon [size]="16" name="more-vertical" color="#041B3C33" class="hidden md:inline"></app-icon>
-            <app-icon [size]="16" name="more-hor" color="#737685" class="md:hidden"></app-icon>
-          </div>
-
-         <h3 class="card-title mb-3">{{ epic.title }}</h3>
-
-         <div class="flex justify-between">
-            @if(epic.assignee.name){
-             <div class="flex items-center">
-                <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40" class="hidden sm:inline me-3"></app-name-avatar-icon>
-                <div class="md:flex-col md:flex hidden font-medium">
-                  <span class="text-[12px] text-text-body ">Assignee</span>
-                  <span class="body-sm text-slate-dark ">{{epic.assignee.name}}</span>
-                </div>
-    
-                <app-name-avatar-icon [userName]="epic.assignee.name" customClass="rounded-lg" customBgColor="#003D9B" customTextColor="#FFFFFF" [size]="28" class="sm:hidden me-3"></app-name-avatar-icon>
-                <div class="flex flex-col md:hidden">
-                  <span class="text-[12px] font-medium text-slate-dark">{{epic.assignee.name}}</span>
-                  <span class="text-[10px] font-normal  text-placeholder ">Assignee</span>
-                </div>
-              
-             </div>
-            }
-
-            <div class="flex-col flex items-end md:hidden">
-                  <span class="text-[10px] text-placeholder uppercase font-bold ">Deadline</span>
-                  <span class="text-[12px] text-slate-dark "> {{ epic.created_at | date: 'MMMM d, yyyy' }}</span>
-            </div>
-         </div>
-        
-
-          <div class="md:justify-between items-center gap-2 pt-5 border-t border-border-gray hidden md:flex text-[11px] tracking-normal">
-
-            <div class="  text-placeholder  flex items-center">
-              <app-icon name="created-by" [size]="12" class="me-1"></app-icon>
-              <span class=" font-normal">Created by: <span class="text-slate-dark font-semibold capitalize">{{epic.created_by.name}}</span></span>
-            </div>
-           
-
-           <div class="flex items-center text-placeholder">
-              <app-icon name="date" [size]="12" class="me-1"></app-icon>
-              <span class="font-normal ">
-                {{ epic.created_at | date: 'd MMMM yyyy' }}
-              </span>
-           </div>
-          </div>
-        </div>
-      }
-      
-      <!-- add epic card -->
-      <div
-        class="bg-white border-3 border-border-secodary border-dashed md:flex flex-col justify-center items-center gap-4 p-6 min-h-56 w-full rounded-lg shadow-form-shadow text-sm/[1.25rem] font-bold hidden "
-      >
-        <a
-          class="bg-surface-low flex items-center justify-center text-slate-dark rounded-xl w-12 h-12"
-          [routerLink]="['/project',currentProject()?.id,'epics','new']"
-        >
-          <app-icon name="plus-with-circle"></app-icon>
-        </a>
-
-        <p class="text-text-body uppercase tracking-[0.0875rem]">add epic</p>
+     @if (isLoading() && searchTerm()!=''){
+      <div class="flex flex-col items-center justify-center py-20 gap-4 flex-1">
+        <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+        <p class="text-text-body text-base font-medium">Searching epics...</p>
       </div>
-    </div>
+
+     }  @else if (isEmpty() && searchTerm()!='') {
+      <div class="flex justify-center items-center h-full my-auto py-16">
+        <div class="flex flex-col items-center max-w-sm text-center">
+          <div class="bg-surface-low rounded-full p-6 mb-4">
+            <app-icon name="empty-1" [size]="32" color="#737685"></app-icon>
+          </div>
+          <h3 class="font-semibold text-2xl text-slate-dark mb-2">No epics found matching your search</h3>
+          <p class="text-text-body text-sm">
+            We couldn't find anything matching "<span class="font-bold text-slate-dark">{{ searchTerm() }}</span>". Try searching with different keywords.
+          </p>
+        </div>
+      </div>
+     }  @else if (isError() && searchTerm()!='') {
+      <div class="flex justify-center h-full my-auto py-12">
+        <div class="max-w-md gap-4 flex flex-col justify-center items-center h-full text-center">
+          <div class="bg-error-msg-bg flex items-center justify-center rounded-xl w-16 h-16 mb-2">
+            <app-icon name="cloud-off" class="text-error"></app-icon>
+          </div>
+          <h2 class="font-semibold text-2xl text-slate-dark">Failed to search epics</h2>
+          <p class="text-text-body text-sm">An error occurred while fetching search results. Please try again.</p>
+          <button class="btn-primary btn-shadow flex items-center gap-1 py-2.5 px-6 font-bold" (click)="retry()">
+            Try Again
+          </button>
+        </div>
+      </div>
+     }@else{
+      <!-- cards container -->
+        <div class="grid grid-cols-1 justify-items-stretch  lg:grid-cols-2 gap-6 w-full mt-6 md:mt-10">
+          @for (epic of epics(); track epic.id) {
+            <div 
+            (click)="setSelectedEpic(epic)"
+              class="bg-white flex flex-col justify-between p-5 md:p-6 md:min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer md:border-l-4 md:border-dark-green"
+            >
+              <div class="flex justify-between mb-4">
+                <span class="bg-badge-bg md:bg-light-green text-primary md:text-success-msg-text py-1 px-2.5 text-[10px] font-bold rounded-xs">{{epic.epic_id}}</span>
+                <app-icon [size]="16" name="more-vertical" color="#041B3C33" class="hidden md:inline"></app-icon>
+                <app-icon [size]="16" name="more-hor" color="#737685" class="md:hidden"></app-icon>
+              </div>
+    
+             <h3 class="card-title mb-3">{{ epic.title }}</h3>
+    
+             <div class="flex justify-between">
+                @if(epic.assignee.name){
+                 <div class="flex items-center">
+                    <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40" class="hidden sm:inline me-3"></app-name-avatar-icon>
+                    <div class="md:flex-col md:flex hidden font-medium">
+                      <span class="text-[12px] text-text-body ">Assignee</span>
+                      <span class="body-sm text-slate-dark ">{{epic.assignee.name}}</span>
+                    </div>
+        
+                    <app-name-avatar-icon [userName]="epic.assignee.name" customClass="rounded-lg" customBgColor="#003D9B" customTextColor="#FFFFFF" [size]="28" class="sm:hidden me-3"></app-name-avatar-icon>
+                    <div class="flex flex-col md:hidden">
+                      <span class="text-[12px] font-medium text-slate-dark">{{epic.assignee.name}}</span>
+                      <span class="text-[10px] font-normal  text-placeholder ">Assignee</span>
+                    </div>
+                  
+                 </div>
+                }
+    
+                <div class="flex-col flex items-end md:hidden">
+                      <span class="text-[10px] text-placeholder uppercase font-bold ">Deadline</span>
+                      <span class="text-[12px] text-slate-dark "> {{ epic.created_at | date: 'MMMM d, yyyy' }}</span>
+                </div>
+             </div>
+            
+    
+              <div class="md:justify-between items-center gap-2 pt-5 border-t border-border-gray hidden md:flex text-[11px] tracking-normal">
+    
+                <div class="  text-placeholder  flex items-center">
+                  <app-icon name="created-by" [size]="12" class="me-1"></app-icon>
+                  <span class=" font-normal">Created by: <span class="text-slate-dark font-semibold capitalize">{{epic.created_by.name}}</span></span>
+                </div>
+               
+    
+               <div class="flex items-center text-placeholder">
+                  <app-icon name="date" [size]="12" class="me-1"></app-icon>
+                  <span class="font-normal ">
+                    {{ epic.created_at | date: 'd MMMM yyyy' }}
+                  </span>
+               </div>
+              </div>
+            </div>
+          }
+      
+          <!-- add epic card -->
+          <div
+            class="bg-white border-3 border-border-secodary border-dashed md:flex flex-col justify-center items-center gap-4 p-6 min-h-56 w-full rounded-lg shadow-form-shadow text-sm/[1.25rem] font-bold hidden "
+          >
+            <a
+              class="bg-surface-low flex items-center justify-center text-slate-dark rounded-xl w-12 h-12"
+              [routerLink]="['/project',currentProject()?.id,'epics','new']"
+            >
+              <app-icon name="plus-with-circle"></app-icon>
+            </a>
+    
+            <p class="text-text-body uppercase tracking-[0.0875rem]">add epic</p>
+          </div>
+         </div>
+     }
+ 
+    
 
     <!-- paginaion -->
-     <app-pagination
+     @if(epics().length > 0){
+      <app-pagination
       [currentPage]="_pagination.currentPage()"
       [total]="_current_project_epics.total()"
       [limit]="_pagination.limit()"
@@ -233,6 +268,7 @@
       itemsLabel="active epics"
       (pageChange)="onPageChange($event)"
      />
+     }
 
   }
 </div>
