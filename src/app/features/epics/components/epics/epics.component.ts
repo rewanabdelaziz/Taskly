@@ -32,6 +32,7 @@ export class EpicsComponent {
 
   selectedEpic = signal<Epic>({} as Epic)
   isOpenPopUp = signal(false)
+  searchTerm = signal('')
  
 
   currentLength = computed(() => 
@@ -88,7 +89,7 @@ export class EpicsComponent {
     }
     this.isError.set(false);
     // const projectId=this._project_management.selectedProject()?.id
-    this._current_project_epics.getCurrentProjectEpics(this._pagination.offset(),this._pagination.limit(),isAppend)
+    this._current_project_epics.getCurrentProjectEpics(this._pagination.offset(),this._pagination.limit(),isAppend,this.searchTerm())
 
   }
 
@@ -110,7 +111,10 @@ export class EpicsComponent {
   }
 
   onSearchEpics(val : string){
-    console.log(val)
+    this._pagination.resetPage();
+    this.searchTerm.set(val)
+    this.getEpics(false);
+    // console.log(val)
   }
 
   
