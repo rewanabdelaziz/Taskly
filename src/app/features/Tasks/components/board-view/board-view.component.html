@@ -1,0 +1,7 @@
+<div class="w-full max-w-full overflow-x-auto pb-6 pt-2">
+  <div class="flex flex-nowrap gap-4 items-start px-1 w-max">
+    @for (status of statuses; track status) {
+        <app-tasks-status-col [status]="status"></app-tasks-status-col>
+    }
+  </div>
+</div>
