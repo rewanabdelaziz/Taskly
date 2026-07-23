@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center h-full w-full">
+<div class="flex flex-col items-center h-full w-full ">
   <!-- header -->
   <div class="hidden sm:flex sm:flex-col w-full mb-6">
     <app-breadcrumb></app-breadcrumb>
@@ -18,19 +18,20 @@
 
           <div class="bg-transparent border border-surface-highest flex justify-between items-center h-full px-3 py-2 rounded-lg absolute inset-0 z-10 pointer-events-none">
             <div class="flex items-center gap-2 w-full">
-              @if(viewControl.value === 'list'){
+              @if(currentView() === 'list'){
                 <app-icon name="list" class="text-primary" [size]="13"></app-icon>
               }@else{
                 <app-icon name="board" [size]="13"></app-icon>
               }
-              <span class="popup-body capitalize">{{ viewControl.value }} view</span>
+              <span class="popup-body capitalize">{{ currentView() }} view</span>
             </div>  
             <app-icon name="arrow-down" [size]="10"></app-icon>   
           </div>
 
           <select 
-            [formControl]="viewControl" 
             id="view"
+            [value]="currentView()"
+            (change)="onViewChange($event)"
             class="w-full h-full rounded-lg bg-transparent absolute inset-0 z-20 cursor-pointer opacity-0 appearance-none">
             <option value="board">Board View</option>
             <option value="list">List View</option>
@@ -43,5 +44,12 @@
 
       </div>
     </div>
+  </div>
+
+
+  <!-- Tsks -->
+   <div class="flex-1 w-full min-w-0 overflow-hidden h-full">
+      <app-board-view class="block h-full w-full min-w-0"></app-board-view>
+    
   </div>
 </div>
