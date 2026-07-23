@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { AddTaskPayload, Task } from '../models/task';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { AddTaskPayload, Status, Task } from '../models/task';
 import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 import { Observable } from 'rxjs';
 
@@ -21,4 +21,15 @@ export class TasksManagementService {
 
     return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`,{params})
   }
+
+  getProjectTasksbyStatus(projId:string, status?:Status):Observable<Task[]>{
+    let params = new HttpParams().set('project_id', `eq.${projId}`);
+    
+    if(status){
+      params = params.set('status',`eq.${status}`)
+    }
+    return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`, {params});
+  
+  }
+  
 }
