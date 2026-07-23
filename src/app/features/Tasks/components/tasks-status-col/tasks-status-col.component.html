@@ -1,0 +1,77 @@
+<div class="w-[288px] shrink-0 flex flex-col">
+  
+    <!-- header -->
+    <div class="flex justify-between items-center pb-1 text-[#64748B] mb-4">
+        <div class="flex items-center gap-2 font-bold text-[11px] uppercase">
+
+            <span class="tracking-[1.1px] flex items-center gap-2">
+               <span class="w-2 h-2 font-bold rounded-full bg-[#94A3B8]"
+                     [ngClass]="{
+                       'bg-primary': status() === 'IN_PROGRESS',
+                       'bg-success': status() === 'DONE',
+                       'bg-error': status() === 'BLOCKED',
+                       'bg-slate-medium': status() === 'IN_REVIEW',
+                       'bg-amber-500': status() === 'READY_FOR_QA',
+                       'bg-rose-500': status() === 'REOPENED',
+                       'bg-cyan-500': status() === 'READY_FOR_PRODUCTION',
+                       
+                     }"></span>
+               {{ status() | statusLabel }}
+            </span>
+              
+            <span class="bg-surface-dark text-slate-dark px-1.5 py-0.5 rounded-xs text-xs font-semibold">
+              {{ tasks()?.length || 0 }}
+            </span>
+        </div>
+    
+        <button class="hover:text-slate-dark cursor-pointer" type="button" (click)="navigateToAddTaskPage()">
+          <app-icon name="plus" [size]="12"></app-icon>
+        </button>
+    </div>
+
+  <!-- add new task card -->
+
+  <div class="flex justify-center py-4 w-full items-cente mb-3 border-2 border-border-gray border-dashed gap-2 cursor-pointer" (click)="navigateToAddTaskPage()">
+    <app-icon name="plus-with-circle" [size]="12"></app-icon>
+    <span class="text-[12px] font-bold tracking-[1.2px] text-ghost-link">Add New Task</span>
+
+  </div>
+
+  <!-- tasks cards container -->
+  <div class="flex flex-col gap-2.5 min-h-37.5 mb-3">
+    @for (task of tasks(); track task.id) {
+      @if (task.due_date ? getDateStatus(task.due_date) : 'NO_DATE'; as dateStatus) {
+      <div class="bg-white p-4 rounded-lg border border-[#C3C6D61A] shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col gap-4"
+           [ngClass]="status() === 'IN_PROGRESS'? 'border-l-4 border-l-primary': '' ">
+        <h3 class="text-sm/[19.25px] font-medium text-slate-dark">{{ task.title }}</h3>
+        <div class="flex justify-between">
+            @if(dateStatus !='NO_DATE'){
+                <div class="flex text-[#94A3B8] font-normal text-[10px] gap-1 items-center">
+                    @if(dateStatus ==='OVERdUE' ){
+                        <app-icon name="full-warning" [size]="10" color="#BA1A1A"></app-icon>
+                        <span class="text-error uppercase">delayed</span>
+                    }@else if(dateStatus === 'TODAY'){
+                        <app-icon name="date" [size]="10" color="#003d9b"></app-icon>
+                        <span class="text-primary uppercase">today</span>
+                    }@else {
+                        <app-icon name="date" [size]="10"></app-icon>
+                        <span>{{task.due_date |date : 'MMM dd'}}</span>
+                    }
+                   
+               </div>
+            }
+
+            @if(task.created_by.name){
+                <app-name-avatar-icon [userName]="task.created_by!.name!" [size]="24" customClass="!rounded-full !text-[10px] font-bold"></app-name-avatar-icon>
+            }
+        </div>
+      </div>
+      }
+    } @empty {
+      <div class="flex items-center justify-center h-24 border border-dashed border-[#CBD5E1] rounded-lg text-xs text-[#94A3B8]">
+        No tasks yet
+      </div>
+    }
+  </div>
+
+</div>

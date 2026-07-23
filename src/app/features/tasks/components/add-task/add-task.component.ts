@@ -58,6 +58,14 @@ export class AddTaskComponent implements OnDestroy{
     this._sharedMembers.getMembers(this.currentProject()!.id)
     this._current_project_Epics.getCurrentProjectEpics()
 
+    const navigation = this._router.getCurrentNavigation();
+    const status = navigation?.extras.state?.['status'] || history.state?.status;
+    if (status) {
+      this.addTaskForm.patchValue({
+        status: status
+      });
+    }
+
     
   }
 

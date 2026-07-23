@@ -62,6 +62,7 @@
         <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
           <a
             [routerLink]="['/project', projectId(), 'tasks']"
+            [queryParams]="{ view: 'board' }"
             routerLinkActive="!text-primary bg-white"
             [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
             class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3 text-sm hover:text-primary font-semibold"
@@ -166,6 +167,7 @@
 
     <a
       [routerLink]="['/project', projectId(), 'tasks']"
+      [queryParams]="{ view: 'board' }"
       routerLinkActive="!text-primary"
       class="flex flex-col items-center text-sidebar-text text-[0.625rem] hover:text-primary font-semibold"
     >
