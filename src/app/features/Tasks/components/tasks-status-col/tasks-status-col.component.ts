@@ -40,8 +40,7 @@ export class TasksStatusColComponent implements OnChanges{
 
 
   getTasksByStatus(status : Status){
-    const projID = this._projects_management.selectedProject()?.id
-    this._tasks_management.getProjectTasksbyStatus(projID!,status).subscribe({
+    this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,status).subscribe({
       next: (res:Task[])=>{
         this.isLoading.set(false)
         if(res.length === 0){
@@ -51,7 +50,7 @@ export class TasksStatusColComponent implements OnChanges{
         }
         this.tasks.set(res)
         
-        console.log(this.tasks())
+        // console.log(this.tasks())
         // console.log(epicId)
         
       },
