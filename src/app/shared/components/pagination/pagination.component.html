@@ -1,13 +1,15 @@
 <div
-      class="hidden sm:flex flex-col sm:flex-row justify-between items-center gap-4 w-full mt-10 pt-6 border-t border-slate-100"
+      class="hidden sm:flex flex-col sm:flex-row justify-between items-center gap-4 w-full "
+      [ngClass]="WithPagesNum()? 'mt-10 pt-6 border-t border-slate-100' : 'px-6 py-4 ' "
     >
       <div class="text-sm text-text-body font-medium">
         Showing <span class="text-slate-dark font-semibold">{{ currentLength() }}</span> of
         <span class="text-slate-dark font-semibold">{{ total() }}</span> {{ itemsLabel() }}
       </div>
-
+     @if(WithPagesNum()){
       <div class="flex items-center gap-2">
-        <button
+       
+         <button
           type="button"
           (click)="prev()"
           [disabled]="currentPage() === 1 || isLoading()"
@@ -42,5 +44,21 @@
         >
           <app-icon name="next-arrow" class="text-[18px]"></app-icon>
         </button>
+       
+       
       </div>
+    }@else {
+      <div class="flex items-center gap-4">
+        <button class="hover:text-slate-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" 
+                (click)="prev()"
+                [disabled]="currentPage() === 1 || isLoading()"
+                type="button"><app-icon name="arrow-back" [size]="15" ></app-icon></button>
+          <span>Page {{ currentPage() }} of {{EndPageNum()}}</span>
+        <button class="hover:text-slate-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                (click)="next()"
+                [disabled]="currentPage() === EndPageNum() || isLoading()"><app-icon name="next-arrow" [size]="15" ></app-icon></button>
+      </div>
+    }
+
+     
 </div>
