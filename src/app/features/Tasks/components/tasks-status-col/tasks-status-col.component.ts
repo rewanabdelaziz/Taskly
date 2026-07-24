@@ -1,4 +1,4 @@
-import { Component, inject, input, OnChanges, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { EpicsManagementsService } from '../../../epics/services/epics-managements.service';
 import { Status, Task } from '../../models/task';
 import { TasksManagementService } from '../../services/tasks-management.service';
@@ -9,12 +9,14 @@ import { StatusLabelPipe } from '../../pipes/status-label.pipe';
 import { DatePipe, NgClass } from '@angular/common';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
 import { Router } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
+import { PaginationService } from '../../../../shared/services/pagination.service';
 
 @Component({
   selector: 'app-tasks-status-col',
   standalone: true,
   imports: [IconComponent,StatusLabelPipe,DatePipe,NameAvatarIconComponent,NgClass],
-  providers:[],
+  providers:[PaginationService],
   templateUrl: './tasks-status-col.component.html',
   styleUrl: './tasks-status-col.component.css'
 })
@@ -26,30 +28,66 @@ export class TasksStatusColComponent implements OnChanges{
   private _projects_management = inject(ProjectsManagementsService)
   private _toast = inject(ToastNotificationService)
   private _router = inject(Router)
+   _pagination = inject(PaginationService);
   currentProject = this._projects_management.selectedProject
   epicId = this._epics_management.selectedEpic
 
-  tasks = signal<Task[]| null>(null)
+  tasks = signal<Task[]>([])
   isLoading = signal(false)
   isEmpty = signal(false)
   isError = signal(false)
 
   ngOnChanges(): void {
+    this.resetState()
+    this._pagination.init(3);
     this.getTasksByStatus(this.status() as Status)
+  }
+  
+  total = signal(0)
+  
+  
+  currentLength = computed(() => 
+    this._pagination.currentLength(this.tasks().length)
+  )
+  endPageNum = computed(() => 
+    this._pagination.getEndPageNum(this.total())
+  );
+
+
+  // @HostListener('window:scroll', [])
+      onColumnScroll(event : Event) {
+        if ( this.isLoading() || this._pagination.currentPage() >= this.endPageNum()) return;
+    
+        const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
+        const max = document.documentElement.scrollHeight;
+    
+        if (pos >= max - 150) {
+          this._pagination.currentPage.update((prev) => prev + 1);
+          this.getTasksByStatus(this.status() as Status);
+        }
   }
 
 
+
   getTasksByStatus(status : Status){
-    this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,status).subscribe({
-      next: (res:Task[])=>{
+    this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,status,this._pagination.offset(),this._pagination.limit()).subscribe({
+      next: (res:HttpResponse<Task[]>)=>{
         this.isLoading.set(false)
-        if(res.length === 0){
+         const newTask = res.body || [];
+         this.tasks.update((prev) => [...prev, ...newTask]);
+
+        if(this.tasks().length === 0){
           this.isEmpty.set(true)
         }else{
           this.isEmpty.set(false)
         }
-        this.tasks.set(res)
-        
+
+        const contentRange = res.headers.get('content-range');
+        if (contentRange) {
+          const parts = contentRange.split('/');
+          const total = parseInt(parts[1]);
+          this.total.set(total);
+        }
         // console.log(this.tasks())
         // console.log(epicId)
         
@@ -70,7 +108,7 @@ export class TasksStatusColComponent implements OnChanges{
     this.isLoading.set(false);
   }
 
-  getDateStatus(date : string) : 'TODAY' | 'OVERdUE' | 'UPCOMING'{
+  getDateStatus(date : string) : 'TODAY' | 'OVERDUE' | 'UPCOMING'{
     const dueDate = new Date (date)
     const today = new Date()
 
@@ -83,7 +121,7 @@ export class TasksStatusColComponent implements OnChanges{
     if(dueDateTIme === todayTime){
       return 'TODAY'
     }else if(dueDateTIme < todayTime){
-      return 'OVERdUE'
+      return 'OVERDUE'
     }else{
       return 'UPCOMING'
     }
