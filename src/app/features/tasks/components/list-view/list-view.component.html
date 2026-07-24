@@ -1,0 +1,122 @@
+ <!-- tabel container -->
+<div class="hidden lg:flex justify-center items-center flex-col w-full px-4">
+  <table
+    class="w-full bg-white border border-slate-200/60 rounded-t-xl overflow-hidden shadow-form-shadow border-collapse"
+  >
+    <thead class="bg-table-bg label-sm text-text-body tracking-[0.55px]  uppercase">
+      <tr class="border-b border-slate-100 text-left">
+        <th class="px-6 py-4">Task Id</th>
+        <th class="px-6 py-4 w-1/4">Title</th>
+        <th class="px-6 py-4">satatus</th>
+        <th class="px-6 py-4">due date</th>
+        <th class="px-6 py-4">assignee</th>
+        <th class="px-6 py-4"></th>
+
+      </tr>
+    </thead>
+    <tbody>
+      @for (task of tasks(); track task.id) {
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
+          <td class="px-6 py-4 text-[12px] font-normal text-primary">{{task.task_id}}</td>
+          <td class="px-6 py-4 text-[14px] font-medium text-slate-dark">{{task.title}}</td>
+          <td class="px-6 py-4 label-sm">
+            <span
+              class="px-2 py-1 rounded-xs text-[10px] font-bold uppercase tracking-wider"
+              [ngClass]="{
+                       'bg-blue-100 text-[#374763]': task.status === 'IN_PROGRESS',
+                       'bg-light-green text-active-task-label': task.status === 'DONE',
+                       'bg-error-msg-bg text-error-msg-text': task.status === 'BLOCKED',
+                       'bg-slate-200 text-slate-medium': task.status === 'IN_REVIEW',
+                       'bg-amber-100 text-amber-500': task.status === 'READY_FOR_QA',
+                       'bg-orange-100 text-rose-500': task.status === 'REOPENED',
+                       'bg-cyan-100 text-cyan-500': task.status === 'READY_FOR_PRODUCTION',
+                       'bg-[#D7E2FF] text-text-body': task.status === 'TO_DO',
+                       
+                     }"
+                >
+              {{ task.status | statusLabel}}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-[14px] text-text-body font-normal">{{task.due_date | date: 'dd MMM yy'}}</td>
+          <td class="px-6 py-4 text-[14px] text-slate-dark font-normal flex gap-1.5">
+            @if(task?.assignee?.name){
+                <app-name-avatar-icon [userName]="task.assignee.name!" [size]="28" customClass="rounded-[12px] text-[11px]!"></app-name-avatar-icon>
+               {{task?.assignee!.name!}}
+            }
+          </td>
+          <td class="px-6 py-4 text-end text-text-body">
+              <button class="p-1 hover:bg-slate-100 rounded-full inline-flex items-center justify-center transition-colors">
+                <app-icon name="more-hor" [size]="14"></app-icon>
+              </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <!-- pagination -->
+  <div class="w-full flex items-center justify-between bg-white border border-slate-200/60 border-t-0 rounded-b-xl overflow-hidden shadow-form-shadow shadow-t-none border-collapse px-6 py-4 text-[12px] text-text-body font-medium">
+    <span>
+      Showing 5 of 24 tasks
+    </span>
+
+    <div class="flex items-center gap-4">
+      <button class="hover:text-slate-dark"><app-icon name="arrow-back" [size]="15" ></app-icon></button>
+        <span>Page 1 of 5</span>
+      <button class="hover:text-slate-dark"><app-icon name="next-arrow" [size]="15" ></app-icon></button>
+    </div>
+  </div>
+
+
+</div>
+<!-- cards container in medium & small screen -->
+<div class="lg:hidden flex flex-col justify-center items-center">
+    <button
+        (click)="navigateToAddTaskPage()"
+        class="btn-primary py-2 flex items-center justify-center gap-1.5 font-semibold text-[14px]/[20px] shadow btn-shadow w-full tracking-normal"
+    >
+      <app-icon name="plus" [size]="9" ></app-icon>
+       create task
+    </button>
+  @for (task of tasks(); track task.id) {
+    <div class="flex flex-col rounded-lg p-4 bg-white shadow-form-shadow w-full mb-2">
+        <div class="flex justify-between -mb-2">
+            <span class="text-[11px] text-[#43465480] font-bold">{{task.task_id}}</span>
+            <span class="text-[11px] font-bold px-1 py-0.5" [ngClass]="{
+                       'bg-blue-100 text-[#374763]': task.status === 'IN_PROGRESS',
+                       'bg-light-green text-active-task-label': task.status === 'DONE',
+                       'bg-error-msg-bg text-error-msg-text': task.status === 'BLOCKED',
+                       'bg-slate-200 text-slate-medium': task.status === 'IN_REVIEW',
+                       'bg-amber-100 text-amber-500': task.status === 'READY_FOR_QA',
+                       'bg-orange-100 text-rose-500': task.status === 'REOPENED',
+                       'bg-cyan-100 text-cyan-500': task.status === 'READY_FOR_PRODUCTION',
+                       'bg-[#D7E2FF] text-text-body': task.status === 'TO_DO',
+                       
+                     }"
+                    >{{task.status}}</span>
+        </div>
+        <h3 class="text-[18px] font-medium text-slate-dark mb-3 mt-0">{{task.title}}</h3>
+        <div class="flex justify-between">
+            <div class="flex gap-3">
+                @if(task?.assignee?.name){
+                <app-name-avatar-icon [userName]="task.assignee.name!" [size]="28" customClass="rounded-[12px]! text-[11px]!"></app-name-avatar-icon>
+                }
+                <div class="flex flex-col tracking-normal">
+                  <span class="text-[11px] text-[#434654B2] tracking-normal font-bold uppercase">Due time</span>
+                  <span class="text-slate-dark font-medium text-[12px]">{{task.due_date | date:'MMM dd, yy'}}</span>
+                </div>
+            </div>
+            <app-icon name="more-vertical" class="text-text-body" [size]="10"></app-icon>
+
+        </div>
+
+    </div>
+  }
+</div>
+
+<!-- add task button -->
+<button
+    class="fixed bottom-0 right-2 btn-primary btn-shadow rounded-xl text-center px-4 py-3 font-bold mb-20 sm:mb-14 sm:me-8 sm:w-14 sm:h-14 lg:flex items-center justify-center hidden"
+    (click)="navigateToAddTaskPage()"
+>
+  <app-icon name="plus" [size]="14"></app-icon>
+</button>
