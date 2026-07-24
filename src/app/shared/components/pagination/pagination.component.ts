@@ -1,10 +1,11 @@
 import { Component, computed, input, output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, NgClass],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.css'
 })
@@ -14,6 +15,7 @@ export class PaginationComponent {
   limit = input.required<number>();
   currentLength = input.required<number>();
   isLoading = input<boolean>(false);
+  WithPagesNum = input<boolean>(true);
   itemsLabel = input<string>('items');
 
   pageChange = output<number>();

@@ -44,7 +44,7 @@ export class FormFieldComponent {
     const errors = ctrl.errors;
     if (errors['required']) return `${this.label() || 'This field'} is required.`;
     if (errors['minlength']) return `${this.label() || 'This field'} must be at least ${errors['minlength'].requiredLength} characters.`;
-    if (errors['minlength'] && errors['maxlength'] ) return `${this.label() || 'This field'} must be at [${errors['minlength'].requiredLength} - ${errors['maxlength'].requiredLength}] characters.`;
+    if (errors['maxlength'] ) return `${this.label() || 'This field'} must be at most ${errors['maxlength'].requiredLength} characters.`;
     if (errors['email']) return 'Please enter a valid email address.';
     if (errors['pattern']) return `${this.patternErrorMsg()} `
     if (errors['passwordMismatch']) return "Passwords do not match."

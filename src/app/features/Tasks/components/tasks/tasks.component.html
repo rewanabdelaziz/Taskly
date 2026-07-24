@@ -1,20 +1,21 @@
 <div class="flex flex-col items-center h-full w-full ">
   <!-- header -->
-  <div class="hidden sm:flex sm:flex-col w-full mb-6">
-    <app-breadcrumb></app-breadcrumb>
+  <div class="flex sm:flex-col w-full lg:mb-6">
+    <app-breadcrumb class="hidden sm:inline"></app-breadcrumb>
 
-    <div class="md:mt-3 md:flex md:justify-between md:items-center gap-4">
+    <div class="mb-6 lg:mb-0 w-full lg:w-auto md:mt-3 flex lg:justify-between lg:items-center md:gap-4 flex-col lg:flex-row">
       <!-- title -->
-      <div class="hidden md:block">
+      <div>
         <h2 class="title-md mb-1">Active Workboard</h2>
-        <p class="body-sm text-[#64748B]">Curating Project Alpha's production pipeline and milestones</p>
+        <p class="body-sm text-[#64748B] hidden lg:block">Curating Project Alpha's production pipeline and milestones</p>
       </div>
       <div class="flex items-center gap-3">
         <app-search-input placeholder="Search Tasks..." 
                           (searchValue)="onSearchEpics($event)"
-                          customClass="!rounded-sm md:!me-0"></app-search-input>
+                          customClass="!rounded-sm md:!me-0 "
+                          class="w-full lg:w-auto"></app-search-input>
 
-        <div class="relative w-40 h-10 shrink-0">
+        <div class="relative w-40 h-12 shrink-0 hidden lg:block">
 
           <div class="bg-transparent border border-surface-highest flex justify-between items-center h-full px-3 py-2 rounded-lg absolute inset-0 z-10 pointer-events-none">
             <div class="flex items-center gap-2 w-full">
@@ -38,18 +39,24 @@
           </select>
         </div>
 
-        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-surface-highest shrink-0 cursor-pointer">
-          <app-icon name="filter" color="#041B3C" [size]="13"></app-icon>
-        </div>
+         @if(currentView()!=='list'){
+          <div class="lg:flex hidden items-center justify-center w-10 h-10 rounded-lg bg-surface-highest shrink-0 cursor-pointer">
+            <app-icon name="filter" color="#041B3C" [size]="13"></app-icon>
+          </div>
+         }
 
       </div>
     </div>
   </div>
 
 
-  <!-- Tsks -->
+  <!-- Tasks -->
    <div class="flex-1 w-full min-w-0 overflow-hidden h-full">
+    @if(currentView()==='list'){
+      <app-list-view></app-list-view>
+    }@else{
       <app-board-view class="block h-full w-full min-w-0"></app-board-view>
+    }
     
   </div>
 </div>

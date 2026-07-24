@@ -94,7 +94,7 @@ export class AddTaskComponent implements OnDestroy{
 
      if (this.addTaskForm.valid) {
       const { title, description ,due_date ,assignee_id,epic_id ,status} = this.addTaskForm.value;
-      const cleanValue = (val: any) => ( val === undefined || String(val).trim() === '') ? null : val;
+      const cleanValue = (val: any) => ( val === undefined || String(val).trim() === '' ||String(val).trim() === 'null') ? null : val;
 
       this.addTaskPlayload = {
          title, 

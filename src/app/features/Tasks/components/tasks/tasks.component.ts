@@ -2,17 +2,18 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule, } from '@angular/forms';
 import { BoardViewComponent } from '../board-view/board-view.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProjectsComponent } from '../../../projects/components/projects/projects.component';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
+import { ListViewComponent } from '../list-view/list-view.component';
+
 type ViewMode = 'board' | 'list';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [BreadcrumbComponent,IconComponent,BoardViewComponent,SearchInputComponent,ReactiveFormsModule],
+  imports: [BreadcrumbComponent,IconComponent,BoardViewComponent,SearchInputComponent,ReactiveFormsModule,ListViewComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })

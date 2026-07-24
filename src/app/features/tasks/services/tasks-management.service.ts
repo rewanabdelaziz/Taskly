@@ -22,13 +22,24 @@ export class TasksManagementService {
     return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`,{params})
   }
 
-  getProjectTasksbyStatus(projId:string, status?:Status):Observable<Task[]>{
+  getProjectTasksbyStatus(projId:string, status?:Status,offset?: number, limit?: number):Observable<HttpResponse<Task[]>> {
     let params = new HttpParams().set('project_id', `eq.${projId}`);
     
     if(status){
       params = params.set('status',`eq.${status}`)
     }
-    return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`, {params});
+
+    if(offset !== undefined && limit !== undefined){
+      params = params.set('limit', limit.toString())
+            .set('offset', offset.toString())          
+    }
+
+    const headers = new HttpHeaders().set('Prefer', 'count=exact');
+    return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`, {
+      headers,
+      params,
+      observe: 'response', //to return all response (header + body)
+    });
   
   }
   
