@@ -116,7 +116,7 @@ export class TasksStatusColComponent implements OnChanges{
     today.setHours(0,0,0,0)
 
     const dueDateTIme = dueDate.getTime()
-    const todayTime = dueDate.getTime()
+    const todayTime = today.getTime()
 
     if(dueDateTIme === todayTime){
       return 'TODAY'
