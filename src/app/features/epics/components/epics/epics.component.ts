@@ -20,9 +20,9 @@ import { PaginationService } from '../../../../shared/services/pagination.servic
   styleUrl: './epics.component.css',
 })
 export class EpicsComponent {
-  private _project_management = inject(ProjectsManagementsService)
-   _current_project_epics= inject(CurrentProjectEpicsService)
-  _pagination = inject(PaginationService);
+  private readonly _project_management = inject(ProjectsManagementsService)
+  readonly _current_project_epics= inject(CurrentProjectEpicsService)
+  readonly _pagination = inject(PaginationService);
   
   currentProject = this._project_management.selectedProject
   epics=this._current_project_epics.epics
