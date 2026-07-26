@@ -186,7 +186,7 @@
           @for (epic of epics(); track epic.id) {
             <div 
             (click)="setSelectedEpic(epic)"
-              class="bg-white flex flex-col justify-between p-5 md:p-6 md:min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer md:border-l-4 md:border-dark-green"
+              class="bg-white flex flex-col justify-between p-5 md:p-4 md:min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer md:border-l-4 md:border-dark-green"
             >
               <div class="flex justify-between mb-4">
                 <span class="bg-badge-bg md:bg-light-green text-primary md:text-success-msg-text py-1 px-2.5 text-[10px] font-bold rounded-xs">{{epic.epic_id}}</span>
@@ -196,7 +196,7 @@
     
              <h3 class="card-title mb-3">{{ epic.title }}</h3>
     
-             <div class="flex justify-between">
+             <div class="flex justify-between mb-6">
                 @if(epic.assignee.name){
                  <div class="flex items-center">
                     <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40" class="hidden sm:inline me-3"></app-name-avatar-icon>
@@ -221,7 +221,7 @@
              </div>
             
     
-              <div class="md:justify-between items-center gap-2 pt-5 border-t border-border-gray hidden md:flex text-[11px] tracking-normal">
+              <div class="md:justify-between items-center gap-2 pt-4 border-t border-border-gray hidden md:flex text-[11px] tracking-normal">
     
                 <div class="  text-placeholder  flex items-center">
                   <app-icon name="created-by" [size]="12" class="me-1"></app-icon>
