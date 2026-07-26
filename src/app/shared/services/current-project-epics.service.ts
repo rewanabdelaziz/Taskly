@@ -3,6 +3,7 @@ import { ProjectsManagementsService } from '../../features/projects/services/pro
 import { EpicsManagementsService } from '../../features/epics/services/epics-managements.service';
 import { HttpResponse } from '@angular/common/http';
 import { Epic } from '../../features/epics/models/epics';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class CurrentProjectEpicsService {
 
   private _project_management = inject(ProjectsManagementsService)
   private _epics_management = inject(EpicsManagementsService)
+  private currentSub$?: Subscription;
 
   epics = signal<Epic[]>([]);
   isloading = signal<boolean>(false);
@@ -20,7 +22,18 @@ export class CurrentProjectEpicsService {
 
   getCurrentProjectEpics(offset? : number , limit? : number,isAppend?:boolean,searchTerm?:string){
      const projectId=this._project_management.selectedProject()?.id
-        this._epics_management.getAllEpics(projectId!,offset,limit,searchTerm).subscribe({
+
+      if (this.currentSub$) {
+        this.currentSub$.unsubscribe();
+      }
+
+      this.isError.set(false);
+
+      if(!isAppend){
+        this.isloading.set(true)
+      }
+
+        this.currentSub$ = this._epics_management.getAllEpics(projectId!,offset,limit,searchTerm).subscribe({
           next: (res: HttpResponse<Epic[]>) => {
     
             this.isloading.set(false);
@@ -32,9 +45,8 @@ export class CurrentProjectEpicsService {
               
             }
     
-            if (this.epics().length == 0) {
-              this.isEmpty.set(true);
-            }
+            this.isEmpty.set(this.epics().length === 0);
+
             // content range from header ex: 0-4/5 [(start index - end index) / total num]
             const contentRange = res.headers.get('content-range');
             if (contentRange) {
@@ -52,6 +64,9 @@ export class CurrentProjectEpicsService {
   }
 
   resetState() {
+    if (this.currentSub$) {
+      this.currentSub$.unsubscribe();
+    }
     this.epics.set([]);
     this.total.set(0);
     this.isEmpty.set(false);
