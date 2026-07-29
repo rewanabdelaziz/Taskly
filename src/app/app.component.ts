@@ -4,12 +4,13 @@ import { ToastComponent } from './shared/components/toast/toast.component';
 import { StorageKeys } from './core/constants/storage-keys';
 import { ToastNotificationService } from './shared/services/toast-notification.service';
 import { filter, Subscription, take } from 'rxjs';
+import { PopupComponent } from './shared/components/popup/popup.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToastComponent],
+  imports: [RouterOutlet, ToastComponent,PopupComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
