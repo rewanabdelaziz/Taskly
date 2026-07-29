@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       @for (task of tasks(); track task.id) {
-        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
+        <tr class="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors cursor-pointer" (click)="setSelectedTask(task)">
           <td class="px-6 py-4 text-[12px] font-normal text-primary">{{task.task_id}}</td>
           <td class="px-6 py-4 text-[14px] font-medium text-slate-dark">{{task.title}}</td>
           <td class="px-6 py-4 label-sm">
@@ -92,7 +92,7 @@
        create task
     </button>
   @for (task of tasks(); track task.id) {
-    <div class="flex flex-col rounded-lg p-4 bg-white shadow-form-shadow w-full mb-2">
+    <div class="flex flex-col rounded-lg p-4 bg-white shadow-form-shadow w-full mb-2" (click)="setSelectedTask(task)">
         <div class="flex justify-between ">
             <span class="text-[11px] text-[#43465480] font-bold">{{task.task_id}}</span>
             <span class="text-[11px] font-bold px-1 py-0.5" 
