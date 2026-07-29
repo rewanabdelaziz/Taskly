@@ -1,4 +1,4 @@
-import { Component, computed, HostListener, inject, input, OnChanges, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, HostListener, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { EpicsManagementsService } from '../../../epics/services/epics-managements.service';
 import { Status, Task } from '../../models/task';
 import { TasksManagementService } from '../../services/tasks-management.service';
@@ -11,6 +11,9 @@ import { NameAvatarIconComponent } from '../../../../shared/components/name-avat
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { PaginationService } from '../../../../shared/services/pagination.service';
+import { PopupService } from '../../../../shared/services/popup.service';
+import { TaskPopupComponent } from '../task-popup/task-popup.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-tasks-status-col',
@@ -20,7 +23,7 @@ import { PaginationService } from '../../../../shared/services/pagination.servic
   templateUrl: './tasks-status-col.component.html',
   styleUrl: './tasks-status-col.component.css'
 })
-export class TasksStatusColComponent implements OnChanges{
+export class TasksStatusColComponent implements OnChanges,OnInit{
   status = input.required<string>();
   
   private _epics_management = inject(EpicsManagementsService)
@@ -28,9 +31,11 @@ export class TasksStatusColComponent implements OnChanges{
   private _projects_management = inject(ProjectsManagementsService)
   private _toast = inject(ToastNotificationService)
   private _router = inject(Router)
+  private _popup = inject(PopupService)
    _pagination = inject(PaginationService);
   currentProject = this._projects_management.selectedProject
   epicId = this._epics_management.selectedEpic
+  private destroyRef = inject(DestroyRef);
 
   tasks = signal<Task[]>([])
   isLoading = signal(false)
@@ -41,6 +46,16 @@ export class TasksStatusColComponent implements OnChanges{
     this.resetState()
     this._pagination.init(3);
     this.getTasksByStatus(this.status() as Status)
+  }
+
+  ngOnInit(): void {
+    this._tasks_management.taskUpdated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.resetState();
+        this._pagination.init(3);
+        this.getTasksByStatus(this.status() as Status);
+    })
   }
   
   total = signal(0)
@@ -54,17 +69,16 @@ export class TasksStatusColComponent implements OnChanges{
   );
 
 
-  // @HostListener('window:scroll', [])
-      onColumnScroll(event : Event) {
-        if ( this.isLoading() || this._pagination.currentPage() >= this.endPageNum()) return;
-    
-        const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
-        const max = document.documentElement.scrollHeight;
-    
-        if (pos >= max - 150) {
-          this._pagination.currentPage.update((prev) => prev + 1);
-          this.getTasksByStatus(this.status() as Status);
-        }
+  onColumnScroll(event : Event) {
+    if ( this.isLoading() || this._pagination.currentPage() >= this.endPageNum()) return;
+
+    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
+    const max = document.documentElement.scrollHeight;
+
+    if (pos >= max - 150) {
+      this._pagination.currentPage.update((prev) => prev + 1);
+      this.getTasksByStatus(this.status() as Status);
+    }
   }
 
 
@@ -131,6 +145,10 @@ export class TasksStatusColComponent implements OnChanges{
     this._router.navigate(['/project',this.currentProject()?.id,'tasks','new'],{
      state: { status: this.status() }
     })
+  }
+
+  setSelectedTask(task: Task){
+    this._popup.open(TaskPopupComponent,{selectedTask : task},"bottom-sheet")
   }
 
   
