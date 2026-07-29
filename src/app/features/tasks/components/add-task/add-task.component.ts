@@ -12,6 +12,7 @@ import { CurrentProjectEpicsService } from '../../../../shared/services/current-
 import { TasksManagementService } from '../../services/tasks-management.service';
 import { SlicePipe } from '@angular/common';
 import { StatusLabelPipe } from '../../pipes/status-label.pipe';
+import { getTodayDateString } from '../../../../shared/utils/date.utilis';
 
 @Component({
   selector: 'app-add-task',
@@ -31,7 +32,7 @@ export class AddTaskComponent implements OnDestroy{
   _globalToastMsg = inject(ToastNotificationService);
   
   addTaskForm!: FormGroup;
-  minDate = ''
+  minDate = getTodayDateString();
   currentProject = this._project_management.selectedProject
   selectedEpic = this._epicsService.selectedEpic
   addTaskPlayload!: AddTaskPayload;
@@ -48,12 +49,7 @@ export class AddTaskComponent implements OnDestroy{
      status: [Status.TO_DO,Validators.required],
     });
 
-    // calculate min date 
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    this.minDate = `${year}-${month}-${day}`;
+   
 
     this._sharedMembers.getMembers(this.currentProject()!.id)
     this._current_project_Epics.getCurrentProjectEpics()
@@ -85,7 +81,7 @@ export class AddTaskComponent implements OnDestroy{
     return this.addTaskForm.get('epic_id') as FormControl;
   }
   get statusControl() {
-    return this.addTaskForm.get('assignee_id') as FormControl;
+    return this.addTaskForm.get('status') as FormControl;
   }
 
   onSubmit(event: Event){

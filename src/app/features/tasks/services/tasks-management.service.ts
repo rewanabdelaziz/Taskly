@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { AddTaskPayload, Status, Task } from '../models/task';
 import { ApiEndpoints } from '../../../core/constants/api-endpoints';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,9 @@ import { Observable } from 'rxjs';
 export class TasksManagementService {
   private _http = inject(HttpClient);
   baseUrl = environment.baseUrl;
+
+  private taskUpdatedSource = new Subject<void>();
+  taskUpdated$ = this.taskUpdatedSource.asObservable();
   
   addNewTask(epicPayload: AddTaskPayload) {
     return this._http.post(`${this.baseUrl}${ApiEndpoints.ADD_TASK}`, epicPayload);
@@ -22,11 +25,15 @@ export class TasksManagementService {
     return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`,{params})
   }
 
-  getProjectTasksbyStatus(projId:string, status?:Status,offset?: number, limit?: number):Observable<HttpResponse<Task[]>> {
+  getProjectTasksbyStatus(projId:string, status?:Status,offset?: number, limit?: number,taskId?:string):Observable<HttpResponse<Task[]>> {
     let params = new HttpParams().set('project_id', `eq.${projId}`);
     
     if(status){
       params = params.set('status',`eq.${status}`)
+    }
+
+    if(taskId){
+      params = params.set('id', `eq.${taskId}`)
     }
 
     if(offset !== undefined && limit !== undefined){
@@ -42,5 +49,16 @@ export class TasksManagementService {
     });
   
   }
+
+  editTask(taskId:string, epicPayload: Partial<AddTaskPayload>) {
+    const params = new HttpParams().set('id', `eq.${taskId}`);
+    return this._http.patch(`${this.baseUrl}${ApiEndpoints.ADD_TASK}`, epicPayload,{params});
+  }
+
+  notifyTaskUpdated() {
+    this.taskUpdatedSource.next();
+  }
+
+  
   
 }

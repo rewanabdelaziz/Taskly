@@ -1,9 +1,10 @@
 import { Injectable, signal, Type } from '@angular/core';
 
 
-export interface ModalConfig<T = unknown> {
-  component: Type<T>;
-  inputs?: Record<string, unknown>;
+export interface ModalConfig {
+  component: Type<any>;
+  inputs?: Record<string, any>;
+  mobilePosition?: 'center' | 'bottom-sheet';
 }
 
 @Injectable({
@@ -11,17 +12,17 @@ export interface ModalConfig<T = unknown> {
 })
 export class PopupService {
   isOpen = signal<boolean>(false);
-  activePopUp = signal<ModalConfig<unknown>| null>(null);
+  activePopUp = signal<ModalConfig | null>(null);
 
-  open <T>(component: Type<T>, inputs?: Record<string, unknown>) {
-    this.activePopUp.set({ component, inputs });
+  open(component: Type<any>, inputs?: Record<string, any>,mobilePosition?: 'center' | 'bottom-sheet') {
+    this.activePopUp.set({ component, inputs,mobilePosition });
     this.isOpen.set(true);
-    // console.log(this.isOpen())
-    // console.log("inside service",...arguments)
+    document.body.classList.add('overflow-hidden');
   }
 
   close() {
     this.isOpen.set(false);
     this.activePopUp.set(null);
+    document.body.classList.remove('overflow-hidden');
   }
 }

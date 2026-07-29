@@ -1,0 +1,411 @@
+@if(isLoading()){
+<!-- skeleton -->
+<div class="bg-white rounded-lg shadow-task-popup z-50 max-h-[90vh] w-full max-w-4xl overflow-hidden flex flex-col animate-pulse">
+    <div class="flex flex-col md:flex-row min-h-0 flex-1">
+      
+      <!-- Left side -->
+      <div class="flex-1 flex flex-col gap-6 p-8 overflow-y-auto">
+        <!-- Header Skeleton -->
+        <div class="flex items-center gap-3">
+          <div class="h-6 bg-slate-200 rounded w-16"></div>
+          <div class="h-8 bg-slate-200 rounded-lg w-48 hidden md:block"></div>
+        </div>
+        
+        <!-- Title Skeleton -->
+        <div class="h-10 bg-slate-200 rounded-md w-3/4 mt-2"></div>
+        
+        <!-- Description Skeleton -->
+        <div class="flex flex-col gap-2 mt-4">
+          <div class="h-3 bg-slate-200 rounded w-20"></div>
+          <div class="h-55 md:h-80 bg-slate-100 rounded-xl w-full border border-slate-200/60 p-4">
+             <div class="h-4 bg-slate-200 rounded w-1/3 mb-3"></div>
+             <div class="h-4 bg-slate-200 rounded w-2/3"></div>
+          </div>
+        </div>
+
+        <!-- Footer Bar Skeleton -->
+        <div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100">
+          <div class="h-4 bg-slate-200 rounded w-20"></div>
+          <div class="h-8 bg-slate-200 rounded-lg w-20"></div>
+        </div>
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="w-full md:w-80 bg-surface-low p-8 border-t md:border-t-0 md:border-l border-slate-100 flex flex-col gap-8">
+        
+        <!-- Status Skeleton -->
+        <div class="flex flex-col gap-2">
+          <div class="h-3 bg-slate-200 rounded w-16"></div>
+          <div class="h-10 bg-slate-200 rounded-lg w-full"></div>
+        </div>
+
+        <!-- Assignee Skeleton -->
+        <div class="flex flex-col gap-2">
+          <div class="h-3 bg-slate-200 rounded w-20"></div>
+          <div class="h-10 bg-slate-200 rounded-lg w-full"></div>
+        </div>
+
+        <!-- Reporter Skeleton -->
+        <div class="flex flex-col gap-2 pb-8 border-b border-slate-200/60">
+          <div class="h-3 bg-slate-200 rounded w-20"></div>
+          <div class="flex items-center gap-2 mt-1">
+            <div class="w-6 h-6 bg-slate-200 rounded-full"></div>
+            <div class="h-4 bg-slate-200 rounded w-28"></div>
+          </div>
+        </div>
+
+        <!-- Due Date Skeleton -->
+        <div class="flex flex-col gap-2">
+          <div class="h-3 bg-slate-200 rounded w-20"></div>
+          <div class="h-10 bg-slate-200 rounded-lg w-full"></div>
+        </div>
+
+        <!-- Created At Skeleton -->
+        <div class="flex justify-between items-center mt-2">
+          <div class="h-3 bg-slate-200 rounded w-20"></div>
+          <div class="h-3 bg-slate-200 rounded w-24"></div>
+        </div>
+
+      </div>
+
+    </div>
+</div>
+}@else if(isError()){
+<div class="bg-white rounded-lg shadow-task-popup z-50 p-8 max-w-md w-full flex flex-col items-center text-center gap-4 my-auto">
+    <div class="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center text-rose-500">
+      <app-icon name="exit" [size]="24"></app-icon>
+    </div>
+    <div>
+      <h3 class="text-base font-semibold text-slate-800">Something went wrong</h3>
+      <p class="text-sm text-slate-500 mt-1">Failed to load task details</p>
+    </div>
+    <button type="button" (click)="closePopUp()" class="mt-2 px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer">
+      Close
+    </button>
+  </div>
+}@else if(isEmpty()){
+<div class="bg-white rounded-lg shadow-task-popup z-50 p-8 max-w-md w-full flex flex-col items-center text-center gap-4 my-auto">
+    <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
+      <app-icon name="layers" [size]="24"></app-icon>
+    </div>
+    <div>
+      <h3 class="text-base font-semibold text-slate-800">No Data Available</h3>
+      <p class="text-sm text-slate-500 mt-1">Task not found</p>
+    </div>
+    <button type="button" (click)="closePopUp()" class="mt-2 px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer">
+      Close
+    </button>
+  </div>
+}@else{
+  @if (selectedTask()?.id) {
+  <div class="bg-[#f1f1f1] md:bg-white rounded-lg shadow-task-popup  z-50 max-h-[90vh] w-full max-w-[100vw] md:max-w-4xl overflow-hidden flex flex-col ">
+    <form [formGroup]="taskForm" class="flex flex-col h-full overflow-hidden">
+      
+      <div class="flex flex-col md:flex-row min-h-0 flex-1">
+        
+        <!-- left Side -->
+        <div class="flex-1 flex flex-col gap-6 ">
+            <!-- header -->
+          
+          <div class=" px-6 pt-6 md:px-8 md:py-6 md:border-b md:border-icon-card">
+
+            <div class="flex items-center justify-between ">
+              <div class="flex items-center gap-2 flex-wrap">
+             
+                <span class="px-2 py-0.5 text-xs font-bold uppercase tracking-[1.2px] text-slate-medium md:text-primary md:bg-badge-bg md:rounded-xs">
+                  {{ task()?.task_id }}
+                </span>
+
+            
+               <!-- epic -->
+               <div class="hidden md:inline-flex relative items-center h-9 whitespace-nowrap">
+                 <div class="flex items-center justify-between gap-2 px-3 py-1.5 border border-surface-highest rounded-lg body-sm font-medium bg-transparent pointer-events-none h-full">
+                   <div class="flex items-center gap-1.5">
+                     <app-icon name="layers" [size]="14" class="text-indigo-600 shrink-0"></app-icon>
+                     <span class="truncate max-w-55">
+                       {{ currentEpic()?.epic_id ? (currentEpic()?.epic_id + ' (' + currentEpic()?.title + ')') : 'Select Epic' }}
+                     </span>
+                   </div>
+                   <app-icon name="arrow-down" [size]="10" class="text-slate-500 shrink-0 ms-1"></app-icon>
+                 </div>
+         
+                 <select id="epic_id"
+                         (change)="edit()"
+                         formControlName="epic_id"
+                         class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                   <option [value]="null" class="popup-body">No epic assigned</option>
+                   @for(epic of _current_project_epics.epics(); track epic.epic_id){
+                     <option [value]="epic.id" class="popup-body">
+                       {{ epic.epic_id }} ({{ epic.title }})
+                     </option>
+                   }
+                 </select>
+         
+             </div>
+
+            </div>
+  
+              <!-- Close button for Mobile -->
+              <button class="md:hidden p-1 text-slate-medium  cursor-pointer" (click)="closePopUp()" type="button">
+                <app-icon name="exit" [size]="16"></app-icon>
+              </button>
+            </div>
+  
+            
+            <div>
+              <app-form-field 
+                id="title"
+                inputCustomClass="!title-md !bg-[#f1f1f1] md:!bg-white  mt-4 md:mt-5.5 md:mt-2 border-none p-0 focus:ring-0 focus:outline-none placeholder:text-slate-400 w-full"
+                [control]="titleControl"
+                type="text"
+                name="title"
+                placeholder="Task title..."
+                [isRequired]="true"
+                (change)="edit()"
+              ></app-form-field>
+
+               <!-- status & epic id in smal screen -->
+                <div class="flex md:hidden gap-2 text-[11px] -mt-4">
+                    <div class="bg-transparent border border-surface-highest flex justify-between items-center py-1 px-3 rounded-lg "
+                          [ngClass]="{
+                          'bg-blue-100! text-[#374763]!': currentStatus() === 'IN_PROGRESS',
+                          'bg-light-green! text-active-task-label!':currentStatus() === 'DONE',
+                          'bg-error-msg-bg! text-error-msg-text!': currentStatus() === 'BLOCKED',
+                          'bg-slate-200! text-slate-medium!':currentStatus() === 'IN_REVIEW',
+                          'bg-amber-100! text-amber-500!': currentStatus() === 'READY_FOR_QA',
+                          'bg-orange-100! text-rose-500!': currentStatus() === 'REOPENED',
+                          'bg-cyan-100! text-cyan-500!': currentStatus() === 'READY_FOR_PRODUCTION',
+                          'bg-[#D7E2FF]! text-text-body!': currentStatus() === 'TO_DO',
+                          
+                        }">
+                        <span class="font-bold uppercase">{{currentStatus()!| statusLabel}}</span>  
+                    </div>
+
+                    <div class="flex items-center gap-1.5 py-1 px-3  border border-surface-highest bg-[#D7E2FF] text-text-body rounded-lg font-medium ">
+                        <app-icon name="layers" [size]="10"></app-icon>
+                        <span>{{ task()?.epic?.epic_id }}</span>
+                   </div>
+                </div>
+            </div>
+
+          </div>
+
+          <div class="hidden md:block overflow-y-auto w-full">
+            <!-- description -->
+          <div class="flex flex-col gap-2 flex-1 p-8">
+            <label for="description" class="form-label text-text-body text-[10px]">DESCRIPTION</label>
+            <app-form-field
+              inputCustomClass="w-full p-3 border border-surface-highest rounded-[12px] bg-white text-slate-dark body-sm  min-h-[180px] md:min-h-[320px]"
+              id="description"
+              name="description"
+              type="textarea"
+              [control]="descriptionControl"
+              placeholder="no description provided..."
+              [withLettersCount]="false"
+              (change)="edit()"
+            ></app-form-field>
+          </div>
+
+           <!-- Footer Bar -->
+            <div class="px-6 py-4 bg-surface-low flex items-center justify-between">
+      
+              <button type="button" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer">
+                <app-icon name="link" [size]="14"></app-icon>
+                <span>Copy link</span>
+              </button>
+      
+              <!-- Close Button -->
+              <button 
+                type="button" 
+                (click)="closePopUp()"
+                class="px-5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- right side: sidebar metadata area in big screen-->
+        <div class="hidden overflow-y-auto p-8 md:w-80 bg-surface-low border-l border-icon-card  md:flex flex-col">
+          
+          <!-- status -->
+           <div class="flex flex-col gap-2 mb-10">
+                <label for="status" class="form-label text-text-body">Status</label>
+                <div class="flex relative w-full h-10 whitespace-nowrap ">
+                    <div class="bg-transparent border border-surface-highest flex justify-between items-center h-10 py-2.5 px-4 rounded-lg absolute inset-0 z-40 pointer-events-none "
+                          [ngClass]="{
+                          'bg-blue-100! text-[#374763]!': currentStatus() === 'IN_PROGRESS',
+                          'bg-light-green! text-active-task-label!':currentStatus() === 'DONE',
+                          'bg-error-msg-bg! text-error-msg-text!': currentStatus() === 'BLOCKED',
+                          'bg-slate-200! text-slate-medium!':currentStatus() === 'IN_REVIEW',
+                          'bg-amber-100! text-amber-500!': currentStatus() === 'READY_FOR_QA',
+                          'bg-orange-100! text-rose-500!': currentStatus() === 'REOPENED',
+                          'bg-cyan-100! text-cyan-500!': currentStatus() === 'READY_FOR_PRODUCTION',
+                          'bg-[#D7E2FF]! text-text-body!': currentStatus() === 'TO_DO',
+                          
+                        }">
+                        <span class="popup-body uppercase">{{currentStatus()!| statusLabel}}</span> 
+                        <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>   
+                    </div>
+                    <select id="status"
+                            (change)="edit()"
+                            class="w-full h-10 px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest absolute inset-0 z-50 deadline-input cursor-pointer opacity-0" formControlName="status">
+                      @for(stat of statuses ; track stat){
+                          <option [value]="stat" class="flex items-center popup-body">
+                            {{stat | statusLabel}}
+                          </option>
+                      }
+                    </select>
+                </div>
+                    
+                    
+            </div>
+
+          <!-- assignee -->
+          <div class="flex flex-col gap-2 mb-6">
+                    <label for="assignee" class="form-label text-text-body">ASSIGNEE</label>
+                    <div class="flex relative w-full h-10 whitespace-nowrap">
+                        <div class="bg-white border border-surface-highest flex justify-between items-center h-10 p-4 rounded-lg absolute inset-0 z-40 pointer-events-none ">
+                           
+                            <div class="flex justify-between items-center ">
+                                @if(currentAssignee()?.member_id ){
+                                    <app-name-avatar-icon [userName]="currentAssignee()?.metadata?.name || '' " [size]="28" color="#4F5F7B" class="me-2"></app-name-avatar-icon>
+                                    <span class="popup-body">{{currentAssignee()?.metadata?.name | slice:0:10}}</span>
+                                }@else{
+                                    <app-icon name="unassigne" [size]="13"></app-icon>
+                                    <span class="ms-2 popup-body">unassigne</span>
+                                }
+                            </div>  
+                             <app-icon name="arrow-down" [size]="10" class="-ms-2"></app-icon>   
+                        </div>
+
+                        <select id="assignee"
+                                (change)="edit()"
+                                class="w-full h-10 px-3 py-2 rounded-lg bg-transparent popup-body border border-surface-highest absolute inset-0 z-50 deadline-input cursor-pointer opacity-0" formControlName="assignee_id">
+                            <option [value]="null" class="popup-body">unassigne</option>
+                          @for(member of _sharedMembers.members() ; track member.member_id){
+                              <option [value]="member.user_id" class="flex items-center popup-body">
+                                {{member.metadata.name}}
+                              </option>
+                          }
+                        </select>
+                    </div>
+                    
+                    
+          </div>
+
+          <!-- created By -->
+          <div class="flex flex-col gap-1.5 pb-10 border-b border-surface-highest">
+            <span class="form-label text-text-body">REPORTER</span>
+            <div class="flex items-center gap-2 py-1">
+              <app-name-avatar-icon [userName]="task()?.created_by!.name" [size]="24" class="rounded-full"></app-name-avatar-icon>
+              <span class="text-sm font-medium text-slate-700">{{task()?.created_by!.name}}</span>
+            </div>
+          </div>
+
+          <!-- deadline -->
+          <div class="flex flex-col gap-1.5 mt-4">
+            <label for="deadline" class="form-label text-text-body">DUE DATE</label>
+            <div class="relative w-full">
+                <div class="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg flex items-center justify-between pointer-events-none shadow-2xs">
+                    <div class="flex items-center gap-2 text-sm text-slate-700">
+                      <app-icon name="date" [size]="14" class="text-slate-400"></app-icon>
+                      <span>{{deadlineControl.value ? (deadlineControl.value | date: 'MMM d, yyyy') : 'Select date'}}</span>
+                    </div>
+                    <app-icon name="arrow-down" [size]="10" class="text-slate-400 "></app-icon>
+                </div>
+              
+              <app-form-field 
+                id="deadline"
+                [control]="deadlineControl"
+                type="date"
+                name="deadline"
+                [minDate]="minDate"
+                [withLettersCount]="false"
+                (change)="edit()"
+                [isHorizontal] = "true"
+                inputCustomClass="absolute inset-0 -mt-4 p-2 w-full h-full opacity-0 mb-0 cursor-pointer z-10 mb-0!"
+              ></app-form-field>
+            </div>
+          </div>
+
+          <!-- Created At -->
+          <div class="flex justify-between -mt-3">
+            <span class="form-label text-text-body">CREATED AT</span>
+            <span class="text-sm font-medium text-slate-700">
+              {{ task()?.created_at | date: 'd MMM yyyy' }}
+            </span>
+          </div>
+
+        </div>
+        
+      <!-- metada Area in small screen -->
+        <div class="grid grid-cols-2 gap-3 w-full my-8 px-6 md:hidden overflow-y-auto">
+        
+            <!-- assignee -->
+            <div class="flex flex-col justify-between min-h-20.5 p-4 rounded-lg bg-surface-low">
+                <label for="assignee" class="form-label text-placeholder">ASSIGNEE</label>
+                <div class="flex items-center gap-2 min-w-0">
+                    @if(currentAssignee()?.member_id ){
+                        <app-name-avatar-icon [userName]="currentAssignee()?.metadata?.name || '' " [size]="25" color="#4F5F7B" class="rounded-full shrink-0"></app-name-avatar-icon>
+                        <span class="text-sm text-slate-dark font-medium truncate">{{currentAssignee()?.metadata?.name}}</span>
+                    }@else{
+                        <app-icon name="unassigne" [size]="11" class="shrink-0"></app-icon>
+                        <span class="popup-body truncate">unassigne</span>
+                    }
+                </div>
+            </div>
+        
+            <!-- due date -->
+            <div class="flex flex-col justify-between min-h-20.5 p-4 rounded-lg bg-surface-low">
+                <label for="deadline" class="form-label text-placeholder">DUE DATE</label>
+                <div class="flex items-center gap-2 min-w-0">
+                    <app-icon name="date" [size]="11" class="text-primary shrink-0"></app-icon>
+                    <span class="text-sm text-slate-dark font-medium truncate">{{deadlineControl.value ? (deadlineControl.value | date: 'd MMM yyyy') : 'Select date'}}</span>
+                </div>
+            </div>
+          
+            <!-- created by -->
+            <div class="flex flex-col justify-between min-h-20.5 p-4 rounded-lg bg-surface-low">
+                <span class="form-label text-placeholder">created by</span>
+                <div class="flex items-center gap-2 min-w-0">
+                    <app-name-avatar-icon [userName]="task()?.created_by!.name" [size]="24" class="rounded-full shrink-0"></app-name-avatar-icon>
+                    <span class="text-sm text-slate-dark font-medium truncate">{{task()?.created_by!.name}}</span>
+                </div>
+            </div>
+        
+            <!-- created at -->
+            <div class="flex flex-col justify-between min-h-20.5 p-4 rounded-lg bg-surface-low">
+                <span class="form-label text-placeholder">CREATED AT</span>
+                <div class="flex items-center gap-2 min-w-0">
+                    <app-icon name="redate" [size]="11" class="text-placeholder shrink-0"></app-icon>
+                    <span class="text-sm text-slate-dark font-medium truncate">{{ task()?.created_at | date: 'd MMM yyyy' }}</span>
+                </div>
+            </div>
+             
+            <!-- description -->
+            <div class="col-span-2 w-full flex flex-col gap-2">
+                <label for="description" class="form-label text-text-body text-[10px]">DESCRIPTION</label>
+                <app-form-field
+                    inputCustomClass="w-full p-3 border !bg-[#FFFFFF] border-[#C3C6D61A] rounded-[8px] text-[#434654] body-sm min-h-[156px]"
+                    id="description"
+                    name="description"
+                    type="textarea"
+                    [control]="descriptionControl"
+                    placeholder="no description provided..."
+                    [withLettersCount]="false"
+                    (change)="edit()"
+                ></app-form-field>
+            </div>
+             
+        </div>
+        
+      </div>
+
+     
+
+    </form>
+  </div>
+  }
+}
+

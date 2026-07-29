@@ -1,4 +1,4 @@
-import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, HostListener, inject, OnInit, signal } from '@angular/core';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { Router } from '@angular/router';
 import { TasksManagementService } from '../../services/tasks-management.service';
@@ -11,6 +11,9 @@ import { StatusLabelPipe } from '../../pipes/status-label.pipe';
 import { PaginationService } from '../../../../shared/services/pagination.service';
 import { HttpResponse } from '@angular/common/http';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { PopupService } from '../../../../shared/services/popup.service';
+import { TaskPopupComponent } from '../task-popup/task-popup.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-list-view',
@@ -24,8 +27,11 @@ export class ListViewComponent implements OnInit{
   private _projects_management = inject(ProjectsManagementsService)
   private _tasks_management = inject(TasksManagementService)
   private _toast = inject(ToastNotificationService)
-   _pagination = inject(PaginationService);
   private _router = inject(Router)
+  private _popup = inject(PopupService)
+  _pagination = inject(PaginationService);
+  private destroyRef = inject(DestroyRef);
+  
   currentProject = this._projects_management.selectedProject
   tasks = signal<Task[]>([])
   isLoading = signal(false)
@@ -50,8 +56,13 @@ export class ListViewComponent implements OnInit{
 
   ngOnInit(): void {
     this._pagination.init(4);
-   this.getTasks()
-   this.checkScreenSize();
+    this.getTasks()
+    this.checkScreenSize();
+    this._tasks_management.taskUpdated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.getTasks();
+    })
   }
 
    @HostListener('window:scroll', [])
@@ -122,6 +133,11 @@ export class ListViewComponent implements OnInit{
 
   navigateToAddTaskPage(){
     this._router.navigate(['/project',this.currentProject()?.id,'tasks','new'])
+  }
+
+
+  setSelectedTask(task: Task){
+    this._popup.open(TaskPopupComponent,{selectedTask : task},"bottom-sheet")
   }
 
  

@@ -46,7 +46,8 @@
             'border-l-4 border-l-primary': status() === 'IN_PROGRESS',
             'border-[#BA1A1A1A]! bg-[#FFDAD633]!': status() === 'BLOCKED',
             
-            }">
+            }"
+            (click)="setSelectedTask(task)">
         <h3 class="text-sm/[19.25px] font-medium text-slate-dark min-h-1/2">{{ task.title }}</h3>
         <div class="flex justify-between mt-4">
            
