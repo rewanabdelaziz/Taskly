@@ -1,9 +1,13 @@
 @if (_popUp.isOpen() && _popUp.activePopUp(); as popupConfig) {
   <div 
-    class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+    class="fixed inset-0 bg-black/60 z-40 flex justify-center transition-all"
+    [ngClass]="{
+      'items-center p-4': popupConfig.mobilePosition !== 'bottom-sheet',
+      'items-end md:items-center p-0 md:p-4': popupConfig.mobilePosition === 'bottom-sheet'
+    }"
     (click)="_popUp.close()">
     
-    <div (click)="$event.stopPropagation()">
+    <div class="w-full md:w-auto" (click)="$event.stopPropagation()">
       <ng-container 
         *ngComponentOutlet="popupConfig.component; inputs: popupConfig.inputs">
       </ng-container>
