@@ -1,4 +1,4 @@
-<div [class]="isHorizontal() ? 'md:flex justify-between items-center mb-8':'form-control' ">
+<div [class]="isHorizontal() ? 'md:flex justify-between items-center mb-8':WithFixedMargin()? 'form-control' :'' ">
     @if(label()){
         @if(isRequired()){
             <label
@@ -56,19 +56,32 @@
             }
 
         
-        }@else {
+        } @else {
+          <div class="relative flex items-center w-full">
             <input
               [type]="type()"
               [name]="name()"
               [id]="id()"
-              class="input-text"
-              [class]="inputCustomClass()? inputCustomClass() : '' "
+              class="input-text w-full"
+              [class]="inputCustomClass() ? inputCustomClass() : ''"
+              [class.ps-9]="withEmailIcon()" 
+              [class.md:ps-3]="withEmailIcon()"
+              [class.md:pe-9]="withEmailIcon()"
               [placeholder]="placeholder()"
               [formControl]="control()"
               [min]="minDate()"
               (blur)="changeValue(control().value)" 
               (change)="changeValue(control().value)"   
             />
+        
+            @if (withEmailIcon()) {
+              <span 
+                class="absolute top-1/2 -translate-y-1/2 flex items-center text-slate-400 pointer-events-none inset-s-4.25 md:inset-s-auto md:inset-e-4"
+              >
+                <app-icon name="email" [size]="12" class="text-placeholder"></app-icon> 
+              </span>
+            }
+          </div>
         }
         @if(!hasError() && description()){
             <p class="text-[0.625rem]/[15px] text-slate-light tracking-normal mt-1.5 ms-1 font-normal">

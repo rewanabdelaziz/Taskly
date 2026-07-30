@@ -28,13 +28,16 @@ export class FormFieldComponent {
   labelCustomClass = input<string|null>(null)
   errorMsgCustomClass = input<string|null>(null)
   withLettersCount = input<boolean>(true)
+  WithFixedMargin = input<boolean>(true)
+  withEmailIcon = input<boolean>(false); 
+  isSubmitted = input<boolean>(false);
 
   change = output<string>()
 
 
   hasError(): boolean {
     const ctrl = this.control();
-    return !!(ctrl && ctrl.invalid && ctrl.touched);
+    return !!(ctrl && ctrl.invalid && (ctrl.touched || ctrl.dirty || this.isSubmitted()));
   }
 
   get errorMessage(): string | null {
