@@ -17,7 +17,7 @@ import { getTodayDateString } from '../../../../shared/utils/date.utilis';
 @Component({
   selector: 'app-add-task',
   standalone: true,
-  imports: [FormFieldComponent,ReactiveFormsModule,RouterOutlet,BreadcrumbComponent,StatusLabelPipe,SlicePipe],
+  imports: [FormFieldComponent,ReactiveFormsModule,BreadcrumbComponent,StatusLabelPipe,SlicePipe],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.css'
 })
