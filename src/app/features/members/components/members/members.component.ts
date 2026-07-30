@@ -1,6 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
@@ -8,10 +7,11 @@ import { SharedMembersService } from '../../../../shared/services/shared-members
 import { MembersManagementsService } from '../../services/members-managements.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [NgClass, RouterLink, IconComponent, BreadcrumbComponent, NameAvatarIconComponent],
+  imports: [RouterLink, IconComponent, BreadcrumbComponent, NameAvatarIconComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
 })
@@ -20,6 +20,7 @@ export class MembersComponent implements OnInit {
   private _activateRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   _sharedMembers = inject(SharedMembersService)
+ 
   isloading = this._sharedMembers.isloading
   isEmpty = this._sharedMembers.isEmpty;
   isError = this._sharedMembers.isError;
@@ -45,6 +46,12 @@ export class MembersComponent implements OnInit {
     if (id) {
       this._sharedMembers.getMembers(id)
     }
+  }
+
+  getRoleClass(role: string): string {
+    return role === 'owner' 
+      ? 'bg-primary-container text-white' 
+      : 'bg-badge-member-bg text-text-body';
   }
 
  
