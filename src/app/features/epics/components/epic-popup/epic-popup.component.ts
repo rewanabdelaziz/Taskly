@@ -1,7 +1,7 @@
-import { Component, DestroyRef, effect, inject, input, OnChanges, OnInit, output, signal, SimpleChanges, untracked } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, signal, } from '@angular/core';
 import { AddEpicPayload, Epic } from '../../models/epics';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router} from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { EpicsManagementsService } from '../../services/epics-managements.service';
@@ -14,18 +14,20 @@ import { Member } from '../../../members/models/members';
 import { Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FetchTasksHanlingService } from '../../../../shared/services/fetch-tasks-hanling.service';
+import { PopupService } from '../../../../shared/services/popup.service';
+import { getTodayDateString } from '../../../../shared/utils/date.utilis';
+import { Task } from '../../../tasks/models/task';
+import { TaskPopupComponent } from '../../../tasks/components/task-popup/task-popup.component';
 
 @Component({
   selector: 'app-epic-popup',
   standalone: true,
-  imports: [IconComponent,FormFieldComponent,NameAvatarIconComponent,DatePipe,RouterLink,ReactiveFormsModule,SlicePipe],
+  imports: [IconComponent,FormFieldComponent,NameAvatarIconComponent,DatePipe,ReactiveFormsModule,SlicePipe],
   templateUrl: './epic-popup.component.html',
   styleUrl: './epic-popup.component.css'
 })
 export class EpicPopupComponent implements OnInit{
  selectedEpic = input.required<Epic | null>();
- isOpenPopUpInput = input(false);
- close = output<void>()
 
   private fb = inject(FormBuilder);
   private _project_management = inject(ProjectsManagementsService)
@@ -34,9 +36,10 @@ export class EpicPopupComponent implements OnInit{
   _sharedMembers = inject(SharedMembersService);
   _globalToastMsg = inject(ToastNotificationService);
   _sharedTasks = inject(FetchTasksHanlingService)
+  _popup = inject(PopupService)
   
   epicForm!: FormGroup;
-  minDate = ''
+  minDate = getTodayDateString();
   currentAssignee = signal< Member | undefined> (undefined) 
  
   currentProject = this._project_management.selectedProject
@@ -45,20 +48,6 @@ export class EpicPopupComponent implements OnInit{
   private destroyRef = inject(DestroyRef);
   private autoSave$ = new Subject<void>();
 
-  constructor(){
-    effect(()=>{
-      if(this.isOpenPopUpInput()&&this.epicForm && this.selectedEpic()){
-        this.getEpicDetail()
-        untracked(()=>{
-          this._sharedTasks.resetState()
-          this._sharedTasks.getTasksForEpic(this.selectedEpic()!.id)
-        })
-        
-        
-        // this.EpicForm.patchValue(this.selectedEpic()!)
-      }
-    })
-  }
 
 
    ngOnInit(): void {
@@ -68,26 +57,23 @@ export class EpicPopupComponent implements OnInit{
       assignee_id: [null],
       deadline: [null],
     });
-     
 
-    // calculate min date 
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    this.minDate = `${year}-${month}-${day}`;
+    if ( this.selectedEpic()) {
+      this.getEpicDetail()
+      this._sharedTasks.resetState()
+      this._sharedTasks.getTasksForEpic(this.selectedEpic()!.id)
+    }
+  
+     
 
     this._sharedMembers.getMembers(this.currentProject()!.id)
 
     this.assigneeIdControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((id)=>{
       if(id){
         this.currentAssignee.set(this._sharedMembers.members().find(m => m.user_id === id));
-        // console.log(this.currentAssignee())
       }else{
         this.currentAssignee.set( undefined)
       }
-      // console.log(id)
-      // console.log(this.currentAssignee())
     })
 
     this.autoEdit()
@@ -113,13 +99,12 @@ export class EpicPopupComponent implements OnInit{
     const projectId = this.selectedEpic()?.project_id
     this._epicsService.getEpicDetails(epicId!,projectId!).subscribe({
       next: (res:Epic[])=>{
-        // console.log(res)
         const currentValue=res[0]
         this.epicForm.patchValue({
           ...currentValue,
           assignee_id: currentValue.assignee.sub
         })
-        // console.log(this.EpicForm.value)
+
         
       },
       error:()=>{
@@ -132,9 +117,8 @@ export class EpicPopupComponent implements OnInit{
 
  
  closePopUp(){
-  this.close.emit()
   this._sharedTasks.resetState()
-  console.log(this._sharedTasks.isEmpty())
+  this._popup.close()
  }
 
  autoEdit(){
@@ -165,6 +149,11 @@ export class EpicPopupComponent implements OnInit{
   navigateToAddTaskPage(){
     this._router.navigate(['/project',this.currentProject()?.id,'tasks','new'])
     this._epicsService.setElectedEpic(this.selectedEpic()!)
-    this.closePopUp() // to remove overflow-hidden from body
+    this.closePopUp() 
+  }
+
+  setSelectedTask(task: Task){
+    this._popup.close()
+    this._popup.open(TaskPopupComponent,{selectedTask : task},"bottom-sheet")
   }
 }

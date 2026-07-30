@@ -1,8 +1,6 @@
-@if (isOpenPopUpInput() && selectedEpic()) {
-    <!-- popup overlay  -->
-  <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 flex items-center justify-center ">
+@if (selectedEpic()) {
     <!-- popup container -->
-    <div class=" bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 z-50 max-h-[90vh] md:w-2xl overflow-y-auto">
+    <div class=" bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 max-h-[90vh] md:w-2xl overflow-y-auto">
       <form  [formGroup]="epicForm">
         <!-- header -->
          <div class="pb-2 sm:pb-8 border-b border-border-secodary  px-6 py-2 sm:p-8 bg-gradient-gray sm:bg-gradient-none">
@@ -175,7 +173,7 @@
                         <div class="border border-border-secodary rounded-lg hidden sm:block">
                             @for(task of _sharedTasks.tasks(); track task.id){
                                 
-                                <div class="flex justify-between items-center border-b border-border-secodary p-4 rounded-xl mb-3">
+                                <div class="flex justify-between items-center border-b border-border-secodary p-4 rounded-xl mb-3 cursor-pointer" (click)="setSelectedTask(task)">
 
                                     <div class="flex flex-col justify-between ">
                                         <span class="popup-task-title mb-1">{{task.title}}</span>
@@ -206,7 +204,7 @@
 
                         @for(task of _sharedTasks.tasks(); track task.id){
                                 
-                                <div class="border border-border-secodary p-4 sm:hidden mb-3 rounded-xl">
+                                <div class="border border-border-secodary p-4 sm:hidden mb-3 rounded-xl cursor-pointer" (click)="setSelectedTask(task)">
 
                                     <div class="flex flex-col justify-between">
                                         <span class="popup-task-title mb-1">{{task.title}}</span>
@@ -265,5 +263,4 @@
       
     </div>
 
-  </div>
 }
