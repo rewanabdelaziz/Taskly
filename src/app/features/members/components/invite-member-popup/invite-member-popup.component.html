@@ -1,0 +1,49 @@
+<div class="flex flex-col bg-white md:rounded-lg rounded-4xl shadow-popup max-w-md">
+    <!-- header -->
+     <div class="flex flex-col px-8 md:pt-8 pt-5.25 w-full">
+        <div class="w-full flex justify-center md:hidden text-slate-light mb-5.25">
+            <app-icon name="slider" [size]="48"></app-icon>
+        </div>
+        <div class="flex justify-between mb-1 md:mb-2">
+            <app-icon name="person-add-fill" [size]="20" class="text-primary rounded-lg bg-surface-low hidden md:inline px-4 py-3.25"></app-icon>
+            <span class="md:hidden text-primary font-bold text-[11px] tracking-[0.55px] uppercase">{{currentProject()?.name}}</span>
+
+            <button class="cursor-pointer" (click)="close()">
+                <app-icon name="exit" [size]="16" class="text-placeholder"></app-icon>
+            </button>
+        </div>
+
+        <h2 class="capitalize font-bold text-slate-dark text-2xl/[32px] tracking-[-0.6px] mb-2">Invite Team Member</h2>
+        <p class="font-normal text-sm tracking-normal text-slate-medium">Send an invitation to join the Architectural Studio workspace.</p>
+     </div>
+
+       <form class="w-full" [formGroup]="inviteMemberForm" (ngSubmit)="onSubmit($event)">
+         <!-- content -->
+            <div class="px-8 pt-6 md:pb-8 pb-6">
+                <app-form-field 
+                    id="email"
+                    [control]="emailControl"
+                    type="text"
+                    name="email"
+                    label="email address"
+                    placeholder="Enter email address"
+                    labelCustomClass="ms-0 mb-2"
+                    inputCustomClass="rounded-lg py-3.5 px-4"
+                    [WithFixedMargin] = "false"
+                    [withEmailIcon] = "true"
+                    [isSubmitted] = "isSubmitted()"
+                ></app-form-field>
+            </div>
+
+            <!-- actions -->
+            <div class="px-8 pb-8 pt-4 md:pt-2 flex justify-between gap-3 flex-col-reverse md:flex-row">
+                <button type="button" class="btns-basic text-slate-medium bg-white t-[13.5] pb-3.5" (click)="close()">cancel</button>
+                <button type="submit" class="btn-primary pt-[13.5] pb-3.5 md:rounded-xs rounded-lg disabled:btn-ghost disabled:cursor-not-allowed"
+                        [disabled]="isDisabeled()">send invitation</button>
+            </div>
+            
+       </form>
+
+      
+    
+</div>
