@@ -102,8 +102,10 @@ export class EpicsComponent {
 
   setSelectedEpic(epic: Epic){
     this.selectedEpic.set(epic)
-    this._popup.open(EpicPopupComponent,{selectedEpic : this.selectedEpic()})
-    console.log(this.selectedEpic())
+    this._popup.open(EpicPopupComponent,{
+      inputs: {selectedEpic : this.selectedEpic()},
+      mobilePosition: 'bottom-sheet'
+    })
   }
 
 

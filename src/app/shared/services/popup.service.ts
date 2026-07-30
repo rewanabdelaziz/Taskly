@@ -1,10 +1,12 @@
 import { Injectable, signal, Type } from '@angular/core';
 
-
-export interface ModalConfig {
-  component: Type<any>;
+export interface ModalOptions {
   inputs?: Record<string, any>;
   mobilePosition?: 'center' | 'bottom-sheet';
+}
+
+export interface ModalConfig extends ModalOptions {
+  component: Type<any>;
 }
 
 @Injectable({
@@ -14,7 +16,10 @@ export class PopupService {
   isOpen = signal<boolean>(false);
   activePopUp = signal<ModalConfig | null>(null);
 
-  open(component: Type<any>, inputs?: Record<string, any>,mobilePosition?: 'center' | 'bottom-sheet') {
+  open(component: Type<any>, options?: ModalOptions) {
+    const mobilePosition = options?.mobilePosition ?? 'center';
+    const inputs = options?.inputs;
+    
     this.activePopUp.set({ component, inputs,mobilePosition });
     this.isOpen.set(true);
     document.body.classList.add('overflow-hidden');

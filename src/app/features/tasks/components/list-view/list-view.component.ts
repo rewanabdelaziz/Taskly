@@ -137,7 +137,10 @@ export class ListViewComponent implements OnInit{
 
 
   setSelectedTask(task: Task){
-    this._popup.open(TaskPopupComponent,{selectedTask : task},"bottom-sheet")
+    this._popup.open(TaskPopupComponent,{
+      inputs: {selectedTask : task},
+      mobilePosition: 'bottom-sheet'
+    })
   }
 
  
