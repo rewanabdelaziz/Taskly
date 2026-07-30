@@ -10,3 +10,14 @@ export interface Member {
     department: string;
   };
 }
+
+export interface InviteMemberPayload{
+  p_email: string,
+  p_project_id: string,
+  p_app_url: string,
+  p_base_url: string
+}
+
+export interface AcceptInvitationPayload{
+  p_token: string
+}
