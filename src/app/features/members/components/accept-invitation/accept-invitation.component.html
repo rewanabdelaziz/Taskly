@@ -1,0 +1,19 @@
+<div class="bg-invite-gradient flex items-center justify-center flex-col w-full h-screen">
+  <!-- header -->
+  <div class="flex items-center mb-12">
+    <app-icon name="logo" class="logo-icon" [size]="20"></app-icon>
+    <span class="ms-2 logo-text text-[24px]"> Taskly </span>
+  </div>
+   <!--card container -->
+  <div class="bg-white flex flex-col justify-center border-top-gradient rounded-lg shadow-invite-box p-12 max-w-xl">
+    <!-- title -->
+    <div class="text-text-body flex items-center py-1 px-3 rounded-xl bg-surface-dark mb-6 w-fit mx-auto">
+        <app-icon name="invitation" [size]="12"></app-icon>
+        <p class="font-bold text-[11px] tracking-[0.55px] uppercase ms-1.5">New Project Invitation</p>
+    </div>
+    
+    <h2 class="title-sm normal-case mb-4 mx-8.5 text-center">You've been invited to join new project</h2>
+
+    <button type="button" class="btn-primary py-4" (click)="verifyAndAcceptInvite()"> Accept Invitation</button>
+  </div>
+</div>
