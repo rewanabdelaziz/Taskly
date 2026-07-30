@@ -1,4 +1,4 @@
-import { Component, computed, effect, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
@@ -11,10 +11,11 @@ import { CurrentProjectEpicsService } from '../../../../shared/services/current-
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { PaginationService } from '../../../../shared/services/pagination.service';
+import { PopupService } from '../../../../shared/services/popup.service';
 @Component({
   selector: 'app-epics',
   standalone: true,
-  imports: [BreadcrumbComponent, IconComponent, RouterLink, DatePipe, NameAvatarIconComponent,EpicPopupComponent,SearchInputComponent,PaginationComponent],
+  imports: [BreadcrumbComponent, IconComponent, RouterLink, DatePipe, NameAvatarIconComponent,SearchInputComponent,PaginationComponent],
   providers:[PaginationService],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
@@ -23,6 +24,7 @@ export class EpicsComponent {
   private readonly _project_management = inject(ProjectsManagementsService)
   readonly _current_project_epics= inject(CurrentProjectEpicsService)
   readonly _pagination = inject(PaginationService);
+  _popup = inject(PopupService)
   
   currentProject = this._project_management.selectedProject
   epics=this._current_project_epics.epics
@@ -100,21 +102,15 @@ export class EpicsComponent {
 
   setSelectedEpic(epic: Epic){
     this.selectedEpic.set(epic)
-    this.isOpenPopUp.set(true)
-    document.body.classList.add('overflow-hidden');
+    this._popup.open(EpicPopupComponent,{selectedEpic : this.selectedEpic()})
+    console.log(this.selectedEpic())
   }
 
-  handleClose(){
-    this.isOpenPopUp.set(false)
-    document.body.classList.remove('overflow-hidden');
-    this.getEpics();
-  }
 
   onSearchEpics(val : string){
     this._pagination.resetPage();
     this.searchTerm.set(val)
     this.getEpics(false);
-    // console.log(val)
   }
 
   
