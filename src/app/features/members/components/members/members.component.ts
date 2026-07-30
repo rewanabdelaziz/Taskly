@@ -1,6 +1,5 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
@@ -19,18 +18,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class MembersComponent implements OnInit {
   private _members = inject(MembersManagementsService);
   private _activateRoute = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
   _sharedMembers = inject(SharedMembersService)
   isloading = this._sharedMembers.isloading
   isEmpty = this._sharedMembers.isEmpty;
   isError = this._sharedMembers.isError;
-  private destroyRef = inject(DestroyRef);
+  
 
   projectId = signal<string | null>(null);
 
-  private route$!: Subscription;
 
   ngOnInit(): void {
-    this.route$ = this._activateRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+     this._activateRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const id = params['id'] || null;
       this.projectId.set(id);
       if (id) {
@@ -48,9 +47,5 @@ export class MembersComponent implements OnInit {
     }
   }
 
-  // ngOnDestroy(): void {
-  //   if (this.route$) {
-  //     this.route$.unsubscribe();
-  //   }
-  // }
+ 
 }
