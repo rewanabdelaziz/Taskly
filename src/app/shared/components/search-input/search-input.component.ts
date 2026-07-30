@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, input, OnInit, output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -18,11 +18,11 @@ export class SearchInputComponent implements OnInit{
   searchValue = output<string>()
 
   private searchSubject = new Subject<string>();
-  private search$!: Subscription;
   private destroyRef = inject(DestroyRef);
+  
 
   ngOnInit(): void {
-    this.search$ = this.searchSubject .pipe(
+     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef)
