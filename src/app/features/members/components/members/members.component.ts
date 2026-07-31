@@ -59,7 +59,8 @@ export class MembersComponent implements OnInit {
 
   openInvitePopup(){
     this._popup.open(InviteMemberPopupComponent,{
-      mobilePosition: 'bottom-sheet'
+      mobilePosition: 'bottom-sheet',
+      inputs : {currentProjMembers: this._sharedMembers.members()}  
     })
   }
 
