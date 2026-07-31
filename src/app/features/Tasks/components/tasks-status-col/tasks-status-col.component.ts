@@ -43,7 +43,7 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   isEmpty = signal(false)
   isError = signal(false)
   getStatusBgClass = getStatusBgClass
-  
+  isDragOver = signal(false);
 
   ngOnChanges(): void {
     this.resetState()
@@ -164,7 +164,55 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   }
  
 
-    
+  // drag and drop functions
+
+  onDragStart(event: DragEvent, task: Task) {
+    if (!event.dataTransfer) return;
+    const data = JSON.stringify({
+      task: task,
+      fromStatus: this.status()
+    });
+
+    event.dataTransfer.setData('text/plain', data);
+    event.dataTransfer.effectAllowed = 'move';
+
+    if (event.target instanceof HTMLElement) {
+      event.target.style.opacity = '0.4';
+    }
+  }
+
+  onDragEnd(event: DragEvent) {
+    this.isDragOver.set(false);
+    if (event.target instanceof HTMLElement) {
+      event.target.style.opacity = '1';
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  onDragEnter(event: DragEvent) {
+    event.preventDefault();
+    this.isDragOver.set(true);
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = event.clientX;
+    const y = event.clientY;
+  
+    if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
+      this.isDragOver.set(false);
+    }
+  }
+
+ 
+  
 }
 
 
