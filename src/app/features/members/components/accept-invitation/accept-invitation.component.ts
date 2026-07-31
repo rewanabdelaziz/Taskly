@@ -18,8 +18,10 @@ export class AcceptInvitationComponent implements OnInit{
   private _members_service = inject(MembersManagementsService);
   private _toast = inject(ToastNotificationService);
   private _auth = inject(AuthServiceService)
-  isLoading = signal<boolean>(true);
+  isLoading = signal<boolean>(false);
   token = signal<string | null>(null);
+
+
 
   ngOnInit(): void {
     const tokenParam = this._activate_route.snapshot.queryParamMap.get('token');
@@ -34,24 +36,30 @@ export class AcceptInvitationComponent implements OnInit{
             token: tokenParam 
           }
         });
+        return
       }
       
     } else {
       this.isLoading.set(false);
       this._toast.showMsg('Invalid or missing invitation token');
       this._router.navigate(['/']);
+      return
     }
   }
 
   verifyAndAcceptInvite() {
+    if (!this.token() || this.isLoading()) {
+      return;
+    }
+
     this.isLoading.set(true);
     this._members_service.acceptInvitation(this.token()!).subscribe({
-      next: (res) => {
+      next: () => {
         this.isLoading.set(false);
         this._toast.showMsg('Invitation accepted successfully! Welcome to the project.', 'success');
-        this._router.navigate(['/project']); 
+        this._router.navigate(['/project'],{ replaceUrl: true }); // to avoid back button return to this page
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
         this._toast.showMsg('Failed to accept invitation or token expired');
         this._router.navigate(['/login']);

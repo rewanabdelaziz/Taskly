@@ -14,6 +14,9 @@
     
     <h2 class="title-sm normal-case mb-4 mx-8.5 text-center">You've been invited to join new project</h2>
 
-    <button type="button" class="btn-primary py-4" (click)="verifyAndAcceptInvite()"> Accept Invitation</button>
+    <button type="button" 
+            class="btn-primary py-4 disabled:btn-ghost disabled:cursor-not-allowed" 
+            [disabled]="isLoading() || !token()" 
+            (click)="verifyAndAcceptInvite()"> {{ isLoading()? 'Accepting...': 'Accept Invitation'}}</button>
   </div>
 </div>
