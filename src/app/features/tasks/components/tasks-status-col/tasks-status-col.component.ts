@@ -54,7 +54,27 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   ngOnInit(): void {
     this._tasks_management.taskUpdated$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+      .subscribe((e) => {
+
+        // handle drag drop event
+        if(e){
+          // optimistic update to from status column
+          if(e?.fromStatus === this.status()){
+            this.tasks.update(prev => prev.filter(t => t.id !== e.taskId));
+            this.total.update(t => Math.max(0, t - 1));
+            return;
+          }
+          // avoid because we updated in onDrop()
+          if (this.status() === e?.toStatus) {
+            return;
+          }
+          
+
+          // skip other columns
+          return
+        }
+        
+        // if not drag drop or if fail drag drop
         this.resetState();
         this._pagination.init(3);
         this.getTasksByStatus(this.status() as Status);
@@ -211,7 +231,43 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
     }
   }
 
- 
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isDragOver.set(false);
+
+    const rawData = event.dataTransfer?.getData('text/plain');
+    if (!rawData) return;
+
+    const { task, fromStatus } = JSON.parse(rawData) as { task: Task; fromStatus: Status };
+    const targetStatus = this.status();
+    if (fromStatus === targetStatus) return;
+
+    // optimistic update to target column (add the card)
+    const updatedTask: Task = { ...task, status: targetStatus as Status };
+    this.tasks.update(prev => [updatedTask, ...prev]);
+    this.total.update(t => t + 1);
+
+    this._tasks_management.editTask(task.id, {status: targetStatus as Status}).subscribe({
+      next: () => {
+        this._tasks_management.notifyTaskUpdated({
+          taskId: task.id,
+          fromStatus: fromStatus,
+          toStatus: targetStatus
+        });
+      },
+      error: (err) => {
+        this._toast.showMsg('Failed to update task status!');
+
+        // optimistic update to target column (remove the card)
+        this.tasks.update(prev => prev.filter(t => t.id !== task.id));
+        this.total.update(t => Math.max(0, t - 1));
+
+        this._tasks_management.notifyTaskUpdated();
+      }
+    });
+  }
+
+  
   
 }
 
