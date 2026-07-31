@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, HostListener, inject, input, OnChanges, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { EpicsManagementsService } from '../../../epics/services/epics-managements.service';
 import { Status, Task } from '../../models/task';
 import { TasksManagementService } from '../../services/tasks-management.service';
@@ -6,7 +6,7 @@ import { ToastNotificationService } from '../../../../shared/services/toast-noti
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { StatusLabelPipe } from '../../pipes/status-label.pipe';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
@@ -93,11 +93,13 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
 
 
   onColumnScroll(event : Event) {
+    const element = event.target as HTMLElement;
+    
     if ( this.isLoading() || this._pagination.currentPage() >= this.endPageNum()) return;
 
-    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.clientHeight;
-    const max = document.documentElement.scrollHeight;
-
+    const pos = element.scrollTop + element.clientHeight;;
+    const max = element.scrollHeight;
+  
     if (pos >= max - 150) {
       this._pagination.currentPage.update((prev) => prev + 1);
       this.getTasksByStatus(this.status() as Status);
