@@ -39,7 +39,7 @@
             <div class="px-8 pb-8 pt-4 md:pt-2 flex justify-between gap-3 flex-col-reverse md:flex-row">
                 <button type="button" class="btns-basic text-slate-medium bg-white t-[13.5] pb-3.5" (click)="close()">cancel</button>
                 <button type="submit" class="btn-primary pt-[13.5] pb-3.5 md:rounded-xs rounded-lg disabled:btn-ghost disabled:cursor-not-allowed"
-                        [disabled]="isDisabeled()">send invitation</button>
+                        [disabled]="inviteMemberForm.invalid || isDisabled()">{{ isDisabled() ? 'sending...' : 'send invitation' }}</button>
             </div>
             
        </form>
