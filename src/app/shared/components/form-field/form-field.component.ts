@@ -51,6 +51,8 @@ export class FormFieldComponent {
     if (errors['email']) return 'Please enter a valid email address.';
     if (errors['pattern']) return `${this.patternErrorMsg()} `
     if (errors['passwordMismatch']) return "Passwords do not match."
+    if (errors['alreadyMember']) return "This user is already a member of this project!"
+
     
     
     return null;
