@@ -6,16 +6,7 @@
 
             <span class="tracking-[1.1px] flex items-center gap-2">
                <span class="w-2 h-2 font-bold rounded-full bg-[#94A3B8]"
-                     [ngClass]="{
-                       'bg-primary': status() === 'IN_PROGRESS',
-                       'bg-success': status() === 'DONE',
-                       'bg-error': status() === 'BLOCKED',
-                       'bg-slate-medium': status() === 'IN_REVIEW',
-                       'bg-amber-500': status() === 'READY_FOR_QA',
-                       'bg-rose-500': status() === 'REOPENED',
-                       'bg-cyan-500': status() === 'READY_FOR_PRODUCTION',
-                       
-                     }"></span>
+                     [class]="getStatusBgClass(status())"></span>
                {{ status() | statusLabel }}
             </span>
               
@@ -38,15 +29,13 @@
   </div>
 
   <!-- tasks cards container -->
-  <div class="flex flex-col gap-2.5 min-h-37.5 mb-3 overflow-y-auto max-h-[calc(100vh-400px)]" (scroll)="onColumnScroll($event)">
+  <div class="flex flex-col gap-2.5  mb-3 overflow-y-auto h-[calc(100vh-400px)]"
+    (scroll)="onColumnScroll($event)"
+   >
     @for (task of tasks(); track task.id) {
       @if (task.due_date ? getDateStatus(task.due_date) : 'NO_DATE'; as dateStatus) {
       <div class="bg-white min-h-28.25 p-4 rounded-lg border border-[#C3C6D61A] shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between"
-           [ngClass]="{
-            'border-l-4 border-l-primary': status() === 'IN_PROGRESS',
-            'border-[#BA1A1A1A]! bg-[#FFDAD633]!': status() === 'BLOCKED',
-            
-            }"
+            [class]="getCardCustomClass()"
             (click)="setSelectedTask(task)">
         <h3 class="text-sm/[19.25px] font-medium text-slate-dark min-h-1/2">{{ task.title }}</h3>
         <div class="flex justify-between mt-4">

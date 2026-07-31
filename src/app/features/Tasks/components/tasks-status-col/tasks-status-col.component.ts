@@ -14,17 +14,18 @@ import { PaginationService } from '../../../../shared/services/pagination.servic
 import { PopupService } from '../../../../shared/services/popup.service';
 import { TaskPopupComponent } from '../task-popup/task-popup.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getStatusBgClass } from '../../../../shared/utils/status.utils';
 
 @Component({
   selector: 'app-tasks-status-col',
   standalone: true,
-  imports: [IconComponent,StatusLabelPipe,DatePipe,NameAvatarIconComponent,NgClass],
+  imports: [IconComponent,StatusLabelPipe,DatePipe,NameAvatarIconComponent],
   providers:[PaginationService],
   templateUrl: './tasks-status-col.component.html',
   styleUrl: './tasks-status-col.component.css'
 })
 export class TasksStatusColComponent implements OnChanges,OnInit{
-  status = input.required<string>();
+  status = input.required<Status>();
   
   private _epics_management = inject(EpicsManagementsService)
   private _tasks_management = inject(TasksManagementService)
@@ -32,7 +33,7 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   private _toast = inject(ToastNotificationService)
   private _router = inject(Router)
   private _popup = inject(PopupService)
-   _pagination = inject(PaginationService);
+  _pagination = inject(PaginationService);
   currentProject = this._projects_management.selectedProject
   epicId = this._epics_management.selectedEpic
   private destroyRef = inject(DestroyRef);
@@ -41,6 +42,8 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   isLoading = signal(false)
   isEmpty = signal(false)
   isError = signal(false)
+  getStatusBgClass = getStatusBgClass
+  
 
   ngOnChanges(): void {
     this.resetState()
@@ -102,14 +105,11 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
           const total = parseInt(parts[1]);
           this.total.set(total);
         }
-        // console.log(this.tasks())
-        // console.log(epicId)
         
       },
       error:(err)=>{
         this.isLoading.set(false)
         this.isError.set(false)
-        // console.log(err)
         this._toast.showMsg("failed to fetch epic's tasks! please try again.")
       }
     })
@@ -153,8 +153,17 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
       mobilePosition: 'bottom-sheet'
     })
   }
-
   
+  getCardCustomClass(): string {
+    if(this.status() == 'IN_PROGRESS'){
+     return  'border-l-4 border-l-primary' 
+    }else if(this.status() == 'BLOCKED'){
+       return 'border-[#BA1A1A1A]! bg-[#FFDAD633]!'
+    }
+    return ''
+  }
+ 
+
     
 }
 
