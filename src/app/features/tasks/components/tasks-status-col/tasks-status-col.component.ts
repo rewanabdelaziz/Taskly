@@ -107,9 +107,12 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
 
 
   getTasksByStatus(status : Status){
-    this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,status,this._pagination.offset(),this._pagination.limit()).subscribe({
+    const projectId = this.currentProject()?.id;
+    if (!projectId) return;
+    this._tasks_management.getProjectTasksbyStatus(projectId,status,this._pagination.offset(),this._pagination.limit()).subscribe({
       next: (res:HttpResponse<Task[]>)=>{
         this.isLoading.set(false)
+         this.isError.set(false)
          const newTask = res.body || [];
          this.tasks.update((prev) => [...prev, ...newTask]);
 
@@ -129,7 +132,8 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
       },
       error:(err)=>{
         this.isLoading.set(false)
-        this.isError.set(false)
+        this.isError.set(true)
+        this.isEmpty.set(false);
         this._toast.showMsg("failed to fetch epic's tasks! please try again.")
       }
     })
