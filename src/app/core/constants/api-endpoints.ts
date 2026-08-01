@@ -15,7 +15,9 @@ export const ApiEndpoints = {
   ADD_PROJECT: `${REST_BASE}/projects`,
   
   // members
-  MEMBERS: `${REST_BASE}/get_project_members`,  
+  MEMBERS: `${REST_BASE}/get_project_members`, 
+  INVITE_MEMBER : `${REST_BASE}/rpc/invite_member`,
+  ACCEPT_INVITATION: `${REST_BASE}/rpc/accept_invitation`,
 
   // epics
   GET_PROJECT_EPICS: `${REST_BASE}/project_epics`,

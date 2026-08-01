@@ -1,12 +1,13 @@
 import { Component, input, output} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '../icon/icon.component';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-form-field',
   standalone: true,
-  imports: [ReactiveFormsModule,IconComponent],
+  imports: [ReactiveFormsModule,IconComponent,RouterLink],
   templateUrl: './form-field.component.html',
   styleUrl: './form-field.component.css'
 })
@@ -51,6 +52,8 @@ export class FormFieldComponent {
     if (errors['email']) return 'Please enter a valid email address.';
     if (errors['pattern']) return `${this.patternErrorMsg()} `
     if (errors['passwordMismatch']) return "Passwords do not match."
+    if (errors['alreadyMember']) return "This user is already a member of this project!"
+
     
     
     return null;

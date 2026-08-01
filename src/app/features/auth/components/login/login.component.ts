@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { UserLoginPayload } from '../../models/user';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit{
   private fb = inject(FormBuilder);
   private _authServie = inject(AuthServiceService);
   private _router = inject(Router);
+  private _activated_route = inject(ActivatedRoute);
   _globalMsg = inject(ToastNotificationService);
 
   loginForm!: FormGroup;
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit{
         next: () => {
           this.isSubmitted.set(false);
           this._globalMsg.showMsg('Logged in successfully!', 'success');
-          this._router.navigate(['/project']);
+          this.onLoginSuccess();
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitted.set(false);
@@ -73,6 +74,18 @@ export class LoginComponent implements OnInit{
     } else {
       this.isSubmitted.set(false);
       this.loginForm.markAllAsTouched();
+    }
+  }
+
+  onLoginSuccess() {
+    const returnUrl = this._activated_route.snapshot.queryParamMap.get('returnUrl');
+    const token = this._activated_route.snapshot.queryParamMap.get('token');
+    if (returnUrl && token) {
+      this._router.navigate([returnUrl], { queryParams: { token: token } });
+      console.log(returnUrl)
+      console.log(token)
+    } else {
+      this._router.navigate(['/project']);
     }
   }
 

@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, HostListener, inject, OnInit, signal } from '@angular/core';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TasksManagementService } from '../../services/tasks-management.service';
 import { Task } from '../../models/task';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
@@ -13,7 +13,8 @@ import { HttpResponse } from '@angular/common/http';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { PopupService } from '../../../../shared/services/popup.service';
 import { TaskPopupComponent } from '../task-popup/task-popup.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-list-view',
@@ -28,6 +29,7 @@ export class ListViewComponent implements OnInit{
   private _tasks_management = inject(TasksManagementService)
   private _toast = inject(ToastNotificationService)
   private _router = inject(Router)
+  private _activate_router = inject(ActivatedRoute)
   private _popup = inject(PopupService)
   _pagination = inject(PaginationService);
   private destroyRef = inject(DestroyRef);
@@ -38,6 +40,9 @@ export class ListViewComponent implements OnInit{
   isEmpty = signal(false)
   isError = signal(false)
   total = signal(0)
+  isSearchEmpty = signal(false);
+  isSearchLoading = signal(false);
+  isSearchError = signal(false);
 
 
   currentLength = computed(() => 
@@ -54,10 +59,26 @@ export class ListViewComponent implements OnInit{
   
   isMobileNow = signal<boolean>(false);
 
+  searchTerm = signal<string>('')
+
   ngOnInit(): void {
     this._pagination.init(4);
-    this.getTasks()
+    // this.getTasks()
     this.checkScreenSize();
+
+    this._activate_router.queryParams
+    .pipe(
+      map(params => params['search'] || ''),
+      takeUntilDestroyed(this.destroyRef) 
+    )
+    .subscribe(searchTerm => {
+      console.log('Search term changed:', searchTerm);
+      this._pagination.resetPage(); 
+      
+      this.searchTerm.set(searchTerm);
+      this.getTasks();
+    });
+
     this._tasks_management.taskUpdated$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
@@ -91,15 +112,26 @@ export class ListViewComponent implements OnInit{
 
 
   getTasks(isAppend = false){
+    const isSearching = this.searchTerm().trim() !== '';
      if (!isAppend) {
       this.isEmpty.set(false);
-      this.isLoading.set(true);
+      this.isSearchEmpty.set(false);
+      if (isSearching) {
+       this.isSearchLoading.set(true);
+     } else {
+       this.isLoading.set(true);
+     }
     }
     this.isError.set(false);
+    this.isSearchError.set(false);
+    this.isEmpty.set(false);
+    this.isSearchEmpty.set(false);
+    // console.log(this.searchTerm())
 
-      this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,undefined,this._pagination.offset(),this._pagination.limit()).subscribe({
+      this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,undefined,this._pagination.offset(),this._pagination.limit(),undefined,this.searchTerm()).subscribe({
         next: (res: HttpResponse<Task[]>)=>{
           this.isLoading.set(false)
+          this.isSearchLoading.set(false);
            if (isAppend) {
               const newTask = res.body || [];
               this.tasks.update((prev) => [...prev, ...newTask]);
@@ -111,7 +143,11 @@ export class ListViewComponent implements OnInit{
             // console.log(res.body)
     
             if (this.tasks().length == 0) {
-              this.isEmpty.set(true);
+              if (isSearching) {
+                this.isSearchEmpty.set(true); 
+              } else {
+                this.isEmpty.set(true);      
+              }
             }
             const contentRange = res.headers.get('content-range');
             if (contentRange) {
@@ -123,7 +159,9 @@ export class ListViewComponent implements OnInit{
         },
         error:(err)=>{
           this.isLoading.set(false)
-          this.isError.set(false)
+          this.isSearchLoading.set(false);
+          this.isError.set(true)
+          this.isSearchError.set(true)
           // console.log(err)
           this._toast.showMsg("failed to fetch epic's tasks! please try again.")
         }
