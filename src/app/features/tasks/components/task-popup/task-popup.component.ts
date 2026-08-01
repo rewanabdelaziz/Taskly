@@ -15,7 +15,7 @@ import { DatePipe, NgClass, SlicePipe } from '@angular/common';
 import { StatusLabelPipe } from '../../pipes/status-label.pipe';
 import { Subject, switchMap } from 'rxjs';
 import { CurrentProjectEpicsService } from '../../../../shared/services/current-project-epics.service';
-import { getTodayDateString } from '../../../../shared/utils/date.utilis';
+import { getTodayDateString } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-task-popup',

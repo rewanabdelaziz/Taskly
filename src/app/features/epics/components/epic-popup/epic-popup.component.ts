@@ -15,7 +15,7 @@ import { Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FetchTasksHanlingService } from '../../../../shared/services/fetch-tasks-hanling.service';
 import { PopupService } from '../../../../shared/services/popup.service';
-import { getTodayDateString } from '../../../../shared/utils/date.utilis';
+import { getTodayDateString } from '../../../../shared/utils/date.utils';
 import { Task } from '../../../tasks/models/task';
 import { TaskPopupComponent } from '../../../tasks/components/task-popup/task-popup.component';
 

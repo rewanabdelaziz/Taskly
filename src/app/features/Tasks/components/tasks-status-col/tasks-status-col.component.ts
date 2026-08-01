@@ -15,17 +15,19 @@ import { PopupService } from '../../../../shared/services/popup.service';
 import { TaskPopupComponent } from '../task-popup/task-popup.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
+import { getStatusBgClass } from '../../../../shared/utils/status.utils';
+
 
 @Component({
   selector: 'app-tasks-status-col',
   standalone: true,
-  imports: [IconComponent,StatusLabelPipe,DatePipe,NameAvatarIconComponent,NgClass],
+  imports: [IconComponent,StatusLabelPipe,DatePipe,NameAvatarIconComponent],
   providers:[PaginationService],
   templateUrl: './tasks-status-col.component.html',
   styleUrl: './tasks-status-col.component.css'
 })
 export class TasksStatusColComponent implements OnChanges,OnInit{
-  status = input.required<string>();
+  status = input.required<Status>();
   
   private _epics_management = inject(EpicsManagementsService)
   private _tasks_management = inject(TasksManagementService)
@@ -34,7 +36,7 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   private _router = inject(Router)
   private _activate_router = inject(ActivatedRoute)
   private _popup = inject(PopupService)
-   _pagination = inject(PaginationService);
+  _pagination = inject(PaginationService);
   currentProject = this._projects_management.selectedProject
   epicId = this._epics_management.selectedEpic
   private destroyRef = inject(DestroyRef);
@@ -48,6 +50,9 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   isSearchError = signal(false);
 
   searchTerm = signal<string>('')
+  getStatusBgClass = getStatusBgClass
+  
+
 
   ngOnChanges(): void {
     this.resetState()
@@ -132,8 +137,6 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
           const total = parseInt(parts[1]);
           this.total.set(total);
         }
-        // console.log(this.tasks())
-        // console.log(epicId)
         
       },
       error:(err)=>{
@@ -141,7 +144,6 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
         this.isError.set(true)
         this.isSearchLoading.set(false)
         this.isSearchError.set(true)
-        // console.log(err)
         this._toast.showMsg("failed to fetch epic's tasks! please try again.")
       }
     })
@@ -185,8 +187,17 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
       mobilePosition: 'bottom-sheet'
     })
   }
-
   
+  getCardCustomClass(): string {
+    if(this.status() == 'IN_PROGRESS'){
+     return  'border-l-4 border-l-primary' 
+    }else if(this.status() == 'BLOCKED'){
+       return 'border-[#BA1A1A1A]! bg-[#FFDAD633]!'
+    }
+    return ''
+  }
+ 
+
     
 }
 

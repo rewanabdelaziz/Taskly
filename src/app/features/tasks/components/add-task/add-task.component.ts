@@ -12,7 +12,7 @@ import { CurrentProjectEpicsService } from '../../../../shared/services/current-
 import { TasksManagementService } from '../../services/tasks-management.service';
 import { SlicePipe } from '@angular/common';
 import { StatusLabelPipe } from '../../pipes/status-label.pipe';
-import { getTodayDateString } from '../../../../shared/utils/date.utilis';
+import { getTodayDateString } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-add-task',
