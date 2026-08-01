@@ -8,12 +8,13 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
 import { StatusLabelPipe } from '../../pipes/status-label.pipe';
 import { DatePipe, NgClass } from '@angular/common';
 import { NameAvatarIconComponent } from '../../../../shared/components/name-avatar-icon/name-avatar-icon.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { PaginationService } from '../../../../shared/services/pagination.service';
 import { PopupService } from '../../../../shared/services/popup.service';
 import { TaskPopupComponent } from '../task-popup/task-popup.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-status-col',
@@ -31,6 +32,7 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   private _projects_management = inject(ProjectsManagementsService)
   private _toast = inject(ToastNotificationService)
   private _router = inject(Router)
+  private _activate_router = inject(ActivatedRoute)
   private _popup = inject(PopupService)
    _pagination = inject(PaginationService);
   currentProject = this._projects_management.selectedProject
@@ -41,6 +43,11 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   isLoading = signal(false)
   isEmpty = signal(false)
   isError = signal(false)
+  isSearchEmpty = signal(false);
+  isSearchLoading = signal(false);
+  isSearchError = signal(false);
+
+  searchTerm = signal<string>('')
 
   ngOnChanges(): void {
     this.resetState()
@@ -49,6 +56,19 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   }
 
   ngOnInit(): void {
+    this._activate_router.queryParams
+      .pipe(
+        map(params => params['search'] || ''),
+        takeUntilDestroyed(this.destroyRef) 
+      )
+      .subscribe(searchTerm => {
+        console.log('Search term changed:', searchTerm);
+        this._pagination.resetPage(); 
+        
+        this.searchTerm.set(searchTerm);
+        this.getTasksByStatus(this.status() as Status);
+      });
+
     this._tasks_management.taskUpdated$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
@@ -84,16 +104,26 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
 
 
   getTasksByStatus(status : Status){
-    this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,status,this._pagination.offset(),this._pagination.limit()).subscribe({
+    const isSearching = this.searchTerm().trim() !== '';
+    this.isLoading.set(!isSearching);
+    this.isSearchLoading.set(isSearching);
+    this.isError.set(false);
+    this.isSearchError.set(false);
+    this.isEmpty.set(false);
+    this.isSearchEmpty.set(false);
+    this._tasks_management.getProjectTasksbyStatus(this.currentProject()?.id!,status,this._pagination.offset(),this._pagination.limit(),undefined,this.searchTerm()).subscribe({
       next: (res:HttpResponse<Task[]>)=>{
         this.isLoading.set(false)
+        this.isSearchLoading.set(false)
          const newTask = res.body || [];
          this.tasks.update((prev) => [...prev, ...newTask]);
 
         if(this.tasks().length === 0){
-          this.isEmpty.set(true)
-        }else{
-          this.isEmpty.set(false)
+          if (isSearching) {
+                this.isSearchEmpty.set(true); 
+              } else {
+                this.isEmpty.set(true);      
+              }
         }
 
         const contentRange = res.headers.get('content-range');
@@ -108,7 +138,9 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
       },
       error:(err)=>{
         this.isLoading.set(false)
-        this.isError.set(false)
+        this.isError.set(true)
+        this.isSearchLoading.set(false)
+        this.isSearchError.set(true)
         // console.log(err)
         this._toast.showMsg("failed to fetch epic's tasks! please try again.")
       }
