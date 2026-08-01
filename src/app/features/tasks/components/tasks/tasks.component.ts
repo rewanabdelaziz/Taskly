@@ -39,8 +39,12 @@ export class TasksComponent implements OnInit{
   }
 
 
-  onSearchEpics(val : string){
-    console.log(val)
+  onSearchTask(val : string){
+    this._router.navigate([], {
+    relativeTo: this._activate_router,
+    queryParams: { search: val || null }, //if val is empty, remove the search param
+    queryParamsHandling: 'merge', // preserve other query params
+  });
   }
 
   onViewChange(event: Event) {

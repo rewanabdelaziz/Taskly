@@ -25,7 +25,7 @@ export class TasksManagementService {
     return this._http.get<Task[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECT_TASK}`,{params})
   }
 
-  getProjectTasksbyStatus(projId:string, status?:Status,offset?: number, limit?: number,taskId?:string):Observable<HttpResponse<Task[]>> {
+  getProjectTasksbyStatus(projId:string, status?:Status,offset?: number, limit?: number,taskId?:string,searchTerm?:string):Observable<HttpResponse<Task[]>> {
     let params = new HttpParams().set('project_id', `eq.${projId}`);
     
     if(status){
@@ -39,6 +39,10 @@ export class TasksManagementService {
     if(offset !== undefined && limit !== undefined){
       params = params.set('limit', limit.toString())
             .set('offset', offset.toString())          
+    }
+
+    if (searchTerm && searchTerm.trim() !== '') {
+      params = params.set('title', `ilike.%${searchTerm}%`);
     }
 
     const headers = new HttpHeaders().set('Prefer', 'count=exact');
