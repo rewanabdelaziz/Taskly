@@ -1,10 +1,11 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { Breadcrumbs } from '../../models/breadcrumbs';
 import { IconComponent } from '../icon/icon.component';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ProjectsManagementsService } from '../../../features/projects/services/projects-managements.service';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -18,6 +19,7 @@ export class BreadcrumbComponent {
   private _activateRouter = inject(ActivatedRoute);
   private _project_management = inject(ProjectsManagementsService);
   private _router = inject(Router);
+  private _document = inject(DOCUMENT);
 
   currentProjectId = toSignal(this._activateRouter.paramMap.pipe(map((paramMap) => paramMap.get('id') || null)));
 
@@ -69,4 +71,38 @@ export class BreadcrumbComponent {
 
     return currentBreadCrumbs;
   });
+
+
+
+
+
+
+  constructor() {
+    effect(() => {
+      const crumbs = this.breadcrumbs();
+      if (crumbs.length > 0) {
+        // JSON-LD Schema
+        const schemaData = {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": crumbs.map((crumb, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": crumb.label,
+            "item": `${window.location.origin}${crumb.url}`
+          }))
+        };
+
+        // Inject the JSON-LD schema into the document head
+        let script = this._document.getElementById('dynamic-breadcrumb-schema') as HTMLScriptElement;
+        if (!script) {
+          script = this._document.createElement('script');
+          script.id = 'dynamic-breadcrumb-schema';
+          script.type = 'application/ld+json';
+          this._document.head.appendChild(script);
+        }
+        script.text = JSON.stringify(schemaData);
+      }
+    });
+  }
 }
