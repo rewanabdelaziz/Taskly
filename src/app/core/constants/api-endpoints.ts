@@ -25,6 +25,9 @@ export const ApiEndpoints = {
 
   // tasks
   ADD_TASK : `${REST_BASE}/tasks`,
-  GET_PROJECT_TASK : `${REST_BASE}/project_tasks` 
+  GET_PROJECT_TASK : `${REST_BASE}/project_tasks` ,
+
+  // calendar 
+  CALENDAR:`${REST_BASE}/rpc/get_tasks_calendar_stats`  
 
 } as const;
