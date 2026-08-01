@@ -83,7 +83,7 @@
           </p>
         </div>
 
-        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold">
+        <button class="btn-primary btn-shadow flex items-center gap-1 py-3 font-bold" (click)="openInvitePopup()">
           <app-icon name="person-add"></app-icon>
           Invite Member
         </button>
@@ -100,6 +100,7 @@
 
         <button
           class="btn-primary sm:py-3 hidden sm:flex items-center gap-1 font-medium shadow btn-shadow h-fit max-w-fit"
+          (click)="openInvitePopup()"
         >
           <app-icon name="person-add" [size]="17" class="me-1"></app-icon>
           Invite Member
@@ -193,7 +194,7 @@
 
       <button
         class="inline sm:hidden fixed bottom-0 right-2 btn-primary btn-shadow rounded-xl text-center px-4 py-3 font-bold mb-20"
-        
+        (click)="openInvitePopup()"
       >
         <app-icon name="person-add" [size]="14"></app-icon>
       </button>
