@@ -1,4 +1,27 @@
- <!-- tabel container -->
+<!-- Search Loading State -->
+@if (isSearchLoading()) {
+  <div class="flex flex-col items-center justify-center py-12 w-full h-full">
+    <div class="animate-spin rounded-full h-7 w-7 border-b-2 border-primary mb-2"></div>
+    <p class="text-xs text-text-body font-medium">Searching tasks...</p>
+  </div>
+} 
+@else if (isSearchError()) {
+  <!-- Search Error State  -->
+  <div class="flex flex-col items-center justify-center py-12 w-full text-center  border border-slate-200/60 rounded-xl shadow-form-shadow p-6 mb-4 h-full">
+    <app-icon name="warning" [size]="28" class="text-rose-500 mb-2"></app-icon>
+    <h3 class="text-sm font-semibold text-slate-dark mb-1">Failed to search tasks</h3>
+    <p class="text-xs text-text-body">Something went wrong while searching. Please try again.</p>
+  </div>
+}
+@else if (isSearchEmpty()) {
+  <!-- Search Empty State -->
+  <div class="flex flex-col items-center justify-center py-12 w-full text-center border border-slate-200/60 rounded-xl shadow-form-shadow p-6 mb-4 h-full">
+    <app-icon name="search" [size]="28" class="text-slate-400 mb-2"></app-icon>
+    <h3 class="text-sm font-semibold text-slate-dark mb-1">No matching tasks found</h3>
+    <p class="text-xs text-text-body">We couldn't find anything matching "{{ searchTerm() }}". Try a different keyword.</p>
+  </div>
+}@else {
+<!-- tabel container -->
 <div class="hidden lg:flex justify-center items-center flex-col w-full px-4">
   <table
     class="w-full bg-white border border-slate-200/60 rounded-t-xl overflow-hidden shadow-form-shadow border-collapse"
@@ -144,3 +167,5 @@
 >
   <app-icon name="plus" [size]="14"></app-icon>
 </button>
+
+}
