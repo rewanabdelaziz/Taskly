@@ -1,12 +1,13 @@
 import { Component, input, output} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from '../icon/icon.component';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-form-field',
   standalone: true,
-  imports: [ReactiveFormsModule,IconComponent],
+  imports: [ReactiveFormsModule,IconComponent,RouterLink],
   templateUrl: './form-field.component.html',
   styleUrl: './form-field.component.css'
 })
