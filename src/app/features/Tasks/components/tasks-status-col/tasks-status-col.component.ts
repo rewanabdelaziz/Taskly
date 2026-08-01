@@ -44,6 +44,7 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   isError = signal(false)
   getStatusBgClass = getStatusBgClass
   isDragOver = signal(false);
+  draggingTaskId = signal<string | null>(null);
 
   ngOnChanges(): void {
     this.resetState()
@@ -202,16 +203,12 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
     event.dataTransfer.setData('text/plain', data);
     event.dataTransfer.effectAllowed = 'move';
 
-    if (event.target instanceof HTMLElement) {
-      event.target.style.opacity = '0.4';
-    }
+    this.draggingTaskId.set(task.id);
   }
 
   onDragEnd(event: DragEvent) {
     this.isDragOver.set(false);
-    if (event.target instanceof HTMLElement) {
-      event.target.style.opacity = '1';
-    }
+   this.draggingTaskId.set(null);
   }
 
   onDragOver(event: DragEvent) {
