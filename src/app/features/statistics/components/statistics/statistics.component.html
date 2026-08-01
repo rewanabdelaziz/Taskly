@@ -1,0 +1,74 @@
+<div class="flex flex-col items-center h-full w-full p-6 bg-gray-50 min-h-screen">
+  
+  <!-- Header -->
+  <div class="mb-8 flex flex-col w-full justify-between items-start md:flex-row md:items-center">
+    <div>
+      <h2 class="title-md">Weekly Planner</h2>
+      <p class="body-sm text-text-body hidden lg:block">Manage your deadlines and track team velocity.</p>
+    </div>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="flex justify-between items-center mt-2 mb-6 flex-wrap gap-4 bg-surface-low w-full p-4 rounded-2xl border border-gray-100">
+    <!-- Date picker -->
+    <app-custom-date-picker (dateRangeSelected)="changeWeek($event)"></app-custom-date-picker>
+    
+    <div class="flex items-center gap-4">
+      <!-- Project Filter -->
+      <select [value]="selectedProjectId" (change)="onProjectChange($event)" class="bg-white p-2.5 rounded-xl shadow-sm border border-gray-200 text-sm text-slate-dark outline-none min-w-37.5">
+        <option [value]="null">All Projects</option>
+        @for(proj of projects(); track proj.id) {
+          <option [value]="proj.id">{{ proj.name }}</option>
+        }
+      </select>
+
+      <!-- Status Filter -->
+      <select [value]="selectedStatus" (change)="onStatusChange($event)" class="bg-white p-2.5 rounded-xl shadow-sm border border-gray-200 text-sm text-slate-dark outline-none min-w-37.5">
+        <option [value]="null">All Statuses</option>
+        @for(status of statuses; track status) {
+          <option [value]="status">{{ status | statusLabel }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-8">
+    <!-- Total Tasks -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 tracking-wider">TOTAL TASKS</p>
+        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ calendarData()?.total_tasks || 0 }}</h3>
+      </div>
+      <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+       <app-icon name="note" [size]="24"></app-icon>
+      </div>
+    </div>
+
+    <!-- Completed Tasks -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 tracking-wider">COMPLETED TASKS</p>
+        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ calendarData()?.done_tasks || 0 }}</h3>
+      </div>
+      <div class="p-3 bg-success text-success-msg-text">
+        <app-icon name="circle-checked-2" [size]="24"></app-icon>
+      </div>
+    </div>
+
+    <!-- Overdue Tasks -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 tracking-wider">OVERDUE TASKS</p>
+        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ calendarData()?.overdue_tasks || 0 }}</h3>
+      </div>
+      <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+        <app-icon name="full-warning" [size]="24"></app-icon>
+      </div>
+    </div>
+  </div>
+
+
+ 
+
+</div>
