@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center h-full w-full p-6 bg-gray-50 min-h-screen">
+<div class="flex flex-col items-center h-full w-full p-3 md:p-6 bg-gray-50 min-h-screen">
   
   <!-- Header -->
   <div class="mb-8 flex flex-col w-full justify-between items-start md:flex-row md:items-center">
@@ -13,9 +13,9 @@
     <!-- Date picker -->
     <app-custom-date-picker (dateRangeSelected)="changeWeek($event)"></app-custom-date-picker>
     
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 flex-wrap">
       <!-- Project Filter -->
-      <select [value]="selectedProjectId" (change)="onProjectChange($event)" class="bg-white p-2.5 rounded-xl shadow-sm border border-gray-200 text-sm text-slate-dark outline-none min-w-37.5">
+      <select [value]="selectedProjectId" (change)="onProjectChange($event)" class="bg-white py-2 px-1 md:px-4 rounded-xs shadow-sm  font-medium text-sm text-slate-dark outline-none ">
         <option [value]="null">All Projects</option>
         @for(proj of projects(); track proj.id) {
           <option [value]="proj.id">{{ proj.name }}</option>
@@ -23,7 +23,7 @@
       </select>
 
       <!-- Status Filter -->
-      <select [value]="selectedStatus" (change)="onStatusChange($event)" class="bg-white p-2.5 rounded-xl shadow-sm border border-gray-200 text-sm text-slate-dark outline-none min-w-37.5">
+      <select [value]="selectedStatus" (change)="onStatusChange($event)" class="bg-white py-2 px-4 rounded-xs shadow-sm  font-medium text-sm text-slate-dark outline-none">
         <option [value]="null">All Statuses</option>
         @for(status of statuses; track status) {
           <option [value]="status">{{ status | statusLabel }}</option>
@@ -33,41 +33,104 @@
   </div>
 
   <!-- KPI Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-8">
     <!-- Total Tasks -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
-      <div>
-        <p class="text-xs font-semibold text-gray-400 tracking-wider">TOTAL TASKS</p>
-        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ calendarData()?.total_tasks || 0 }}</h3>
+      <div class="flex flex-col gap-1">
+        <p class="text-xs font-bold text-[#041B3C99]">TOTAL TASKS</p>
+        <h3 class="text-[30px] font-bold text-slate-dark">{{ calendarData()?.total_tasks }}</h3>
       </div>
-      <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-       <app-icon name="note" [size]="24"></app-icon>
+      <div class="p-3.5 bg-[#0052CC1A] text-primary rounded-xs">
+       <app-icon name="note" [size]="18"></app-icon>
       </div>
     </div>
 
     <!-- Completed Tasks -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
-      <div>
-        <p class="text-xs font-semibold text-gray-400 tracking-wider">COMPLETED TASKS</p>
-        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ calendarData()?.done_tasks || 0 }}</h3>
+    <div class="bg-white p-6 rounded-lg shadow-sm  flex justify-between items-center">
+      <div class="flex flex-col gap-1">
+        <p class="text-xs font-bold text-[#041B3C99]">COMPLETED TASKS</p>
+        <span class="text-[30px] font-bold text-slate-dark">{{ calendarData()?.done_tasks }}</span>
       </div>
-      <div class="p-3 bg-success text-success-msg-text">
-        <app-icon name="circle-checked-2" [size]="24"></app-icon>
+      <div class="p-3.5 bg-[#0068441A] text-dark-green rounded-xs">
+        <app-icon name="circle-checked-2" [size]="20"></app-icon>
       </div>
     </div>
 
     <!-- Overdue Tasks -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
-      <div>
-        <p class="text-xs font-semibold text-gray-400 tracking-wider">OVERDUE TASKS</p>
-        <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ calendarData()?.overdue_tasks || 0 }}</h3>
+      <div class="flex flex-col gap-1">
+        <p class="text-xs font-bold text-[#041B3C99]">OVERDUE TASKS</p>
+        <h3 class="text-[30px] font-bold text-error">{{ calendarData()?.overdue_tasks }}</h3>
       </div>
-      <div class="p-3 bg-red-50 text-red-600 rounded-xl">
-        <app-icon name="full-warning" [size]="24"></app-icon>
+      <div class="p-3.5 bg-[#FFDAD633] text-error rounded-xs">
+        <app-icon name="full-warning" [size]="19"></app-icon>
       </div>
     </div>
   </div>
 
+
+<!-- Days Grid -->
+<div class="flex gap-4 w-full overflow-x-auto pb-4 pt-6 h-auto">
+  @for(dayItem of calendarData()?.daily; track dayItem.day) {
+    <div class="relative bg-white p-4 pt-6 flex flex-col rounded-lg transition-all duration-300 min-w-31.5 min-h-105 flex-1 shrink-0 border"
+         [ngClass]="{
+           'border-[#003D9B] border-2 shadow-xl z-10': isToday(dayItem.day),
+           'border-gray-100 shadow-sm': !isToday(dayItem.day)
+         }">
+      
+      <!-- 'TODAY' Badge -->
+      @if(isToday(dayItem.day)) {
+        <div class="absolute -top-3.5 left-[50%] transform -translate-x-1/2 px-3 py-1 bg-[#003D9B] text-white text-[10px] font-bold rounded-full tracking-widest shadow-sm z-20">
+          TODAY
+        </div>
+      }
+
+      <!-- Day Header -->
+      <div class="mb-8 relative w-full">
+        <span class="text-xs font-bold block uppercase tracking-wider"
+              [class]="isToday(dayItem.day) ? 'text-primary' : 'text-popup-label' ">
+          {{ dayItem.day | date:'EEE' }}
+        </span>
+        <span class="text-2xl font-bold tracking-tight"
+              [ngClass]="(dayItem.statuses | json) !== '{}' ? 'text-slate-dark' : 'text-[#041B3C99]'">
+          {{ dayItem.day | date:'d MMM' }}
+        </span>
+      </div>
+
+      <!-- Status Badges List -->
+      <div class="flex flex-col gap-2 mt-2">
+        @if((dayItem.statuses | json) !== '{}') {
+          @for(status of statuses; track status) {
+            @if(dayItem?.statuses?.[status]) {
+              <div class="flex justify-between items-center  p-2 rounded-xs text-xs font-semibold"
+                   [ngClass]="{
+                       'bg-[#0052CC33] text-primary border-l-4 border-l-[#003D9B]': status === 'IN_PROGRESS',
+                       'bg-light-green text-active-task-label': status === 'DONE',
+                       'bg-error-msg-bg text-error-msg-text': status === 'BLOCKED',
+                       'bg-slate-200 text-slate-medium':status === 'IN_REVIEW',
+                       'bg-amber-100 text-amber-500': status === 'READY_FOR_QA',
+                       'bg-orange-100 text-rose-500': status === 'REOPENED',
+                       'bg-cyan-100 text-cyan-500': status === 'READY_FOR_PRODUCTION',
+                       'bg-[#D7E2FF] text-text-body': status === 'TO_DO',
+                       
+                     }">
+                <span class="font-bold text-[11px] uppercase">{{ status | statusLabel }}</span>
+                <span class="font-bold text-slate-dark text-xs">{{ dayItem?.statuses?.[status] }}</span>
+              </div>
+            }
+          }
+        } @else {
+          <!-- No Tasks Placeholder -->
+          <div class="flex flex-col items-center justify-center text-gray-400 py-20 mt-6">
+            <app-icon name="empty" [size]="44" class="mb-3 text-gray-300"></app-icon>
+            <span class="text-[11px] font-semibold uppercase tracking-wider">NO TASKS</span>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+</div>
 
  
 

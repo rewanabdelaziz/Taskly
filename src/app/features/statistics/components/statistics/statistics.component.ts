@@ -70,7 +70,7 @@ export class StatisticsComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  // دالة استقبال النطاق من الـ Custom Date Picker
+ 
   changeWeek(range: { startDate: Date; endDate: Date }): void {
     this.startDate.set(this.formatDate(range.startDate));
     this.endDate.set(this.formatDate(range.endDate));
