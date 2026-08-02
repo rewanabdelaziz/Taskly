@@ -15,21 +15,27 @@ export class CustomDatePickerComponent implements OnInit {
   
   startDate = signal<Date | null>(null);
   endDate = signal<Date | null>(null);
-  monthDays: Date[] = [];
-  isOpen: boolean = false;
+  monthDays= signal< Date[]>([]);
+  isOpen = signal(false);
 
-  currentViewDate = new Date();
+  currentViewDate = signal(new Date());
 
   dateRangeSelected = output<{ startDate: Date; endDate: Date }>();
 
   ngOnInit(): void {
-    this.generateMonthDays();
+    this.generateCalendarDays();
+    this.initDate()
+    
+  }
+
+  initDate(){
     const start = new Date();
     const end = new Date();
-    end.setDate(start.getDate() + 6);
+    end.setDate(start.getDate() + 6); //current day number + 6
 
     this.startDate.set(start);
     this.endDate.set(end);
+    // console.log(this.startDate())
 
     // output the init date
     this.dateRangeSelected.emit({
@@ -39,30 +45,37 @@ export class CustomDatePickerComponent implements OnInit {
   }
 
   toggleDropdown() {
-    this.isOpen = !this.isOpen;
+    this.isOpen.set(!this.isOpen()) ;
   }
 
-  generateMonthDays() {
-    const year = this.currentViewDate.getFullYear();
-    const month = this.currentViewDate.getMonth();
+  generateCalendarDays(calendarRange : number = 21) {
+    const viewDate = new Date(this.currentViewDate());
+    
+    const today = viewDate.getDay();  // 0 - 6 --> sun - sat
+    const distanceToMonday = today === 0 ? 6 : today - 1;  // if today sunday --> 6
 
-    const lastDayOfMonth = new Date(year, month + 1, 0);
+    const startDateGrid = new Date(viewDate);
+    startDateGrid.setDate(viewDate.getDate() - distanceToMonday);
 
     const days: Date[] = [];
-    for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
-      days.push(new Date(year, month, i));
+
+    for (let i = 0; i < calendarRange; i++) {
+      const d = new Date(startDateGrid);
+      d.setDate(startDateGrid.getDate() + i);
+      days.push(d);
     }
-    this.monthDays = days;
+
+    this.monthDays.set(days) ;
   }
 
-  changeMonth(event: Event, direction: number) {
+  changeCalendarView(event: Event, direction: number, calendarRange : number = 21) {
     event.stopPropagation(); 
+
+    const currentView = new Date(this.currentViewDate());
+    currentView.setDate(currentView.getDate() + (direction * calendarRange));
     
-    const year = this.currentViewDate.getFullYear();
-    const month = this.currentViewDate.getMonth();
-    
-    this.currentViewDate = new Date(year, month + direction, 1);
-    this.generateMonthDays();
+    this.currentViewDate.set(currentView);
+    this.generateCalendarDays();
   }
 
   navigateWeek(event: Event, direction: number) {
@@ -82,8 +95,8 @@ export class CustomDatePickerComponent implements OnInit {
     this.startDate.set(newStart);
     this.endDate.set(newEnd);
 
-    this.currentViewDate = new Date(newStart);
-    this.generateMonthDays();
+    this.currentViewDate.set(new Date(newStart)) ;
+    this.generateCalendarDays();
 
     this.dateRangeSelected.emit({
       startDate: newStart,
@@ -108,7 +121,7 @@ export class CustomDatePickerComponent implements OnInit {
       } else {
         // range selected days
         const diffTime = Math.abs(date.getTime() - start.getTime());
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; //+1 to count the start day itself
 
         if (diffDays <= 7) {
           this.endDate.set(date);
@@ -131,10 +144,10 @@ export class CustomDatePickerComponent implements OnInit {
     const end = this.endDate();
     
     if (start && end) {
-      const time = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+      const currentTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
       const startTime = new Date(start.getFullYear(), start.getMonth(), start.getDate()).getTime();
       const endTime = new Date(end.getFullYear(), end.getMonth(), end.getDate()).getTime();
-      return time >= startTime && time <= endTime;
+      return currentTime >= startTime && currentTime <= endTime;
     }
     return false;
   }
@@ -159,13 +172,14 @@ export class CustomDatePickerComponent implements OnInit {
           endDate: calculatedEnd
         });
       }
-      this.isOpen = false;
+      this.isOpen.set(false);
     }
   }
 
   resetRange() {
     this.startDate.set(null);
     this.endDate.set(null);
-    this.isOpen = false;
+    this.isOpen.set(false);
+    this.initDate()
   }
 }

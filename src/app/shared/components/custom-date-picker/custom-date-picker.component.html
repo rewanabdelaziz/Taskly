@@ -1,48 +1,55 @@
 <div class="relative">
   <!-- the range header -->
   <div class="cursor-pointer select-none p-2.5 flex items-center justify-between  bg-transparent mb-3 text-slate-dark font-bold text-sm" >
-    <app-icon name="arrow-back" [size]="15" class="hover:bg-gray-100 rounded-lg transition" (click)="navigateWeek($event, -1)"></app-icon>
+    <app-icon name="arrow-back" [size]="12" class="hover:bg-gray-100 rounded-lg transition" (click)="navigateWeek($event, -1)"></app-icon>
     <div class="text-center mx-3" (click)="toggleDropdown()">
-      <span>{{ startDate() ? (startDate() | date:'d MMM, yyyy') : 'Select start date' }}</span> - 
+      <span>{{ startDate() ? (startDate() | date:'d MMM') : 'Select start date' }}</span> - 
       <span>{{ endDate() ? (endDate() | date:'d MMM, yyyy') : 'choose end date' }}</span>
     </div>
-    <app-icon name="next-arrow" [size]="15" class="hover:bg-gray-100 rounded-lg transition" (click)="navigateWeek($event, 1)"></app-icon>
+    <app-icon name="next-arrow" [size]="12" class="hover:bg-gray-100 rounded-lg transition" (click)="navigateWeek($event, 1)"></app-icon>
   </div>
 
   <!-- calendar popup dropdown -->
-  @if (isOpen) {
-    <div class="absolute top-full left-0 mt-2 z-50 bg-white shadow-xl border border-gray-200 rounded-2xl p-4 w-80">
+  @if (isOpen()) {
+    <div class="absolute top-full left-0  mt-2 md:mt-6.25 z-50 bg-white shadow-lg border border-gray-200 rounded-2xl p-5 w-80">
       
       <!-- Month Navigation Header -->
-      <div class="flex justify-between items-center mb-4 px-1">
-        <span class="font-bold text-gray-800 text-base">
-          {{ currentViewDate | date:'MMMM yyyy' }}
+      <div class="flex justify-between items-center mb-4">
+        <span class="font-bold text-slate-dark text-[16px]">
+          {{ currentViewDate() | date:'MMMM yyyy' }}
         </span>
-        <div class="flex items-center gap-1">
-          <button type="button" class="p-1.5 hover:bg-gray-100 rounded-lg text-gray-600 transition" (click)="changeMonth($event,-1)">
-            <app-icon name="arrow-back" [size]="16"></app-icon>
+        <div class="flex items-center gap-2 text-[#4F5F7B]">
+          <button type="button" (click)="changeCalendarView($event,-1)" class="cursor-pointer">
+            <app-icon name="arrow-back" [size]="12"></app-icon>
           </button>
-          <button type="button" class="p-1.5 hover:bg-gray-100 rounded-lg text-gray-600 transition" (click)="changeMonth($event,1)">
-            <app-icon name="next-arrow" [size]="16"></app-icon>
+          <button type="button" (click)="changeCalendarView($event,1)" class="cursor-pointer">
+            <app-icon name="next-arrow" [size]="12"></app-icon>
           </button>
         </div>
       </div>
 
       <!-- Days of week labels -->
-      <div class="grid grid-cols-7 gap-1 mb-2 text-center text-xs font-semibold text-gray-400">
-        <span>MO</span><span>TU</span><span>WE</span><span>TH</span><span>FR</span><span>SA</span><span>SU</span>
+      <div class="grid grid-cols-7 gap-1 mb-2 text-centerfont-bold text-[10px] text-[#94A3B8]">
+        <span class="px-2.75">MO</span> 
+        <span class="px-2.75">TU</span>
+        <span class="px-2.75">WE</span>
+        <span class="px-2.75">TH</span>
+        <span class="px-2.75">FR</span>
+        <span class="px-2.75">SA</span>
+        <span class="px-2.75">SU</span>
       </div>
 
       <!-- days grid container -->
-      <div class="grid grid-cols-7 gap-1 my-4">
-        @for(day of monthDays; track day) {
+      <div class="grid grid-cols-7 gap-1 my-1">
+        @for(day of monthDays(); track day) {
           <div 
-            class="py-2.5 text-center cursor-pointer text-[13px] transition flex items-center justify-center"
-            [class.bg-blue-600]="day === startDate() || day === endDate()"
-            [class.text-white]="day === startDate() || day === endDate()"
-            [class.font-bold]="day === startDate() || day === endDate()"
-            [class.bg-primary]="isInRange(day)"
-            [class.text-white]="isInRange(day)"
+            class="py-2 text-center cursor-pointer text-[13px] transition flex items-center justify-center border-transparent"
+            [class.border]="day === startDate() || day === endDate()"
+            [class.rounded-l-lg]="isSameDay(day, startDate())"
+            [class.rounded-r-lg]="isSameDay(day, endDate())"
+            [class.bg-[#0052CC33]]="day === startDate() || day === endDate()|| isInRange(day) "
+            [class.text-primary]="day === startDate() || day === endDate()|| isInRange(day) "
+            [class.text-[#CBD5E1]]="day.getMonth() !== currentViewDate().getMonth() "
             [class.hover:bg-gray-100]="day !== startDate() && day !== endDate() && !isInRange(day)"
             (click)="selectDate(day)">
             {{ day | date:'d' }}
@@ -51,9 +58,9 @@
       </div>
 
       <!-- Actions -->
-      <div class="flex justify-end gap-2 mt-4 pt-3 border-t border-gray-100">
-        <button type="button" class="px-4 py-2 border-none rounded-lg cursor-pointer text-[13px] bg-gray-100 text-gray-800 hover:bg-gray-200 transition" (click)="resetRange()">Cancel</button>
-        <button type="button" class="px-4 py-2 border-none rounded-lg cursor-pointer text-[13px] bg-blue-700 text-white hover:bg-blue-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition" [disabled]="!startDate()" (click)="applyRange()">Apply Range</button>
+      <div class="flex justify-end gap-2 mt-4 pt-6 border-t border-[#E2E8F080]">
+        <button type="button" class="btn-secondary py-2" (click)="resetRange()">Cancel</button>
+        <button type="button" class="btn-primary py-2" [disabled]="!startDate()" (click)="applyRange()">Apply Range</button>
       </div>
     </div>
   }
