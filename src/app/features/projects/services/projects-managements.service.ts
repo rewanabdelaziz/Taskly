@@ -29,9 +29,17 @@ export class ProjectsManagementsService {
     return this._http.post(`${this.baseUrl}${ApiEndpoints.ADD_PROJECT}`, projectPayload);
   }
 
-  getAllProjects(offset: number, limit: number): Observable<HttpResponse<Project[]>> {
-    const params = new HttpParams().set('limit', limit.toString()).set('offset', offset.toString());
+  getAllProjects(offset?: number, limit?: number): Observable<HttpResponse<Project[]>> {
+    let params = new HttpParams();
 
+    if (limit !== undefined && limit !== null) {
+      params = params.set('limit', limit.toString());
+    }
+    
+    if (offset !== undefined && offset !== null) {
+      params = params.set('offset', offset.toString());
+    }
+   
     const headers = new HttpHeaders().set('Prefer', 'count=exact');
 
     return this._http.get<Project[]>(`${this.baseUrl}${ApiEndpoints.GET_PROJECTS}`, {

@@ -55,6 +55,13 @@ export const routes: Routes = [
           import('./features/tasks/components/add-task/add-task.component').then((m) => m.AddTaskComponent),
       },
       {
+        path: 'my-statistics',
+        loadComponent: () =>
+          import('./features/statistics/components/statistics/statistics.component').then(
+            (m) => m.StatisticsComponent,
+          ),
+      },
+      {
         path: '',
         loadComponent: () =>
           import('./features/projects/components/projects-list/projects-list.component').then(
@@ -103,5 +110,7 @@ export const routes: Routes = [
       import('./features/members/components/accept-invitation/accept-invitation.component').then(
         (m) => m.AcceptInvitationComponent,
       ),
-  }
+  },
+  
+
 ];
