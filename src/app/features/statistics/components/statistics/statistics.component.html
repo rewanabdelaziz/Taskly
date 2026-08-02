@@ -17,8 +17,8 @@
       <!-- Project Filter -->
       <select [value]="selectedProjectId" (change)="onProjectChange($event)" class="bg-white py-2 px-1 md:px-4 rounded-xs shadow-sm  font-medium text-sm text-slate-dark outline-none ">
         <option [value]="null">All Projects</option>
-        @for(proj of projects(); track proj.id) {
-          <option [value]="proj.id">{{ proj.name }}</option>
+        @for(proj of projects(); track proj.project_id) {
+          <option [value]="proj.project_id">{{ proj.project_name }}</option>
         }
       </select>
 
@@ -129,6 +129,17 @@
       </div>
 
     </div>
+  }
+</div>
+
+<!-- chart & projects container -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8 w-full">
+  @if(calendarData()){
+    <app-circle-chart [totalTasks]="calendarData()?.total_tasks || 0"
+                    [totals]="calendarData()?.totals!"
+                    ></app-circle-chart>
+
+    <app-project-tasks-statistics [projects]="projects()"></app-project-tasks-statistics>
   }
 </div>
 

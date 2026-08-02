@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { StatisticsService } from '../../services/statistics.service';
 import { ToastNotificationService } from '../../../../shared/services/toast-notification.service';
-import { CalendarResponse } from '../../models/statistics';
+import { CalendarResponse, TasksCountPerProjectRes } from '../../models/statistics';
 import { Project } from '../../../projects/models/projects';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
 import { HttpResponse } from '@angular/common/http';
@@ -10,11 +10,13 @@ import { StatusLabelPipe } from '../../../tasks/pipes/status-label.pipe';
 import { DatePipe, JsonPipe, NgClass } from '@angular/common';
 import { CustomDatePickerComponent } from '../../../../shared/components/custom-date-picker/custom-date-picker.component';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { CircleChartComponent } from '../circle-chart/circle-chart.component';
+import { ProjectTasksStatisticsComponent } from '../project-tasks-statistics/project-tasks-statistics.component';
 
 @Component({
   selector: 'app-statistics',
   standalone: true,
-  imports: [StatusLabelPipe, DatePipe, NgClass, JsonPipe, CustomDatePickerComponent, IconComponent], 
+  imports: [StatusLabelPipe, DatePipe, NgClass, JsonPipe, CustomDatePickerComponent, IconComponent,CircleChartComponent,ProjectTasksStatisticsComponent], 
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.css'
 })
@@ -22,13 +24,15 @@ export class StatisticsComponent implements OnInit {
   private _statsService = inject(StatisticsService);
   private _toast = inject(ToastNotificationService);
   private project_managements = inject(ProjectsManagementsService);
+
   
   startDate = signal<string>('');
   endDate = signal<string>('');
   selectedProjectId: string | null = null;
   selectedStatus: string | null = null;
   calendarData = signal<CalendarResponse | null>(null);
-  projects = signal<Project[]>([]);
+  // projects = signal<Project[]>([]);
+  projects = signal<TasksCountPerProjectRes[]>([]);
   statuses = Object.values(Status);
   currentDateObj = new Date();
 
@@ -38,16 +42,28 @@ export class StatisticsComponent implements OnInit {
     this.getCalendarData();
   }
 
-  getProjects() {
-    this.project_managements.getAllProjects().subscribe({
-      next: (res: HttpResponse<Project[]>) => {
-        this.projects.set(res.body || []);
+   getProjects() {
+    this._statsService.getTasksCountPerProject(this.startDate(),this.endDate()).subscribe({
+      next: (res: TasksCountPerProjectRes[]) => {
+        this.projects.set(res);
+        console.log(res)
       },
       error: () => {
         this._toast.showMsg('Failed to fetch projects. Please try again.');
       },
     });
   }
+
+  // getProjects() {
+  //   this.project_managements.getAllProjects().subscribe({
+  //     next: (res: HttpResponse<Project[]>) => {
+  //       this.projects.set(res.body || []);
+  //     },
+  //     error: () => {
+  //       this._toast.showMsg('Failed to fetch projects. Please try again.');
+  //     },
+  //   });
+  // }
 
   setDefaultCurrentWeek(): void {
     const today = new Date();
@@ -99,6 +115,7 @@ export class StatisticsComponent implements OnInit {
     ).subscribe({
       next: (res) => {
         this.calendarData.set(res);
+        // console.log(res)
       },
       error: (err) => {
         console.error('Error fetching calendar stats', err);
