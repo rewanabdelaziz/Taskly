@@ -89,8 +89,12 @@
         >
           Cancel
         </button>
-        <button type="submit" class="btn-primary w-full sm:w-auto sm:px-8 rounded-lg sm:rounded-none">
-          create Task
+        <button type="submit" class="btn-primary w-full sm:w-auto sm:px-8 rounded-lg sm:rounded-none disabled:opacity-50 disabled:cursor-not-allowed"[disabled]="isSubmitted()">
+          @if (isSubmitted()) {
+            <span>Creating...</span>
+          } @else {
+            <span>Create Task</span>
+          }
         </button>
       </div>
     </form>
