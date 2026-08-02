@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, HostListener, inject, input, OnChanges, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, HostListener, inject, input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
 import { EpicsManagementsService } from '../../../epics/services/epics-managements.service';
 import { Status, Task } from '../../models/task';
 import { TasksManagementService } from '../../services/tasks-management.service';
@@ -54,13 +54,17 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
   
 
 
-  ngOnChanges(): void {
-    this.resetState()
-    this._pagination.init(3);
-    this.getTasksByStatus(this.status() as Status)
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['status'] && !changes['status'].firstChange) {
+      this.resetState();
+      this._pagination.init(3);
+      this.getTasksByStatus(this.status() as Status);
+    }
   }
 
   ngOnInit(): void {
+    this._pagination.init(3);
+
     this._activate_router.queryParams
       .pipe(
         map(params => params['search'] || ''),
@@ -71,6 +75,7 @@ export class TasksStatusColComponent implements OnChanges,OnInit{
         this._pagination.resetPage(); 
         
         this.searchTerm.set(searchTerm);
+        this.resetState();
         this.getTasksByStatus(this.status() as Status);
       });
 
