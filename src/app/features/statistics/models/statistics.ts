@@ -39,3 +39,9 @@ export interface CalendarResponse{
   overdue_tasks:number
 
 }
+
+export interface TasksCountPerProjectRes{
+  project_id:string,
+  project_name:string,
+  tasks_count:number
+}
