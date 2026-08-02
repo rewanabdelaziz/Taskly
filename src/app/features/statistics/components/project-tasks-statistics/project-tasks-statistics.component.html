@@ -1,0 +1,11 @@
+<div class="w-full bg-white p-8 flex flex-col gap-10 justify-between rounded-lg">
+    <h3 class="text-[18px] font-bold text-slate-dark">All projects</h3>
+    @for(proj of projects(); track proj.project_id){
+        <div class="flex justify-between">
+            <span class="font-bold text-[12px] text-[#041B3CB2]">{{proj.project_name}}</span>
+            <span class="font-bold text-[12px] text-slate-dark">{{proj.tasks_count}}</span>
+        </div>
+
+    }
+
+</div>
