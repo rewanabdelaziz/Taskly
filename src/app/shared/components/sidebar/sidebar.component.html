@@ -44,6 +44,24 @@
         </a>
       </li>
 
+       <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
+        <a
+          routerLink="my-statistics"
+          routerLinkActive="!text-primary bg-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [class]="isCollapsed() ? 'text-sidebar-text' : 'text-slate-dark'"
+          class="hover:bg-white rounded-sm py-2.5 px-3 flex items-center gap-3 text-sm/[20px] hover:text-primary font-semibold"
+        >
+         
+          <app-icon name="statistics" [size]="16" class="text-[#0F172A]"></app-icon>
+          
+
+          @if (!isCollapsed()) {
+            <span>My Statistics</span>
+          }
+        </a>
+      </li>
+
       @if (projectId()) {
         <li [class]="isCollapsed() ? 'mb-7' : 'mb-1'">
           <a
