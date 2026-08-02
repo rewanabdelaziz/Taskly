@@ -5,6 +5,12 @@ import { AddTaskPayload, Status, Task } from '../models/task';
 import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 import { Observable, Subject } from 'rxjs';
 
+export interface TaskUpdateEvent {
+  fromStatus?: Status;
+  toStatus?: Status;
+  taskId?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +18,7 @@ export class TasksManagementService {
   private _http = inject(HttpClient);
   baseUrl = environment.baseUrl;
 
-  private taskUpdatedSource = new Subject<void>();
+  private taskUpdatedSource = new Subject<TaskUpdateEvent | void>();
   taskUpdated$ = this.taskUpdatedSource.asObservable();
   
   addNewTask(epicPayload: AddTaskPayload) {
@@ -54,13 +60,13 @@ export class TasksManagementService {
   
   }
 
-  editTask(taskId:string, epicPayload: Partial<AddTaskPayload>) {
+  editTask(taskId:string, taskPayload: Partial<AddTaskPayload>) {
     const params = new HttpParams().set('id', `eq.${taskId}`);
-    return this._http.patch(`${this.baseUrl}${ApiEndpoints.ADD_TASK}`, epicPayload,{params});
+    return this._http.patch(`${this.baseUrl}${ApiEndpoints.ADD_TASK}`, taskPayload,{params});
   }
 
-  notifyTaskUpdated() {
-    this.taskUpdatedSource.next();
+  notifyTaskUpdated(event?: TaskUpdateEvent) {
+    this.taskUpdatedSource.next(event);
   }
 
   
