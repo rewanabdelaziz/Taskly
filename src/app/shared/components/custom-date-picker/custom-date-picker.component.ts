@@ -24,6 +24,18 @@ export class CustomDatePickerComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateMonthDays();
+    const start = new Date();
+    const end = new Date();
+    end.setDate(start.getDate() + 6);
+
+    this.startDate.set(start);
+    this.endDate.set(end);
+
+    // output the init date
+    this.dateRangeSelected.emit({
+      startDate: start,
+      endDate: end
+    });
   }
 
   toggleDropdown() {
@@ -51,6 +63,32 @@ export class CustomDatePickerComponent implements OnInit {
     
     this.currentViewDate = new Date(year, month + direction, 1);
     this.generateMonthDays();
+  }
+
+  navigateWeek(event: Event, direction: number) {
+    event.stopPropagation();
+
+    const currentStart = this.startDate();
+    const currentEnd = this.endDate();
+
+    if (!currentStart || !currentEnd) return;
+
+    const newStart = new Date(currentStart);
+    newStart.setDate(newStart.getDate() + (direction * 7));
+
+    const newEnd = new Date(currentEnd);
+    newEnd.setDate(newEnd.getDate() + (direction * 7));
+
+    this.startDate.set(newStart);
+    this.endDate.set(newEnd);
+
+    this.currentViewDate = new Date(newStart);
+    this.generateMonthDays();
+
+    this.dateRangeSelected.emit({
+      startDate: newStart,
+      endDate: newEnd
+    });
   }
   
   selectDate(date: Date) {
@@ -100,6 +138,7 @@ export class CustomDatePickerComponent implements OnInit {
     }
     return false;
   }
+
 
   applyRange() {
     const start = this.startDate();
