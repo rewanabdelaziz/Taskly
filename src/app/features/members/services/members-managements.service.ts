@@ -23,8 +23,8 @@ export class MembersManagementsService {
     const payload:InviteMemberPayload = {
       p_email : email,
       p_project_id : project_id,
-      // p_app_url : this.appUrl,
-      p_app_url : "http://localhost:4200",
+      p_app_url : this.appUrl,
+      // p_app_url : "http://localhost:4200",
       p_base_url : this.baseUrl
     }
     return this._http.post<Member[]>(`${this.baseUrl}${ApiEndpoints.INVITE_MEMBER}`,  payload );
