@@ -1,9 +1,17 @@
 .shared-inline-icon {
-  width: 100%;
-  height: 100%;
+  display: inline-block;
+  -webkit-mask-size: contain;
+  -moz-mask-size: contain;
+  -o-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -moz-mask-repeat: no-repeat;
+  -o-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -moz-mask-position: center;
+  -o-mask-position: center;
+  mask-position: center;
+  flex-shrink: 0; /* if parent is flex */
 }
-::ng-deep .shared-inline-icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+
