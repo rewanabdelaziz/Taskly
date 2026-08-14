@@ -1,8 +1,14 @@
 <div
-  [innerHTML]="safeSvgContent()"
   [style.width.px]="size()"
   [style.height.px]="size()"
-  [style.color]="color()"
+  [style.background-color]="color()"
+  [style.-webkit-mask-image]="svgMaskStyle()"
+  [style.-moz-mask-image]="svgMaskStyle()"
+  [style.-o-mask-image]="svgMaskStyle()"
+  [style.mask-image]="svgMaskStyle()"
   class="shared-inline-icon"
   [class]="customClass()"
 ></div>
+
+
+

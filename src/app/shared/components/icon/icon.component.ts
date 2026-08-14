@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, computed, input} from '@angular/core';
 
 @Component({
   selector: 'app-icon',
@@ -9,28 +7,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   templateUrl: './icon.component.html',
   styleUrl: './icon.component.css',
 })
-export class IconComponent implements OnInit {
-  private http = inject(HttpClient);
-  private sanitizer = inject(DomSanitizer);
-
+export class IconComponent {
   name = input.required<string>();
   size = input<number>(24);
   color = input<string>('currentColor');
   customClass = input<string | null>(null)
+  svgMaskStyle = computed(() => `url('assets/icons/${this.name()}.svg')`);
 
-  
-  safeSvgContent = signal<SafeHtml>(''); // final inner HtML
-
-  ngOnInit(): void {
-    if (this.name()) {
-      this.http.get(`assets/icons/${this.name()}.svg`, { responseType: 'text' }).subscribe({
-        next: (svgText) => {
-          this.safeSvgContent.set(this.sanitizer.bypassSecurityTrustHtml(svgText));
-        },
-        error: () => {
-          console.error(`Icon "${this.name}" not found in assets/icons/`);
-        },
-      });
-    }
-  }
 }
