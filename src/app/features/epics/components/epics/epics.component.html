@@ -274,7 +274,7 @@
     
 
     <!-- paginaion -->
-     @if(epics().length > 0){
+     @if(endPageNum() > 1){
       <app-pagination
       [currentPage]="_pagination.currentPage()"
       [total]="_current_project_epics.total()"
