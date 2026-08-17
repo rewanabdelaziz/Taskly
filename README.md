@@ -1,27 +1,82 @@
-# TASKLY
+# Taskly - Project Management System
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Taskly is a modern, scalable, and user-friendly Project Management System designed to streamline team collaboration, track progress, and manage workflows efficiently using a hierarchical structure: Projects -> Epics -> Tasks.
 
-## Development server
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://taskly-omega-lyart.vercel.app/)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## 📌 Overview
+Taskly helps teams stay organized by providing a clear overview of their work. Whether you are managing complex projects or tracking individual tasks, Taskly ensures that everyone stays aligned and productive.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🎯 Objective
+To provide a comprehensive platform where teams can:
+* Manage multiple projects seamlessly.
+* Break down large objectives into Epics and Tasks.
+* Assign responsibilities and track progress visually via a Kanban-style Board.
+* Collaborate effectively with team members.
 
-## Build
+## 📊 Preview
+![Taskly Statistics](https://github.com/user-attachments/assets/f5b2ce2a-6bbc-4de5-af8b-668551587237)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## 🧩 Core Features
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 🔐 Authentication
+* User signup & secure login.
+* Secure session management.
+* Forgot password & reset functionality.
 
-## Running end-to-end tests
+### 📁 Project & Epic Management
+* Create, edit, and list projects.
+* Manage Epics within projects with deadlines and owner assignments.
+* Hierarchical task organization.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### 👥 Team Collaboration
+* Invite members via email with a token-based system.
 
-## Further help
+### ✅ Task Management & Workflow
+Efficiently manage task lifecycles with the following statuses:
+`TO_DO`, `IN_PROGRESS`, `BLOCKED`, `IN_REVIEW`, `READY_FOR_QA`, `REOPENED`, `READY_FOR_PRODUCTION`, `DONE`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### 📊 Board View
+* Visual task tracking with Drag & Drop functionality.
+* Quick task creation directly from board columns.
+
+### 🔍 Search
+* Advanced search by Title.
+
+---
+
+## 🛠 Tech Stack
+* **Frontend:** Angular 17
+* **Styling:** Tailwind CSS
+* **Backend & Database:** Supabase
+* **Package Manager:** pnpm
+* **Tools:** ESLint, Prettier
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+* Node.js (v18.x or higher)
+* pnpm
+* A Supabase project
+
+### Installation
+1. Clone the repository:
+   `git clone https://github.com/rewanabdelaziz/Taskly.git`
+2. Navigate to the project directory:
+   `cd Taskly`
+3. Install dependencies:
+   `pnpm install`
+4. Run the development server:
+   `pnpm dev`
+
+---
+
+## Author
+**Rewan Abdelaziz**
+* [LinkedIn](https://www.linkedin.com/in/rewan-abdelaziz)
