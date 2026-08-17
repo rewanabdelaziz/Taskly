@@ -1,8 +1,8 @@
-import { Component, computed, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, HostListener, inject, signal } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { ProjectsManagementsService } from '../../../projects/services/projects-managements.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Epic } from '../../models/epics';
 import { DatePipe } from '@angular/common';
 import { NameAvatarIconComponent } from "../../../../shared/components/name-avatar-icon/name-avatar-icon.component";
@@ -12,6 +12,7 @@ import { SearchInputComponent } from '../../../../shared/components/search-input
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { PaginationService } from '../../../../shared/services/pagination.service';
 import { PopupService } from '../../../../shared/services/popup.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-epics',
   standalone: true,
@@ -22,15 +23,19 @@ import { PopupService } from '../../../../shared/services/popup.service';
 })
 export class EpicsComponent {
   private readonly _project_management = inject(ProjectsManagementsService)
+  private readonly _router = inject(Router);
+  private readonly _activatedRoute = inject(ActivatedRoute);
   readonly _current_project_epics= inject(CurrentProjectEpicsService)
   readonly _pagination = inject(PaginationService);
   _popup = inject(PopupService)
+  private destroyRef = inject(DestroyRef);
   
   currentProject = this._project_management.selectedProject
   epics=this._current_project_epics.epics
   isLoading=this._current_project_epics.isloading
   isEmpty=this._current_project_epics.isEmpty
   isError=this._current_project_epics.isError
+  
 
   selectedEpic = signal<Epic>({} as Epic)
   isOpenPopUp = signal(false)
@@ -47,7 +52,13 @@ export class EpicsComponent {
 
   onPageChange(newPage: number) {
     this._pagination.goToPage(newPage,this._current_project_epics.total());
-    this.getEpics();
+    
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: { page: newPage },
+      queryParamsHandling: 'merge', // to keep any other params
+    });
+
   }
 
   isMobileNow = signal<boolean>(false);
@@ -55,7 +66,26 @@ export class EpicsComponent {
   ngOnInit(): void {
     this._pagination.init(3);
     this._current_project_epics.resetState()
-    this.getEpics();
+    this._activatedRoute.queryParams.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(params => {
+      const pageParam = params['page'];
+      if (pageParam) {
+        const pageNumber = Number(pageParam);
+        this._pagination.currentPage.set(pageNumber);
+      } else {
+        this._pagination.currentPage.set(1);
+      }
+
+      const searchParam = params['search'];
+      if (searchParam) {
+        this.searchTerm.set(searchParam);
+      } else {
+        this.searchTerm.set('');
+      }
+      
+      this.getEpics();
+    });
     this.checkScreenSize();
     
   }
@@ -110,7 +140,13 @@ export class EpicsComponent {
   onSearchEpics(val : string){
     this._pagination.resetPage();
     this.searchTerm.set(val)
-    this.getEpics(false);
+
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: { page: 1, search: val || null }, //reset page and add search term to param
+      queryParamsHandling: 'merge',
+    });
+
   }
 
   
