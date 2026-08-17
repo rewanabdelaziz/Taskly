@@ -188,10 +188,11 @@
             (click)="setSelectedEpic(epic)"
               class="bg-white flex flex-col justify-between p-5 md:p-4 md:min-h-56 rounded-lg tracking-normal font-medium shadow-form-shadow cursor-pointer md:border-l-4 md:border-dark-green"
             >
-              <div class="flex justify-between mb-4">
+              <div class="flex justify-between items-center mb-4">
                 <span class="bg-badge-bg md:bg-light-green text-primary md:text-success-msg-text py-1 px-2.5 text-[10px] font-bold rounded-xs">{{epic.epic_id}}</span>
-                <app-icon [size]="16" name="more-vertical" color="#041B3C33" class="hidden md:inline"></app-icon>
-                <app-icon [size]="16" name="more-hor" color="#737685" class="md:hidden"></app-icon>
+                <!-- <app-icon [size]="16" name="more-vertical" color="#041B3C33" class="hidden md:inline"></app-icon>
+                <app-icon [size]="16" name="more-hor" color="#737685" class="md:hidden"></app-icon> -->
+                <app-icon [size]="16" name="edit" color="#737685" class="hover:bg-background p-2"></app-icon>
               </div>
     
              <h3 class="card-title mb-3">{{ epic.title }}</h3>
