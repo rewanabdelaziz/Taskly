@@ -197,26 +197,35 @@
              <h3 class="card-title mb-3">{{ epic.title }}</h3>
     
              <div class="flex justify-between mb-6">
-                @if(epic.assignee.name){
+                
                  <div class="flex items-center">
-                    <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40" class="hidden sm:inline me-3"></app-name-avatar-icon>
-                    <div class="md:flex-col md:flex hidden font-medium">
-                      <span class="text-[12px] text-text-body ">Assignee</span>
-                      <span class="body-sm text-slate-dark ">{{epic.assignee.name}}</span>
-                    </div>
-        
-                    <app-name-avatar-icon [userName]="epic.assignee.name" customClass="rounded-lg" customBgColor="#003D9B" customTextColor="#FFFFFF" [size]="28" class="sm:hidden me-3"></app-name-avatar-icon>
-                    <div class="flex flex-col md:hidden">
-                      <span class="text-[12px] font-medium text-slate-dark">{{epic.assignee.name}}</span>
-                      <span class="text-[10px] font-normal  text-placeholder ">Assignee</span>
-                    </div>
-                  
+                    @if(epic.assignee.name){
+                      <app-name-avatar-icon [userName]="epic.assignee.name" customBgColor="#65DCA4" customTextColor="#002113" [size]="40" class="hidden sm:inline me-3"></app-name-avatar-icon>
+                      <div class="md:flex-col md:flex hidden font-medium">
+                        <span class="text-[12px] text-text-body ">Assignee</span>
+                        <span class="body-sm text-slate-dark ">{{epic.assignee.name}}</span>
+                      </div>
+          
+                      <app-name-avatar-icon [userName]="epic.assignee.name" customClass="rounded-lg" customBgColor="#003D9B" customTextColor="#FFFFFF" [size]="28" class="sm:hidden me-3"></app-name-avatar-icon>
+                      <div class="flex flex-col md:hidden">
+                        <span class="text-[12px] font-medium text-slate-dark">{{epic.assignee.name}}</span>
+                        <span class="text-[10px] font-normal  text-placeholder ">Assignee</span>
+                      </div>
+                    }@else {
+                      <app-icon name="unassigne" [size]="17" class="text-[#94A3B8] me-3 sm:![size]:30"></app-icon>
+                      <span class="text-[12px] font-medium text-placeholder">Unassignee</span>
+                    }
                  </div>
-                }
+                
     
                 <div class="flex-col flex items-end md:hidden">
                       <span class="text-[10px] text-placeholder uppercase font-bold ">Deadline</span>
-                      <span class="text-[12px] text-slate-dark "> {{ epic.created_at | date: 'MMMM d, yyyy' }}</span>
+                      @if(epic.deadline){
+                        <span class="text-[12px] text-slate-dark "> {{ epic.deadline| date: 'MMMM d, yyyy' }}</span>
+                      }@else {
+                        <span class="text-[12px] text-placeholder ">no deadline</span>
+                      }
+                      
                 </div>
              </div>
             
@@ -231,9 +240,15 @@
     
                <div class="flex items-center text-placeholder">
                   <app-icon name="date" [size]="12" class="me-1"></app-icon>
-                  <span class="font-normal ">
-                    {{ epic.created_at | date: 'd MMMM yyyy' }}
-                  </span>
+                    @if(epic.deadline){
+                      <span class="font-normal ">
+                        {{ epic.deadline | date: 'd MMMM yyyy' }}
+                      </span>
+                    }@else {
+                      <span class="font-normal ">
+                        no due date
+                      </span>
+                    }
                </div>
               </div>
             </div>
