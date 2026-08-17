@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { reverseAuthGuard } from './core/guards/reverse-auth.guard';
+import { unAuthGuard } from './core/guards/unauth.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'project' },
@@ -75,7 +75,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./features/auth/components/auth-layout/auth-layout.component').then((m) => m.AuthLayoutComponent),
-    canActivate: [reverseAuthGuard],
+    canActivate: [unAuthGuard],
 
     children: [
       {

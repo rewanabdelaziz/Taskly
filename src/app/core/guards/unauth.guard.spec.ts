@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { reverseAuthGuard } from './reverse-auth.guard';
+import { unAuthGuard } from './unauth.guard';
 
-describe('reverseAuthGuard', () => {
+describe('unAuthGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => reverseAuthGuard(...guardParameters));
+    TestBed.runInInjectionContext(() => unAuthGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
